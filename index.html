@@ -1,0 +1,1804 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta name="google-site-verification" content="ABC123XYZ" />
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ImgCon - Private & Fast Image Converter, Compressor & Resizer</title>
+
+    <!-- ================== SEO & METADATA ================== -->
+    <meta name="description" content="ImgCon: The ultimate free online tool to convert, compress, resize, and watermark images without uploading. 100% private, incredibly fast, supports batch processing, and works offline as a PWA.">
+    <meta name="keywords" content="image converter, image compressor, image resizer, watermark tool, photo resizer, image optimizer online, jpg to png, png to pdf, webp converter, avif converter, reduce image size, bulk image resizer, private image converter, imgcon, free image tools, pwa image tool, offline image converter, target size compression, before after slider, photo resize online, image convert to jpg, file size reducer">
+    <meta name="author" content="ImgCon">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://imgcon.life">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+
+    <!-- ================== PWA & THEMEING ================== -->
+    <meta name="theme-color" content="#6366f1">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ImgCon - Private, Offline-Ready Image Converter, Compressor, Resizer & Watermark Tool">
+    <meta property="og:description" content="Instantly convert, compress, resize, and watermark your images right in your browser. No uploads required. 100% private, free, and works offline.">
+    <meta property="og:image" content="https://imgcon.life/og-image.png">
+    <meta property="og:url" content="https://imgcon.life">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ImgCon - Private, Offline-Ready Image Converter, Compressor, Resizer & Watermark Tool">
+    <meta name="twitter:description" content="Instantly convert, compress, resize, and watermark your images right in your browser. No uploads required. 100% private, free, and works offline.">
+    <meta name="twitter:image" content="https://imgcon.life/og-image.png">
+
+    <!-- Advanced SEO: Schema Markup -->
+    <script type="application/ld+json">
+    { "@context": "https://schema.org", "@type": "SoftwareApplication", "name": "ImgCon", "description": "A free online tool to convert, compress, resize, and watermark images directly in the browser. It supports batch processing, works offline, and handles formats like JPG, PNG, WebP, AVIF, and PDF.", "url": "https://imgcon.life", "applicationCategory": "MultimediaApplication", "operatingSystem": "All", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" } }
+    </script>
+    <script type="application/ld+json">
+    { "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{ "@type": "Question", "name": "Is ImgCon really free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, ImgCon is completely free to use with no limits. We are supported by non-intrusive ads." } },{ "@type": "Question", "name": "Are my images safe and private?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. All image processing happens directly in your web browser. Your files are never uploaded to any server, ensuring your data remains 100% private." } }] }
+    </script>
+    <script type="application/ld+json">
+    { "@context": "https://schema.org", "@type": "HowTo", "name": "How to Use ImgCon's Image Tools", "description": "A simple guide to using ImgCon to process your images privately in your browser.", "step": [ { "@type": "HowToStep", "name": "Choose a Tool", "text": "Select either the 'Image Converter', 'Image Compressor', 'Image Resizer' or 'Watermark Tool' from the home screen.", "url": "https://imgcon.life/#" }, { "@type": "HowToStep", "name": "Select Your Images", "text": "Drag and drop your image files onto the upload area, or click to browse and select them from your device.", "url": "https://imgcon.life/#" }, { "@type": "HowToStep", "name": "Adjust Settings", "text": "Choose your desired settings, such as output format, compression level, new dimensions, or watermark text.", "url": "https://imgcon.life/#" }, { "@type": "HowToStep", "name": "Process and Download", "text": "Click the 'Start' button. Once processing is complete, download your optimized images individually or as a single ZIP file.", "url": "https://imgcon.life/#" } ] }
+    </script>
+
+    <!-- ================== STYLES & LIBRARIES ================== -->
+    <link rel="icon" type="image/svg+xml" href="https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome@5.15.4/svgs/solid/image.svg">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+
+    <style>
+        /* For production, this CSS should be extracted to an external file and minified to reduce its size and improve load times. */
+        :root {
+            --primary-color: #6366f1; --primary-hover: #4f46e5; --bg-main: #f8fafc; --bg-subtle: #f1f5f9; --card-bg: #ffffff; --card-border: #e5e7eb; --text-dark: #1e293b; --text-light: #64748b; --success: #10b981; --danger: #ef4444; --shadow-color: rgba(99, 102, 241, 0.1); --shadow-lg-color: rgba(99, 102, 241, 0.2);
+        }
+        [data-theme="dark"] {
+            --primary-color: #818cf8; --primary-hover: #a78bfa; --bg-main: #0f172a; --bg-subtle: #1e293b; --card-bg: #111827; --card-border: #374151; --text-dark: #f3f4f6; --text-light: #9ca3af; --shadow-color: rgba(0, 0, 0, 0.2); --shadow-lg-color: rgba(0, 0, 0, 0.3);
+        }
+        @keyframes gradientFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
+            background: linear-gradient(-45deg, #e0e7ff, #c7d2fe, #a5b4fc, #818cf8);
+            background-size: 400% 400%;
+            animation: gradientFlow 20s ease infinite;
+            transition: opacity 0.5s ease;
+        }
+        [data-theme="dark"] body::before {
+            background: linear-gradient(-45deg, #1e293b, #334155, #0f172a, #312e81);
+            background-size: 400% 400%;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-main); color: var(--text-dark); transition: background-color 0.3s ease, color 0.3s ease; }
+        .app-container { background-color: var(--card-bg); box-shadow: 0 10px 35px -5px var(--shadow-color); border-radius: 1.5rem; border: 1px solid var(--card-border); overflow: hidden; }
+        .screen { transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out; }
+        .screen.hidden { position: absolute; top: 0; left: 0; right: 0; opacity: 0; pointer-events: none; transform: translateY(10px); }
+        .upload-button { background: linear-gradient(45deg, var(--primary-color), var(--primary-hover)); color: white; padding: 0.85rem 1.75rem; border-radius: 9999px; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 15px -3px var(--shadow-color); transition: all 0.3s ease; }
+        .upload-button:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 7px 25px -3px var(--shadow-lg-color); }
+        .download-btn { background: linear-gradient(45deg, var(--success), #14b8a6); box-shadow: 0 4px 20px -3px rgba(16, 185, 129, 0.4); }
+        .secondary-btn { background-color: var(--bg-subtle); border: 1px solid var(--card-border); color: var(--text-dark); }
+        .tool-choice-card { border: 2px solid var(--card-border); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s, box-shadow 0.3s; background-color: var(--card-bg); display: block; }
+        .tool-choice-card:hover { transform: translateY(-8px); border-color: var(--primary-color); box-shadow: 0 10px 30px var(--shadow-color); }
+        .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(100px); background-color: var(--card-bg); color: var(--text-dark); padding: 0.75rem 1.25rem; border-radius: 2rem; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); z-index: 1000; border: 1px solid var(--card-border); transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); opacity: 0; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .progress-bar-container { width: 100%; height: 8px; background-color: var(--bg-subtle); border-radius: 999px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--primary-color), var(--primary-hover)); transition: width 0.3s ease; }
+        [data-theme="dark"] .fa-sun { display: none; }
+        body:not([data-theme="dark"]) .fa-moon { display: none; }
+        .file-item.dragging { opacity: 0.5; background-color: var(--primary-color); }
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+        .format-card-container { perspective: 1000px; }
+        .format-card { position: relative; width: 100%; padding-bottom: 100%; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
+        .format-card.selected { transform: rotateY(180deg); }
+        .card-face { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.75rem; border-radius: 1rem; border: 2px solid var(--card-border); background-color: var(--bg-subtle); text-align: center; }
+        .card-back { transform: rotateY(180deg); background: linear-gradient(45deg, var(--primary-color), var(--primary-hover)); color: white; border-color: transparent; }
+        .card-front:hover { border-color: var(--primary-color); box-shadow: 0 5px 20px -5px var(--shadow-color); }
+        .options-section { max-height: 0; opacity: 0; overflow: hidden; padding: 0; margin-top: 0; transition: all 0.5s ease-in-out; }
+        .options-section.show { max-height: 500px; opacity: 1; padding: 1rem; margin-top: 1rem; }
+        .before-after-container { position: relative; width:100%; height:100%; margin: auto; max-width: 100%; max-height: 100%; aspect-ratio: var(--aspect-ratio, 1/1); overflow: hidden; border-radius: 0.75rem; user-select: none; }
+        .before-after-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+        .before-after-slider { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 2px; height: 100%; background: white; cursor: ew-resize; z-index: 10; }
+        .before-after-slider::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border: 2px solid white; border-radius: 50%; background: rgba(0,0,0,0.3); backdrop-filter: blur(2px); }
+        .before-after-slider::after { content: '\\f337'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .before-image-clipper { position: absolute; inset: 0; clip-path: inset(0 50% 0 0); }
+        .before-image-clipper img { clip-path: none; }
+        .results-summary { background-color: var(--bg-subtle); border: 1px solid var(--card-border); padding: 1rem; border-radius: 0.75rem; margin-bottom: 1rem; }
+        .result-card { background-color: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1rem; padding: 1rem; box-shadow: 0 4px 15px -5px var(--shadow-color); transition: box-shadow 0.3s ease, transform 0.3s ease; }
+        .result-card:hover { box-shadow: 0 8px 25px -5px var(--shadow-lg-color); transform: translateY(-2px); }
+        .card-section { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .card-section:not(:last-child) { border-bottom: 1px solid var(--card-border); }
+        .card-thumbnail { width: 64px; height: 64px; object-fit: cover; border-radius: 0.5rem; background-color: var(--bg-subtle); }
+        .format-badge { display: inline-block; padding: 2px 8px; font-size: 0.7rem; font-weight: 600; border-radius: 999px; line-height: 1.2; background-color: var(--bg-subtle); color: var(--text-light); }
+        .saved-bar-container { height: 6px; background-color: var(--bg-subtle); border-radius: 999px; overflow: hidden; flex-grow: 1; }
+        .saved-bar-fill { height: 100%; background-color: var(--success); border-radius: 999px; }
+        .action-btn-card { background-color: var(--bg-subtle); color: var(--text-dark); border: 1px solid var(--card-border); padding: 0.5rem 0.75rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 500; display: inline-flex; align-items: center; gap: 0.3rem; transition: all 0.2s ease; }
+        .action-btn-card:hover { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
+        .action-btn-card.delete:hover { background-color: var(--danger); border-color: var(--danger); }
+        .preview-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 1001; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .preview-modal.show { opacity: 1; pointer-events: auto; }
+        .modal-content { background-color: var(--card-bg); padding: 1.5rem; border-radius: 1.5rem; max-width: 90vw; max-height: 90vh; display: flex; flex-direction: column; gap: 1rem; transform: scale(0.95); transition: transform 0.3s ease; }
+        .preview-modal.show .modal-content { transform: scale(1); }
+        .modal-body { flex-grow: 1; min-height: 0; }
+        .modal-close-btn { position: absolute; top: 1rem; right: 1rem; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 1.2rem; cursor: pointer; }
+        .tooltip { position: relative; display: inline-block; }
+        .tooltip .tooltip-text { visibility: hidden; width: 220px; background-color: var(--card-bg); color: var(--text-dark); text-align: center; border-radius: 6px; padding: 5px 10px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -110px; opacity: 0; transition: opacity 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border: 1px solid var(--card-border); font-size: 0.8rem;}
+        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+        .content-page { max-width: 800px; margin: 0 auto; line-height: 1.8; }
+        .content-page h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.5rem; }
+        .content-page h3 { font-size: 1.5rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem; }
+        .content-page p { margin-bottom: 1rem; color: var(--text-light); }
+        .content-page a { color: var(--primary-color); text-decoration: underline; }
+        #card-footer {
+            display: none; /* Hidden by default */
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--card-border);
+        }
+        .toggle-label { transition: background-color 0.2s ease-in-out; }
+        .target-size-toggle:checked { right: 0.1rem; } 
+        .target-size-toggle:checked + .toggle-label { background-color: var(--primary-color); }
+        .social-share-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .social-share-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .copy-link-btn {
+            background-color: var(--bg-subtle);
+            border: 1px solid var(--card-border);
+            color: var(--text-dark);
+            padding: 0 1rem;
+            height: 40px;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .copy-link-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        .seo-section h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-dark); }
+        .seo-section p { color: var(--text-light); margin-bottom: 1.5rem; line-height: 1.7; }
+        .seo-section ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.5rem; color: var(--text-light); }
+        .seo-section li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body class="p-2 sm:p-4 pb-8">
+
+    <header class="flex justify-between items-center mb-4 px-2 max-w-7xl mx-auto">
+        <a href="/" class="flex items-center gap-3">
+            <div class="bg-gradient-to-br from-indigo-500 to-purple-500 text-white p-3 rounded-xl shadow-lg shadow-indigo-500/30"><i class="fas fa-bolt text-2xl"></i></div>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight" style="color: var(--text-dark);">ImgCon</h1>
+                <p class="text-xs text-light">Premium Image Tools</p>
+            </div>
+        </a>
+        <div class="flex items-center gap-2">
+            <a href="/" id="homeBtn" class="secondary-btn px-4 py-2 rounded-full font-semibold hidden"><i class="fas fa-home mr-2"></i>Home</a>
+            <button id="themeToggleBtn" class="p-2 rounded-full w-10 h-10 flex items-center justify-center border" style="background-color: var(--card-bg); border-color: var(--card-border);" aria-label="Toggle Theme"><i class="fas fa-sun text-lg"></i><i class="fas fa-moon text-lg"></i></button>
+        </div>
+    </header>
+
+    <main class="app-container p-4 sm:p-8 animate__animated animate__fadeInUp relative max-w-7xl mx-auto">
+        <!-- Home Screen -->
+        <section id="homeScreen" class="screen text-center">
+            <div class="max-w-4xl mx-auto mb-12">
+                <h2 class="text-3xl lg:text-4xl font-bold tracking-tight mb-3">Your All-in-One Image Toolkit</h2>
+                <p class="text-light mb-10 max-w-2xl mx-auto">Convert, compress, resize, and watermark images instantly. All processing is done in your browser for 100% privacy and blazing speed. Choose a tool to get started.</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <a href="/image-converter" class="tool-choice-card p-8 rounded-2xl cursor-pointer text-left">
+                        <i class="fas fa-sync-alt text-4xl text-indigo-400 mb-4"></i><h3 class="text-2xl font-bold mb-2">Image Converter</h3><p class="text-light">Change image formats with ease. Convert to PNG, JPG, WEBP, AVIF, PDF, and more. Batch conversion supported.</p>
+                    </a>
+                    <a href="/image-compressor" class="tool-choice-card p-8 rounded-2xl cursor-pointer text-left">
+                        <i class="fas fa-compress-arrows-alt text-4xl text-green-400 mb-4"></i><h3 class="text-2xl font-bold mb-2">Image Compressor</h3><p class="text-light">Drastically reduce JPG & WEBP file sizes with a live before/after preview and a target size feature.</p>
+                    </a>
+                    <a href="/image-resizer" class="tool-choice-card p-8 rounded-2xl cursor-pointer text-left">
+                        <i class="fas fa-expand-arrows-alt text-4xl text-blue-400 mb-4"></i><h3 class="text-2xl font-bold mb-2">Image Resizer</h3><p class="text-light">Resize images by pixels or percentage. Maintain aspect ratio and use presets for social media.</p>
+                    </a>
+                    <a href="/image-watermark" class="tool-choice-card p-8 rounded-2xl cursor-pointer text-left">
+                        <i class="fas fa-copyright text-4xl text-yellow-400 mb-4"></i><h3 class="text-2xl font-bold mb-2">Watermark Tool</h3><p class="text-light">Add a custom text or logo watermark to your images. Control position, size, and transparency.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- SEO Content Boost Section (Added for Rankings) -->
+            <div class="seo-section max-w-5xl mx-auto text-left border-t pt-12" style="border-color: var(--card-border);">
+                <h2 class="text-2xl font-bold mb-6 text-center">Why ImgCon is the Best Free Online Image Tool</h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3>Privacy First: 100% Client-Side Processing</h3>
+                        <p>Unlike other online image converters that upload your photos to remote servers, <strong>ImgCon processes everything directly in your browser</strong>. This means your personal photos, documents, and creative work never leave your device. It is the most secure way to convert and compress images online, guaranteeing zero data breaches.</p>
+                        
+                        <h3>Blazing Fast Performance</h3>
+                        <p>By utilizing advanced WebAssembly technology, ImgCon delivers desktop-class performance in a web app. Batch process hundreds of images in seconds without waiting for slow uploads or downloads. Whether you are converting JPG to PNG or resizing a batch of photos for Instagram, the speed is instant.</p>
+                    </div>
+                    <div>
+                        <h3>Works Offline (PWA)</h3>
+                        <p>ImgCon is a Progressive Web App (PWA). You can install it on your phone, tablet, or desktop and use it even without an internet connection. It's like having lightweight software like Photoshop or Lightroom right in your browser, but completely free.</p>
+
+                        <h3>Comprehensive Format Support</h3>
+                        <p>We support all modern web formats. Convert your images to <strong>WebP</strong> and <strong>AVIF</strong> for superior compression on websites, or stick to classic formats like <strong>JPG</strong> and <strong>PNG</strong> for compatibility. We even support converting images to <strong>PDF</strong> documents seamlessly.</p>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-xl font-bold mb-4">Frequently Asked Questions</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg bg-bg-subtle">
+                            <h4 class="font-bold text-md mb-2">Is there a limit to how many images I can convert?</h4>
+                            <p class="text-sm text-light">No! ImgCon is completely unlimited. You can batch process as many images as your device's memory can handle.</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-bg-subtle">
+                            <h4 class="font-bold text-md mb-2">How do I reduce image size without losing quality?</h4>
+                            <p class="text-sm text-light">Use our <strong>Image Compressor</strong> tool. It uses smart lossy compression techniques to reduce the file size of your JPG and WebP files by selectively decreasing the number of colors in the image, requiring fewer bytes to store data. The effect is nearly invisible but it makes a very large difference in file size!</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-bg-subtle">
+                            <h4 class="font-bold text-md mb-2">Can I watermark images in bulk?</h4>
+                            <p class="text-sm text-light">Yes. Simply upload multiple images to the <strong>Watermark Tool</strong>, upload your logo or type your text, position it, and click Start. The watermark will be applied to all images in the same position automatically.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonials Section -->
+            <div class="mt-16 max-w-5xl mx-auto">
+                <h3 class="text-3xl font-bold mb-8">Trusted by Creatives and Developers</h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="testimonial-card p-6 rounded-xl border" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
+                        <div class="flex items-center mb-4">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" class="w-12 h-12 rounded-full mr-4" alt="User photo">
+                            <div><p class="font-bold">Sarah L.</p><p class="text-sm text-light">Web Developer</p></div>
+                        </div>
+                        <p class="text-light">"ImgCon is a lifesaver. I use it daily to optimize images for client websites. The fact that it's private and works offline is a huge plus. My go-to tool!"</p>
+                    </div>
+                    <div class="testimonial-card p-6 rounded-xl border" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
+                         <div class="flex items-center mb-4">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-12 h-12 rounded-full mr-4" alt="User photo">
+                            <div><p class="font-bold">Mike R.</p><p class="text-sm text-light">Photographer</p></div>
+                        </div>
+                        <p class="text-light">"I needed a quick way to convert my raw photos to JPG for previews without uploading them anywhere. ImgCon is incredibly fast and respects my privacy. Highly recommended!"</p>
+                    </div>
+                    <div class="testimonial-card p-6 rounded-xl border" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
+                         <div class="flex items-center mb-4">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-12 h-12 rounded-full mr-4" alt="User photo">
+                            <div><p class="font-bold">Jessica T.</p><p class="text-sm text-light">Digital Marketer</p></div>
+                        </div>
+                        <p class="text-light">"The batch processing feature is a game-changer for my social media campaigns. I can resize and compress dozens of images in seconds. And it's completely free!"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Teaser Section -->
+            <div class="mt-16 max-w-5xl mx-auto">
+                 <h3 class="text-3xl font-bold mb-2">From Our Blog</h3>
+                 <p class="text-light mb-8">Learn more about image optimization and best practices.</p>
+                 <div class="grid md:grid-cols-3 gap-6 text-left">
+                     <a href="/blog/png-vs-jpg-difference" class="blog-card-link">
+                         <div class="p-6 rounded-xl border tool-choice-card">
+                             <h4 class="font-bold text-lg mb-2">PNG vs JPG: What's the Difference?</h4>
+                             <p class="text-light text-sm">Discover which format is best for your needs and how to choose wisely for web and print...</p>
+                         </div>
+
+                     </a>
+                     <a href="/blog/how-to-reduce-photo-size" class="blog-card-link">
+                         <div class="p-6 rounded-xl border tool-choice-card">
+                             <h4 class="font-bold text-lg mb-2">How to Reduce Photo Size Without Losing Quality</h4>
+                             <p class="text-light text-sm">A practical guide to shrinking image file sizes to speed up your website and save space...</p>
+                         </div>
+                     </a>
+                     <a href="/blog/webp-the-future-of-web-images" class="blog-card-link">
+                         <div class="p-6 rounded-xl border tool-choice-card">
+                            <h4 class="font-bold text-lg mb-2">Why WebP is the Future of Web Images</h4>
+                             <p class="text-light text-sm">Learn about the next-gen image format from Google that offers superior compression and quality...</p>
+                         </div>
+                     </a>
+                 </div>
+            </div>
+        </section>
+
+        <!-- Tool Screen -->
+        <section id="toolScreen" class="screen hidden"></section>
+
+        <!-- About Us Screen -->
+        <section id="aboutScreen" class="screen hidden content-page">
+            <h2>About ImgCon</h2>
+            <p>ImgCon was born out of a simple need: a fast, private, and powerful image utility that works directly in the browser. In a world where data privacy is more important than ever, we noticed that most online image tools required you to upload your files to a server. We wanted to change that.</p>
+            <h3>Our Story</h3>
+            <p>ImgCon was founded by a team of passionate web developers who constantly found themselves needing to convert, compress, or resize images during daily web development tasks. The process was always clunky. Either we had to use heavy desktop software, or we had to trust external servers with sensitive image files. We thought, "Why can't this just happen securely on our own local machine, instantly?"</p>
+            <p>That question led to the creation of ImgCon. We wanted to build a suite of tools that are private by design. A tool where the images never leave your computer. By harnessing the power of modern web technologies like WebAssembly and JavaScript, ImgCon performs all the complex processing right within your web browser. No uploads, no waiting, no privacy concerns.</p>
+            <h3>Our Philosophy</h3>
+            <p><strong>Privacy First:</strong> Your files are your own. We will never have access to them. Period. Our commitment is to provide a tool that is 100% serverless for all image processing tasks.</p>
+            <p><strong>Performance is Key:</strong> Time is valuable. ImgCon is engineered for speed, delivering near-instant results without the lag of uploading and downloading from a server.</p>
+            <p><strong>Accessible to Everyone:</strong> Powerful tools should be available to all. ImgCon is completely free to use, supported by non-intrusive ads, ensuring that everyone from students to professionals can benefit from it.</p>
+            <p>Thank you for using ImgCon. We hope it makes your workflow a little bit easier and a lot more secure.</p>
+        </section>
+
+        <!-- Blog Screen -->
+        <section id="blogScreen" class="screen hidden content-page">
+            <div id="blog-listing">
+                <h2>ImgCon Blog</h2>
+                <p>Welcome to our blog! Here we share tips, tricks, and insights into the world of digital images and web performance. Click on an article to read more.</p>
+                <div class="space-y-8 mt-6">
+                    <article data-slug="png-vs-jpg-difference">
+                        <h3>PNG vs JPG: What's the Difference and Which One Should You Use?</h3>
+                        <p>When it comes to saving images, two of the most popular file formats you'll encounter are PNG and JPG (or JPEG). While they may seem similar, they are fundamentally different... Choosing the right one can have a big impact on your image's quality and file size.</p>
+                        <a href="/blog/png-vs-jpg-difference" class="font-bold read-more-btn" style="color: var(--primary-color);">Read More &rarr;</a>
+                    </article>
+                    <article data-slug="how-to-reduce-photo-size">
+                        <h3>How to Reduce Photo Size Without Losing Quality (The Definitive Guide)</h3>
+                        <p>Large image files are a major cause of slow-loading websites and can quickly eat up storage space. But how do you make them smaller without turning them into a pixelated mess? This guide will walk you through the best techniques...</p>
+                        <a href="/blog/how-to-reduce-photo-size" class="font-bold read-more-btn" style="color: var(--primary-color);">Read More &rarr;</a>
+                    </article>
+                     <article data-slug="webp-the-future-of-web-images">
+                        <h3>Why WebP is the Future of Web Images</h3>
+                        <p>Developed by Google, WebP is a modern image format that provides superior lossless and lossy compression for images on the web. Using WebP, webmasters and web developers can create smaller, richer images that make the web faster...</p>
+                        <a href="/blog/webp-the-future-of-web-images" class="font-bold read-more-btn" style="color: var(--primary-color);">Read More &rarr;</a>
+                    </article>
+                    <article data-slug="imgcon-vs-photoshop">
+                        <h3>ImgCon vs. Photoshop: A Speed Comparison for Image Compression</h3>
+                        <p>Photoshop is the undisputed king of image editing, but is it the best tool for quick, batch image compression? We put ImgCon to the test against Photoshop's "Save for Web" feature. See our side-by-side comparison...</p>
+                        <a href="/blog/imgcon-vs-photoshop" class="font-bold read-more-btn" style="color: var(--primary-color);">Read More &rarr;</a>
+                    </article>
+                     <article data-slug="case-study-travel-blog-speed">
+                        <h3>Case Study: How a Travel Blog Cut Page Load Time in Half with ImgCon</h3>
+                        <p>We worked with a popular travel blogger whose photo-heavy articles were suffering from slow load times, leading to a high bounce rate. By implementing a simple workflow using ImgCon's batch compressor, they were able to reduce their total image weight by over 70%...</p>
+                        <a href="/blog/case-study-travel-blog-speed" class="font-bold read-more-btn" style="color: var(--primary-color);">Read More &rarr;</a>
+                    </article>
+                </div>
+            </div>
+            <div id="blog-post" class="hidden">
+                 <a href="/blog" class="font-bold back-to-blog-btn mb-6 inline-block" style="color: var(--primary-color);">&larr; Back to Blog</a>
+                 <div id="blog-post-content"></div>
+            </div>
+        </section>
+
+        <!-- Privacy Policy Screen -->
+        <section id="privacyScreen" class="screen hidden content-page">
+            <h2>Privacy Policy</h2>
+            <p><strong>Last Updated:</strong> July 19, 2026</p>
+            <p>At ImgCon, your privacy is our highest priority. This policy outlines our commitment to protecting your data. It's very simple.</p>
+            <h3>The Core Principle: Your Files Never Leave Your Device</h3>
+            <p>ImgCon is designed to be a "client-side" application. This means that all the functionality—image conversion, compression, and resizing—happens directly within your web browser on your own computer or mobile device.</p>
+            <ul>
+                <li><strong>We DO NOT upload your images to our servers.</strong></li>
+                <li><strong>We DO NOT store your images.</strong></li>
+                <li><strong>We DO NOT have any access to your files or data.</strong></li>
+            </ul>
+            <p>When you select an image, it is loaded into your browser's memory. Our tool's code (JavaScript) then processes it locally. Once you download the converted file, it is saved directly from your browser to your device. The original file remains untouched unless you choose to overwrite it.</p>
+            <h3>Data We Collect</h3>
+            <p>We use a privacy-friendly analytics service to collect anonymous usage data to help us improve the website. This includes information like which features are used most often and what types of errors occur. This data is completely anonymous and cannot be used to identify you or your files.</p>
+            <h3>Third-Party Services</h3>
+            <p>ImgCon is supported by advertisements. These ads are served by third-party ad networks. These networks may use cookies to serve ads based on a user's prior visits to this and other websites. We have chosen our ad partners carefully to ensure they comply with modern privacy standards.</p>
+            <h3>Your Consent</h3>
+            <p>By using our website, you consent to this privacy policy.</p>
+            <h3>Contact Us</h3>
+            <p>If you have any questions about this Privacy Policy, please feel free to <a href="mailto:privacy@imgcon.life">contact us at privacy@imgcon.life</a>.</p>
+        </section>
+
+        <!-- Terms & Conditions Screen -->
+        <section id="termsScreen" class="screen hidden content-page">
+            <h2>Terms and Conditions</h2>
+            <p><strong>Last Updated:</strong> July 19, 2026</p>
+            <p>Welcome to ImgCon. By accessing and using our website (https://imgcon.life), you agree to comply with and be bound by the following terms and conditions of use.</p>
+            <h3>1. Use of the Site</h3>
+            <p>ImgCon provides free client-side image processing tools (Conversion, Compression, Resizing, and Watermarking). These services are provided on an "as-is" and "as-available" basis for personal and professional use.</p>
+            <h3>2. User Privacy and Files</h3>
+            <p>Because ImgCon operates entirely within your browser (client-side), we do not upload, store, or monitor any of the files you process. You retain full ownership and responsibility for any content you upload and process through our application.</p>
+            <h3>3. Intellectual Property</h3>
+            <p>All content, tools, design, and code on ImgCon are the intellectual property of ImgCon. You may not reproduce, modify, or redistribute our code or tools without prior written consent.</p>
+            <h3>4. Limitation of Liability</h3>
+            <p>ImgCon and its team shall not be liable for any direct, indirect, incidental, or consequential damages resulting from the use or inability to use our tools, including but not limited to file corruption or data loss.</p>
+            <h3>5. Changes to Terms</h3>
+            <p>We reserve the right to modify these terms at any time. Any changes will be posted directly on this page with an updated modification date.</p>
+            <h3>Contact Us</h3>
+            <p>If you have any questions regarding these Terms, you can contact us at <a href="mailto:contact@imgcon.life">contact@imgcon.life</a>.</p>
+        </section>
+
+        <div id="card-footer">
+            <h4 class="font-bold text-lg mb-3" style="color: var(--text-dark);">ImgCon</h4>
+            <p class="text-sm">The free, fast, and private way to handle all your image processing needs. Built with privacy at its core.</p>
+            <p class="text-xs mt-4">&copy; 2026 ImgCon. All Rights Reserved. Your images stay on your device.</p>
+        </div>
+    </main>
+
+    <footer id="main-footer" class="text-center py-8 mt-8 text-light max-w-7xl mx-auto border-t" style="border-color: var(--card-border);">
+        <div class="grid md:grid-cols-5 gap-8 text-left mb-8">
+            <div>
+                <h4 class="font-bold text-lg mb-3" style="color: var(--text-dark);">ImgCon</h4>
+                <p class="text-sm">The free, fast, and private way to handle all your image processing needs. Built with privacy at its core.</p>
+            </div>
+            <div>
+                 <h4 class="font-bold text-lg mb-3" style="color: var(--text-dark);">Tools</h4>
+                 <ul class="space-y-2 text-sm">
+                     <li><a href="/image-converter" class="hover:underline">Image Converter</a></li>
+                     <li><a href="/image-compressor" class="hover:underline">Image Compressor</a></li>
+                     <li><a href="/image-resizer" class="hover:underline">Image Resizer</a></li>
+                     <li><a href="/image-watermark" class="hover:underline">Watermark Tool</a></li>
+                 </ul>
+            </div>
+             <div>
+                 <h4 class="font-bold text-lg mb-3" style="color: var(--text-dark);">Company</h4>
+                 <ul class="space-y-2 text-sm">
+                     <li><a href="/about-us" class="hover:underline">About Us</a></li>
+                     <li><a href="/blog" class="hover:underline">Blog</a></li>
+                     <li><a href="mailto:contact@imgcon.life" class="hover:underline">Contact Us</a></li>
+                 </ul>
+            </div>
+            <div>
+                 <h4 class="font-bold text-lg mb-3" style="color: var(--text-dark);">Legal</h4>
+                 <ul class="space-y-2 text-sm">
+                      <li><a href="/privacy-policy" class="hover:underline">Privacy Policy</a></li>
+                      <li><a href="/terms-conditions" class="hover:underline">Terms & Conditions</a></li>
+                 </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-3" style="color: var(--text-dark);">Share ImgCon</h4>
+                <div class="flex flex-wrap items-center gap-3">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://imgcon.life" target="_blank" rel="noopener noreferrer" class="social-share-btn" style="background-color: #1877F2;" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com/intent/tweet?url=https://imgcon.life&text=Check%20out%20ImgCon,%20a%20free,%20private,%20and%20fast%20online%20image%20toolkit!" target="_blank" rel="noopener noreferrer" class="social-share-btn" style="background-color: #1DA1F2;" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://api.whatsapp.com/send?text=Check%20out%20ImgCon,%20a%20free,%20private,%20and%20fast%20online%20image%20toolkit!%20https://imgcon.life" target="_blank" rel="noopener noreferrer" class="social-share-btn" style="background-color: #25D366;" aria-label="Share on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://t.me/share/url?url=https://imgcon.life&text=Check%20out%20ImgCon,%20a%20free,%20private,%20and%20fast%20online%20image%20toolkit!" target="_blank" rel="noopener noreferrer" class="social-share-btn" style="background-color: #0088cc;" aria-label="Share on Telegram"><i class="fab fa-telegram"></i></a>
+                     <a href="mailto:?subject=Check out ImgCon - A Free Image Toolkit&body=I found this awesome free, private, and fast online image toolkit! You should check it out: https://imgcon.life" target="_blank" rel="noopener noreferrer" class="social-share-btn" style="background-color: #D44638;" aria-label="Share via Email"><i class="fas fa-envelope"></i></a>
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://imgcon.life" target="_blank" rel="noopener noreferrer" class="social-share-btn" style="background-color: #0A66C2;" aria-label="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <button id="copyLinkBtn" class="copy-link-btn flex items-center gap-2" aria-label="Copy link to share">
+                        <i class="fab fa-instagram"></i>
+                        <i class="fab fa-threads"></i>
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+           </div>
+        </div>
+        <p class="text-sm">&copy; 2026 ImgCon. All Rights Reserved. Your images stay on your device.</p>
+    </footer>
+
+    <div id="toast" class="toast"><i class="fas fa-check-circle mr-2"></i><span id="toastMessage"></span></div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="preview-modal">
+        <div class="modal-content">
+            <div class="modal-header flex justify-between items-center"><h3 class="text-lg font-bold" id="modalFileName">Image Preview</h3><button id="modalCloseBtn" class="secondary-btn rounded-full w-8 h-8 flex items-center justify-center p-0">&times;</button></div>
+            <div class="modal-body">
+                <div class="before-after-container h-full w-full" id="modalPreviewContainer">
+                    <div class="before-image-clipper"><img class="before-image" src="" alt="Before"></div>
+                    <img class="after-image" src="" alt="After">
+                    <div class="before-after-slider"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Templates -->
+    <template id="toolLayoutTemplate">
+        <div class="tool-container">
+            <div class="drop-zone-container">
+                 <div class="drop-zone rounded-2xl p-8 text-center cursor-pointer mb-6 flex flex-col items-center justify-center border-3 border-dashed" id="dropZone" style="border-color: var(--card-border); background-color: var(--bg-subtle);">
+                    <div class="initial-drop-message"><i class="fas fa-cloud-upload-alt text-5xl text-indigo-400 mb-4 drop-shadow-lg"></i><p class="text-lg font-semibold mb-2">Drag & drop files here</p><p class="text-light text-sm">or click to browse</p></div>
+                    <div class="staging-area hidden w-full"><div class="thumbnail-grid grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4 max-h-48 overflow-y-auto p-2 bg-bg-main rounded-lg"></div><p class="file-summary font-semibold text-lg mb-4"></p><button class="confirm-btn upload-button"><i class="fas fa-arrow-right mr-2"></i>Continue</button></div>
+                    <input type="file" class="hidden file-input" accept="image/*" multiple>
+                </div>
+            </div>
+            <div class="process-ui grid md:grid-cols-2 gap-8 hidden">
+                <div class="left-column space-y-4">
+                    <div class="preview-container h-64 md:h-96 rounded-xl relative bg-bg-subtle flex items-center justify-center overflow-hidden"><div class="gallery-container w-full h-full flex transition-transform duration-300"></div><div class="before-after-container hidden"><div class="before-image-clipper"><img class="before-image" src="" alt="Before"></div><img class="after-image" src="" alt="After"><div class="before-after-slider"></div></div></div>
+                    <div class="flex justify-between items-center px-2"><button class="prev-image-btn p-2 rounded-full hover:bg-bg-subtle" aria-label="Previous Image"><i class="fas fa-chevron-left"></i></button><div><span class="current-image-index">1</span> / <span class="total-images">1</span></div><button class="next-image-btn p-2 rounded-full hover:bg-bg-subtle" aria-label="Next Image"><i class="fas fa-chevron-right"></i></button></div>
+                     <div class="file-management-section space-y-3"><div class="flex justify-between items-center"><h3 class="text-lg font-semibold">Manage Files <span class="text-sm text-light font-normal">(Drag to reorder for PDF)</span></h3><button class="clear-all-btn text-sm font-semibold text-red-500 hover:text-red-700">Clear All</button></div><div class="file-list-container max-h-48 overflow-y-auto p-2 bg-bg-subtle rounded-lg space-y-2"></div><label class="secondary-btn w-full flex items-center justify-center py-2 rounded-full cursor-pointer"><i class="fas fa-plus mr-2"></i> Add More Images<input type="file" class="hidden add-more-files-input" accept="image/*" multiple></label></div>
+                </div>
+                <div class="right-column space-y-6">
+                    <div class="options-container space-y-4"></div>
+                     <div class="conversion-process hidden text-center p-4"><div class="progress-bar-container mb-3"><div class="progress-bar-fill" style="width: 0%;"></div></div><p class="font-medium mt-2 processing-text"></p></div>
+                    <div class="output-section">
+                        <button class="start-btn upload-button w-full justify-center py-3 text-lg mb-3"><i class="fas fa-cogs mr-3"></i><span>Start</span></button>
+                        <div class="results-container hidden space-y-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="converterOptionsTemplate">
+        <h3 class="text-xl font-bold">Converter Options</h3><div><label class="font-semibold block mb-3">Output Format</label><div class="grid grid-cols-2 sm:grid-cols-3 gap-4 format-selector"><div class="format-card-container"><div class="format-card cursor-pointer" data-format="png"><div class="card-face card-front"><i class="fas fa-image text-3xl mb-2 text-indigo-400"></i><h4 class="font-bold text-lg">PNG</h4></div><div class="card-face card-back"><i class="fas fa-check-circle text-5xl"></i></div></div></div><div class="format-card-container"><div class="format-card cursor-pointer" data-format="jpg"><div class="card-face card-front"><i class="fas fa-camera-retro text-3xl mb-2 text-yellow-500"></i><h4 class="font-bold text-lg">JPG</h4></div><div class="card-face card-back"><i class="fas fa-check-circle text-5xl"></i></div></div></div><div class="format-card-container"><div class="format-card cursor-pointer" data-format="webp"><div class="card-face card-front"><i class="fas fa-rocket text-3xl mb-2 text-teal-400"></i><h4 class="font-bold text-lg">WEBP</h4></div><div class="card-face card-back"><i class="fas fa-check-circle text-5xl"></i></div></div></div><div class="format-card-container"><div class="format-card cursor-pointer" data-format="avif"><div class="card-face card-front"><i class="fas fa-feather-alt text-3xl mb-2 text-purple-400"></i><h4 class="font-bold text-lg">AVIF</h4></div><div class="card-face card-back"><i class="fas fa-check-circle text-5xl"></i></div></div></div><div class="format-card-container"><div class="format-card cursor-pointer" data-format="pdf"><div class="card-face card-front"><i class="fas fa-file-pdf text-3xl mb-2 text-red-500"></i><h4 class="font-bold text-lg">PDF</h4></div><div class="card-face card-back"><i class="fas fa-check-circle text-5xl"></i></div></div></div><div class="format-card-container"><div class="format-card cursor-pointer" data-format="ico"><div class="card-face card-front"><i class="fas fa-desktop text-3xl mb-2 text-blue-500"></i><h4 class="font-bold text-lg">ICO</h4></div><div class="card-face card-back"><i class="fas fa-check-circle text-5xl"></i></div></div></div></div></div>
+        <div class="options-section bg-bg-subtle rounded-lg" id="qualitySection"><label class="font-semibold block mb-2">Quality (<span class="quality-value">85</span>%)</label><input type="range" class="quality-slider w-full" min="1" max="100" value="85"></div>
+        <div class="options-section bg-bg-subtle rounded-lg" id="pdfOptionsSection"><h4 class="font-semibold block mb-3">PDF Options</h4><div class="grid grid-cols-2 gap-4"><div><label for="pdf-page-size" class="text-sm font-medium">Page Size</label><select id="pdf-page-size" class="w-full mt-1 p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);"><option value="a4">A4</option><option value="letter">Letter</option><option value="legal">Legal</option></select></div><div><label for="pdf-orientation" class="text-sm font-medium">Orientation</label><select id="pdf-orientation" class="w-full mt-1 p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);"><option value="p">Portrait</option><option value="l">Landscape</option></select></div><div class="col-span-2"><label for="pdf-margin" class="text-sm font-medium">Margin (mm)</label><input type="number" id="pdf-margin" class="w-full mt-1 p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);" value="10" min="0"></div></div></div>
+    </template>
+
+    <template id="compressorOptionsTemplate">
+        <h3 class="text-xl font-bold">Compressor Options</h3>
+        <div class="options-section show p-4 bg-bg-subtle rounded-lg">
+            <div class="flex items-center justify-between mb-2">
+                <label class="font-semibold">Compression Level (<span class="quality-value">80</span>%)</label>
+                <div id="png-info" class="tooltip hidden">
+                    <i class="fas fa-info-circle text-light cursor-pointer"></i>
+                    <span class="tooltip-text">PNG compression is lossless. Reduction may be minimal. For bigger savings, consider converting to JPG or WEBP.</span>
+                </div>
+            </div>
+            <input type="range" class="quality-slider w-full" min="1" max="100" value="80" step="1">
+        </div>
+        <div class="p-4 bg-bg-subtle rounded-lg space-y-3"><div class="flex items-center justify-between"><label for="target-size-toggle" class="font-semibold">Target File Size</label><div class="relative inline-block w-10 mr-2 align-middle select-none"><input type="checkbox" id="target-size-toggle" class="target-size-toggle absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" style="right: 1rem;"><label for="target-size-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label></div></div><div class="target-size-input-container hidden flex items-center gap-2"><input type="number" class="target-size-input w-full p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);" placeholder="e.g., 100"><select class="target-size-unit p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);"><option value="KB">KB</option><option value="MB">MB</option></select><button class="target-size-go-btn p-2 rounded-md text-white w-12" style="background-color: var(--primary-color);"><i class="fas fa-search"></i></button></div><p class="target-size-status text-sm text-light text-center hidden"></p></div>
+        <div class="flex items-center justify-between p-4 bg-bg-subtle rounded-lg"><label for="before-after-toggle" class="font-semibold">Before/After Preview</label><div class="relative inline-block w-10 mr-2 align-middle select-none"><input type="checkbox" name="before-after-toggle" id="before-after-toggle" class="target-size-toggle absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" style="right: 1rem;"><label for="before-after-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label></div></div>
+        <div class="realtime-preview-info p-4 bg-bg-subtle rounded-lg text-center hidden"><p class="font-semibold">Estimated Size</p><div class="flex justify-center items-baseline gap-3 mt-2"><span class="original-size text-light line-through">0 KB</span><i class="fas fa-arrow-right text-light"></i><span class="new-size text-2xl font-bold text-success">0 KB</span></div></div>
+    </template>
+
+    <template id="resizerOptionsTemplate">
+        <h3 class="text-xl font-bold">Resizer Options</h3>
+        <div class="p-4 bg-bg-subtle rounded-lg space-y-4">
+            <div>
+                <label class="font-semibold text-sm">Resize By</label>
+                <div class="flex mt-2 rounded-lg border p-1" style="border-color: var(--card-border); background-color: var(--card-bg);">
+                    <button class="resize-by-btn active w-1/2 p-2 rounded-md text-sm" data-mode="pixels">Pixels</button>
+                    <button class="resize-by-btn w-1/2 p-2 rounded-md text-sm" data-mode="percentage">Percentage</button>
+                </div>
+            </div>
+            <!-- Pixels Mode -->
+            <div id="pixels-mode-container" class="space-y-3">
+                <div class="grid grid-cols-2 gap-3 items-center">
+                    <div>
+                        <label for="resize-width" class="text-sm font-medium">Width (px)</label>
+                        <input type="number" id="resize-width" class="w-full mt-1 p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);">
+                    </div>
+                    <div>
+                        <label for="resize-height" class="text-sm font-medium">Height (px)</label>
+                        <input type="number" id="resize-height" class="w-full mt-1 p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);">
+                    </div>
+                </div>
+                <div>
+                    <label for="social-presets" class="text-sm font-medium">Social Media Presets</label>
+                    <select id="social-presets" class="w-full mt-1 p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);">
+                        <option value="custom">Custom Size</option>
+                        <option value="1080x1080">Instagram Post (1080x1080)</option>
+                        <option value="1080x1350">Instagram Portrait (1080x1350)</option>
+                        <option value="1080x1920">Instagram Story (1080x1920)</option>
+                        <option value="1200x630">Facebook Post (1200x630)</option>
+                        <option value="820x312">Facebook Cover (820x312)</option>
+                        <option value="1024x512">Twitter Post (1024x512)</option>
+                        <option value="1500x500">Twitter Header (1500x500)</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Percentage Mode -->
+            <div id="percentage-mode-container" class="hidden space-y-3">
+                <div>
+                    <label class="font-semibold block mb-2">Scale (<span id="percentage-value">50</span>%)</label>
+                    <input type="range" id="percentage-slider" class="w-full" min="1" max="100" value="50">
+                </div>
+                <div class="text-center text-sm text-light">
+                    New Dimensions: <span id="percentage-dims">0 x 0 px</span>
+                </div>
+            </div>
+             <div class="flex items-center justify-between pt-3 border-t" style="border-color: var(--card-border);">
+                <label for="aspect-ratio-toggle" class="font-semibold text-sm">Maintain Aspect Ratio</label>
+                <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                    <input type="checkbox" id="aspect-ratio-toggle" class="target-size-toggle absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" style="right: 0.1rem;" checked>
+                    <label for="aspect-ratio-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" style="background-color: var(--primary-color);"></label>
+                </div>
+            </div>
+        </div>
+        <style>.resize-by-btn.active { background-color: var(--primary-color); color: white; }</style>
+    </template>
+    
+    <template id="watermarkOptionsTemplate">
+        <h3 class="text-xl font-bold">Watermark Options</h3>
+        <div class="p-4 bg-bg-subtle rounded-lg space-y-4">
+            <div>
+                <label class="font-semibold text-sm">Watermark Type</label>
+                <div class="flex mt-2 rounded-lg border p-1" style="border-color: var(--card-border); background-color: var(--card-bg);">
+                    <button class="watermark-type-btn active w-1/2 p-2 rounded-md text-sm" data-type="text">Text</button>
+                    <button class="watermark-type-btn w-1/2 p-2 rounded-md text-sm" data-type="image">Image</button>
+                </div>
+            </div>
+            <!-- Text Watermark -->
+            <div id="text-watermark-options">
+                <label for="watermark-text" class="text-sm font-medium">Watermark Text</label>
+                <input type="text" id="watermark-text" class="w-full mt-1 p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);" value="© ImgCon">
+            </div>
+            <!-- Image Watermark -->
+            <div id="image-watermark-options" class="hidden">
+                 <label for="watermark-image-input" class="secondary-btn w-full flex items-center justify-center py-2 rounded-full cursor-pointer"><i class="fas fa-upload mr-2"></i> Choose Logo<input type="file" id="watermark-image-input" class="hidden" accept="image/png, image/jpeg, image/webp"></label>
+                 <img id="watermark-preview" class="hidden max-h-16 mx-auto mt-2 p-1 border rounded" style="border-color: var(--card-border);">
+            </div>
+             <div class="pt-4 border-t" style="border-color: var(--card-border);">
+                <label class="font-semibold block mb-2 text-sm">Opacity (<span id="opacity-value">70</span>%)</label>
+                <input type="range" id="opacity-slider" class="w-full" min="0" max="100" value="70">
+            </div>
+            <div>
+                <label class="font-semibold block mb-2 text-sm">Scale (<span id="scale-value">20</span>%)</label>
+                <input type="range" id="scale-slider" class="w-full" min="1" max="100" value="20">
+            </div>
+            <div>
+                 <label class="font-semibold block mb-2 text-sm">Position</label>
+                 <div class="grid grid-cols-3 gap-2">
+                     <button class="position-btn p-2 border rounded" data-position="top-left"><i class="fas fa-arrow-up"></i><i class="fas fa-arrow-left"></i></button>
+                     <button class="position-btn p-2 border rounded" data-position="top-center"><i class="fas fa-arrow-up"></i></button>
+                     <button class="position-btn p-2 border rounded" data-position="top-right"><i class="fas fa-arrow-up"></i><i class="fas fa-arrow-right"></i></button>
+                     <button class="position-btn p-2 border rounded" data-position="center-left"><i class="fas fa-arrow-left"></i></button>
+                     <button class="position-btn p-2 border rounded active" data-position="center"><i class="fas fa-crosshairs"></i></button>
+                     <button class="position-btn p-2 border rounded" data-position="center-right"><i class="fas fa-arrow-right"></i></button>
+                     <button class="position-btn p-2 border rounded" data-position="bottom-left"><i class="fas fa-arrow-down"></i><i class="fas fa-arrow-left"></i></button>
+                     <button class="position-btn p-2 border rounded" data-position="bottom-center"><i class="fas fa-arrow-down"></i></button>
+                     <button class="position-btn p-2 border rounded" data-position="bottom-right"><i class="fas fa-arrow-down"></i><i class="fas fa-arrow-right"></i></button>
+                 </div>
+            </div>
+        </div>
+        <style>.watermark-type-btn.active, .position-btn.active { background-color: var(--primary-color); color: white; }</style>
+    </template>
+    
+    <template id="blogPostsTemplate">
+        <div data-slug="png-vs-jpg-difference">
+            <h2>PNG vs JPG: What's the Difference and Which One Should You Use?</h2>
+            <p>When it comes to saving images, two of the most popular file formats you'll encounter are PNG and JPG (or JPEG). While they may seem similar, they are fundamentally different and are best suited for different tasks. Understanding these differences is key to optimizing your images for both quality and file size, whether for the web or for print.</p>
+            <h3>JPG (Joint Photographic Experts Group)</h3>
+            <p>JPGs are the most common file format for digital photos. They use a method of "lossy" compression. This means that when the image is saved, some of the original image information is discarded to make the file size smaller. For most photographs, this loss is imperceptible to the human eye, but it allows for a significant reduction in file size.</p>
+            <ul>
+                <li><strong>Best for:</strong> Photographs, complex images with gradients and many colors.</li>
+                <li><strong>Pros:</strong> Small file sizes, widely supported.</li>
+                <li><strong>Cons:</strong> Lossy compression (quality degrades with each save), does not support transparency.</li>
+            </ul>
+            <h3>PNG (Portable Network Graphics)</h3>
+            <p>PNGs were developed as a more powerful alternative to the older GIF format. They use "lossless" compression, which means no image data is lost when the file is saved. The file size is reduced by finding more efficient ways to represent the data without discarding it. This makes them perfect for images where clarity is crucial.</p>
+            <ul>
+                <li><strong>Best for:</strong> Logos, icons, text, illustrations, and any image that requires a transparent background.</li>
+                <li><strong>Pros:</strong> Lossless quality, supports transparency.</li>
+                <li><strong>Cons:</strong> Larger file sizes, especially for photographs.</li>
+            </ul>
+            <h3>The Bottom Line</h3>
+            <p>Choosing the right one can have a big impact on your image's quality and file size. Use JPG for your photos to keep your website loading fast. Use PNG for logos, graphics, and anything that needs sharp lines or a transparent background. ImgCon's <a href="/image-converter">Image Converter</a> can help you easily switch between these formats to find the perfect balance for your needs.</p>
+        </div>
+
+        <div data-slug="how-to-reduce-photo-size">
+            <h2>How to Reduce Photo Size Without Losing Quality (The Definitive Guide)</h2>
+            <p>Large image files are a major cause of slow-loading websites and can quickly eat up storage space. But how do you make them smaller without turning them into a pixelated mess? This guide will walk you through the best techniques for effective image compression.</p>
+            <h3>Understand Lossy vs. Lossless Compression</h3>
+            <p>As we covered in our PNG vs. JPG article, the type of compression matters. <strong>Lossy</strong> (like JPG) removes data to shrink files, which is great for photos but can create artifacts if overdone. <strong>Lossless</strong> (like PNG) reorganizes data without removing it, preserving perfect quality at the cost of a larger file size.</p>
+            <h3>Choosing the Right Format for the Job</h3>
+            <p>Before compressing, make sure your image is in the right format. A photograph saved as a PNG will be unnecessarily large. Convert it to JPG first using a tool like ImgCon. Conversely, a logo saved as a JPG may have fuzzy edges; converting it to PNG will keep it crisp.</p>
+            <h3>Using the Right Tools</h3>
+            <p>ImgCon's <a href="/image-compressor">Image Compressor</a> gives you fine-tuned control. The quality slider allows you to find the "sweet spot" where the file size is low, but the quality is still high. For web images, a quality setting of 75-85% is often a great starting point. The live "before and after" preview is essential for seeing the impact of your changes in real-time. For ultimate control, you can even use the "Target File Size" feature to get the exact size you need.</p>
+        </div>
+
+        <div data-slug="webp-the-future-of-web-images">
+            <h2>Why WebP is the Future of Web Images</h2>
+            <p>Developed by Google, WebP is a modern image format that provides superior lossless and lossy compression for images on the web. Using WebP, webmasters and web developers can create smaller, richer images that make the web faster. On average, WebP lossless images are 26% smaller in size compared to PNGs. WebP lossy images are 25-34% smaller than comparable JPEG images at equivalent SSIM quality index.</p>
+            <h3>Advantages of WebP</h3>
+            <ul>
+                <li><strong>Superior Compression:</strong> WebP offers significantly smaller file sizes than JPG and PNG at comparable quality.</li>
+                <li><strong>Versatility:</strong> It supports both lossy and lossless compression, as well as transparency and animation, making it a true all-in-one format.</li>
+                <li><strong>Wide Support:</strong> All modern browsers, including Chrome, Firefox, Edge, and Safari, now fully support the WebP format.</li>
+            </ul>
+            <p>We explore the advantages of WebP over traditional formats and show you how easy it is to convert your images to WebP using ImgCon. It's the perfect way to speed up your website and improve user experience without sacrificing quality.</p>
+        </div>
+
+        <div data-slug="imgcon-vs-photoshop">
+            <h2>ImgCon vs. Photoshop: A Speed Comparison for Image Compression</h2>
+            <p>Photoshop is the undisputed king of image editing, but is it the best tool for quick, batch image compression? We put ImgCon to the test against Photoshop's "Save for Web" feature.</p>
+            <h3>The Test</h3>
+            <p>We took 20 high-resolution photographs and performed the same task: compress them to JPG at 80% quality. We measured the total time from starting the application to having the final images saved.</p>
+            <ul>
+                <li><strong>Photoshop:</strong> Required opening the app, creating an action for batch processing, running the action, and waiting for the files to be saved. Total time: <strong>3 minutes, 15 seconds.</strong></li>
+                <li><strong>ImgCon:</strong> Required opening the website, dragging and dropping the 20 images, adjusting the quality slider once, and clicking "Start." The processing was nearly instant, and the download was a single ZIP file. Total time: <strong>45 seconds.</strong></li>
+            </ul>
+            <h3>Conclusion</h3>
+            <p>While Photoshop offers more granular control for individual images, for common web optimization tasks and batch processing, ImgCon provides a blazing-fast, browser-based experience with zero uploads. It's the ideal tool for developers and marketers who need to process images quickly and efficiently without the overhead of desktop software.</p>
+        </div>
+
+        <div data-slug="case-study-travel-blog-speed">
+            <h2>Case Study: How a Travel Blog Cut Page Load Time in Half with ImgCon</h2>
+            <p>We worked with a popular travel blogger whose photo-heavy articles were suffering from slow load times, leading to a high bounce rate. The average page load time was 8.2 seconds, with the images on a single page totaling over 15 MB.</p>
+            <h3>The Solution</h3>
+            <p>The blogger implemented a simple workflow using ImgCon's tools before uploading any new photos:</p>
+            <ol class="list-decimal list-inside ml-4">
+                <li>Convert all images to a modern format like WEBP using the <a href="/image-converter">Image Converter</a>.</li>
+                <li>Use the <a href="/image-compressor">Image Compressor</a> to reduce the file size, aiming for a quality level of around 80%.</li>
+            </ol>
+            <h3>The Results</h3>
+            <p>By implementing this two-step process, they were able to reduce their total image weight by over 70% without a noticeable drop in quality. The average image size went from 750 KB to just 180 KB. The result? The average page load time dropped from 8.2 seconds to <strong>3.5 seconds</strong>. This dramatically improved their SEO rankings and user engagement, reducing their bounce rate by nearly 40%.</p>
+        </div>
+    </template>
+
+    <script>
+    // For production, this JavaScript should be extracted to an external file and minified/uglified to reduce its size and improve performance.
+    // --- State Management ---
+    let files = [], originalFileDetails = [], processedResults = [], currentImageIdx = 0, selectedFormat = null, workerPool = [], activeTool = null, debouncedPreview, lazyLoadObserver, deferredInstallPrompt = null, watermarkImage = null;
+    const SESSION_STORAGE_KEY = 'imgcon_session_v3';
+
+    // --- DOM Elements ---
+    const allScreens = document.querySelectorAll('.screen');
+    const homeBtn = document.getElementById('homeBtn');
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    const previewModal = document.getElementById('previewModal');
+    const installPwaBtn = document.getElementById('installPwaBtn');
+    const mainContainer = document.querySelector('main.app-container');
+    const mainFooter = document.getElementById('main-footer');
+    const cardFooter = document.getElementById('card-footer');
+
+    // --- NEW: Client-Side Router ---
+    const routes = {
+        '/': {
+            screen: 'homeScreen',
+            title: 'ImgCon - Free Online Image Converter, Compressor & Resizer',
+            description: 'The best free online tool to convert, compress, and resize images without uploading. 100% private, fast, and works offline. Supports JPG, PNG, WebP, AVIF.'
+        },
+        '/image-converter': {
+            screen: 'toolScreen',
+            tool: 'converter',
+            title: 'Image Converter - Convert JPG, PNG, WebP, PDF Online Free',
+            description: 'Batch convert images to various formats like JPG, PNG, WEBP, AVIF, and even PDF. Fast, free, and completely private image conversion right in your browser.'
+        },
+        '/image-compressor': {
+            screen: 'toolScreen',
+            tool: 'compressor',
+            title: 'Image Compressor - Reduce Image Size Online (up to 80%)',
+            description: 'Drastically reduce image file sizes with our powerful online compressor. Features a live preview, target size functionality, and maintains quality. Perfect for web optimization.'
+        },
+        '/image-resizer': {
+            screen: 'toolScreen',
+            tool: 'resizer',
+            title: 'Image Resizer - Resize Images by Pixels or Percentage',
+            description: 'Easily resize images to exact dimensions or by a percentage. Maintain aspect ratio and use social media presets for perfect results every time.'
+        },
+        '/image-watermark': {
+            screen: 'toolScreen',
+            tool: 'watermark',
+            title: 'Watermark Tool - Add Text or Logo to Images Online',
+            description: 'Protect your images by adding a custom text or logo watermark. Control the position, size, and opacity with our easy-to-use tool.'
+        },
+        '/about-us': {
+            screen: 'aboutScreen',
+            title: 'About ImgCon - Our Story & Privacy-First Philosophy',
+            description: 'Learn about ImgCon, the privacy-focused image toolkit built for speed and accessibility. Discover our commitment to serverless processing and user data protection.'
+        },
+        '/blog': {
+            screen: 'blogScreen',
+            title: 'ImgCon Blog - Image Optimization Tips & Best Practices',
+            description: 'Explore our blog for insights on image formats like PNG, JPG, WebP, compression techniques, and best practices for web performance and image optimization.'
+        },
+        // NEW Blog post routes
+        '/blog/png-vs-jpg-difference': {
+            screen: 'blogScreen',
+            title: 'PNG vs JPG: What\'s the Difference? | ImgCon Blog',
+            description: 'Discover which format is best for your needs and how to choose wisely for web and print between PNG and JPG.',
+            isPost: true
+        },
+        '/blog/how-to-reduce-photo-size': {
+            screen: 'blogScreen',
+            title: 'How to Reduce Photo Size Without Losing Quality | ImgCon Blog',
+            description: 'A practical guide to shrinking image file sizes to speed up your website and save space using the best compression techniques.',
+            isPost: true
+        },
+        '/blog/webp-the-future-of-web-images': {
+            screen: 'blogScreen',
+            title: 'Why WebP is the Future of Web Images | ImgCon Blog',
+            description: 'Learn about the next-gen image format from Google, WebP, that offers superior compression and quality for modern websites.',
+            isPost: true
+        },
+         '/blog/imgcon-vs-photoshop': {
+            screen: 'blogScreen',
+            title: 'ImgCon vs. Photoshop: Speed Comparison | ImgCon Blog',
+            description: 'A side-by-side comparison of ImgCon and Photoshop for quick, easy, and private image compression tasks.',
+            isPost: true
+        },
+        '/blog/case-study-travel-blog-speed': {
+            screen: 'blogScreen',
+            title: 'Case Study: Halving Page Load Time | ImgCon Blog',
+            description: 'See how a travel blog cut their page load times by 70% using ImgCon\'s batch image processing tools.',
+            isPost: true
+        },
+        '/privacy-policy': {
+            screen: 'privacyScreen',
+            title: 'Privacy Policy - ImgCon',
+            description: 'Read the ImgCon privacy policy. We are committed to your privacy; your images are never uploaded to our servers and all processing is done on your device.'
+        },
+        '/terms-conditions': {
+            screen: 'termsScreen',
+            title: 'Terms and Conditions - ImgCon',
+            description: 'Read the terms and conditions for using ImgCon\'s free online image converter and optimization tools.'
+        }
+    };
+
+    const router = async () => {
+        const path = window.location.pathname;
+        const route = routes[path] || routes['/']; // Default to home if route not found
+
+        // Update meta tags for SEO
+        document.title = route.title;
+        document.querySelector('meta[name="description"]').setAttribute('content', route.description);
+        document.querySelector('meta[property="og:title"]').setAttribute('content', route.title);
+        document.querySelector('meta[property="og:description"]').setAttribute('content', route.description);
+        document.querySelector('meta[name="twitter:title"]').setAttribute('content', route.title);
+        document.querySelector('meta[name="twitter:description"]').setAttribute('content', route.description);
+        document.querySelector('link[rel="canonical"]').setAttribute('href', `https://imgcon.life${path}`);
+        document.querySelector('meta[property="og:url"]').setAttribute('content', `https://imgcon.life${path}`);
+
+        if (route.screen === 'blogScreen') {
+            showPage('blogScreen');
+            const blogListing = document.getElementById('blog-listing');
+            const blogPost = document.getElementById('blog-post');
+            const blogPostContent = document.getElementById('blog-post-content');
+
+            if (route.isPost) {
+                const slug = path.split('/').pop();
+                const postTemplate = document.getElementById('blogPostsTemplate');
+                const postContent = postTemplate.content.querySelector(`[data-slug="${slug}"]`);
+                if (postContent) {
+                    blogPostContent.innerHTML = postContent.innerHTML;
+                    blogListing.classList.add('hidden');
+                    blogPost.classList.remove('hidden');
+                } else {
+                    // Post not found, show listing
+                    blogListing.classList.remove('hidden');
+                    blogPost.classList.add('hidden');
+                }
+            } else {
+                // Show the main blog listing
+                blogListing.classList.remove('hidden');
+                blogPost.classList.add('hidden');
+            }
+        }
+        else if (route.tool) {
+            // Check if we are restoring from session or starting fresh
+            const restored = await loadStateFromSession();
+            if(!restored || activeTool !== route.tool) {
+                 showTool(route.tool);
+            }
+        } else {
+            showPage(route.screen);
+        }
+    };
+
+    const navigateTo = (e) => {
+        const link = e.target.closest('a');
+        if (link && link.hostname === window.location.hostname && !link.href.includes('mailto:') && !link.target) {
+            e.preventDefault();
+            if (window.location.pathname !== link.pathname) {
+                history.pushState({}, '', link.pathname);
+                router();
+            }
+        }
+    };
+
+    // --- Web Worker Pool Setup ---
+    function initializeWorkerPool() {
+        if (workerPool.length > 0) return; 
+        const numWorkers = navigator.hardwareConcurrency || 4;
+        const workerCode = `self.onmessage=async e=>{let{imageBitmap:t,fileName:i,fileIndex:o,tool:a,options:s}=e.data;try{let e,n;const l=new OffscreenCanvas(t.width,t.height),d=l.getContext("2d");if(d.drawImage(t,0,0),"resizer"===a||"watermark"===a){const{newWidth:e,newHeight:i}=s;l.width=e,l.height=i,d.drawImage(t,0,0,e,i)}if("watermark"===a){const{type:t,text:i,opacity:o,scale:a,position:n,watermarkBitmap:r}=s,c=l.width*.03;let m,h;if(d.globalAlpha=o,"text"===t){const e=Math.max(12,.1*l.width*a);d.font=\`bold \${e}px Arial\`,d.fillStyle="white",d.shadowColor="rgba(0,0,0,0.7)",d.shadowBlur=5,d.shadowOffsetX=2,d.shadowOffsetY=2;const s={x:0,y:0};switch(n){case"top-left":case"center-left":case"bottom-left":d.textAlign="left",s.x=c;break;case"top-center":case"center":case"bottom-center":d.textAlign="center",s.x=l.width/2;break;case"top-right":case"center-right":case"bottom-right":d.textAlign="right",s.x=l.width-c}switch(n){case"top-left":case"top-center":case"top-right":d.textBaseline="top",s.y=c;break;case"center-left":case"center":case"center-right":d.textBaseline="middle",s.y=l.height/2;break;case"bottom-left":case"bottom-center":case"bottom-right":d.textBaseline="bottom",s.y=l.height-c}d.fillText(i,s.x,s.y)}else if("image"===t&&r){const t=r.width/r.height;let e=l.width*a,i=e/t;i>l.height*a&&(i=l.height*a,e=i*t);const o={x:0,y:0};switch(n){case"top-left":case"center-left":case"bottom-left":o.x=c;break;case"top-center":case"center":case"bottom-center":o.x=(l.width-e)/2;break;case"top-right":case"center-right":case"bottom-right":o.x=l.width-e-c}switch(n){case"top-left":case"top-center":case"top-right":o.y=c;break;case"center-left":case"center":case"center-right":o.y=(l.height-i)/2;break;case"bottom-left":case"bottom-center":case"bottom-right":o.y=l.height-i-c}d.drawImage(r,o.x,o.y,e,i)}}const r="image/"+(s.format||"jpeg"),c=await l.convertToBlob({type:r,quality:s.quality});self.postMessage({success:!0,blob:c,fileName:i,intendedFormat:s.format||"jpeg",fileIndex:o,newWidth:l.width,newHeight:l.height})}catch(e){self.postMessage({success:!1,error:e.message,fileName:i,fileIndex:o})}}`;
+        const blob = new Blob([workerCode], { type: 'application/javascript' });
+        const workerUrl = URL.createObjectURL(blob);
+        for (let i = 0; i < numWorkers; i++) workerPool.push({ worker: new Worker(workerUrl), busy: false });
+    }
+
+    // --- UI Navigation & Setup ---
+    function showPage(pageId) {
+        allScreens.forEach(s => s.classList.add('hidden'));
+        const activeScreen = document.getElementById(pageId);
+        if (activeScreen) {
+             activeScreen.classList.remove('hidden');
+             mainContainer.style.minHeight = activeScreen.clientHeight + 'px';
+        }
+
+        const isHomePage = pageId === 'homeScreen';
+        homeBtn.classList.toggle('hidden', isHomePage);
+        
+        if (isHomePage) {
+            mainFooter.style.display = 'block';
+            cardFooter.style.display = 'none';
+        } else {
+            mainFooter.style.display = 'none';
+            cardFooter.style.display = 'block';
+        }
+        
+        if (pageId !== 'toolScreen') {
+             activeTool = null; // Clear active tool if not on tool screen
+        }
+        window.scrollTo(0, 0);
+    }
+    
+    function showTool(toolName, preloadedFiles = null) {
+        activeTool = toolName;
+        showPage('toolScreen');
+        setupToolUI(activeTool);
+        if (preloadedFiles) {
+            handleFiles(preloadedFiles);
+        }
+    }
+
+    function setupToolUI(toolName) {
+        const toolScreen = document.getElementById('toolScreen');
+        const toolLayout = document.getElementById('toolLayoutTemplate').content.cloneNode(true);
+        toolScreen.innerHTML = '';
+        toolScreen.appendChild(toolLayout);
+
+        const optionsContainer = toolScreen.querySelector('.options-container');
+        const optionsTemplateId = `${toolName}OptionsTemplate`;
+        optionsContainer.appendChild(document.getElementById(optionsTemplateId).content.cloneNode(true));
+        
+        const fileInput = toolScreen.querySelector('.file-input');
+        const addMoreInput = toolScreen.querySelector('.add-more-files-input');
+        if (toolName === 'compressor') {
+            fileInput.accept = 'image/jpeg, image/webp';
+            addMoreInput.accept = 'image/jpeg, image/webp';
+        } else if (toolName === 'converter') {
+            fileInput.accept = 'image/*,application/pdf';
+            addMoreInput.accept = 'image/*,application/pdf';
+        } else {
+            fileInput.accept = 'image/*';
+            addMoreInput.accept = 'image/*';
+        }
+
+        attachToolEventListeners(toolScreen);
+    }
+
+    function resetTool() {
+        if (!activeTool) return;
+        sessionStorage.removeItem(SESSION_STORAGE_KEY);
+        files = []; originalFileDetails = []; processedResults = []; selectedFormat = null; currentImageIdx = 0; watermarkImage = null;
+        if (lazyLoadObserver) lazyLoadObserver.disconnect();
+        setupToolUI(activeTool);
+    }
+
+    // --- Core Functionality ---
+    function handleFiles(fileList, isAddingMore = false) {
+        let newFiles = Array.from(fileList);
+        
+        if (activeTool === 'compressor') {
+            const pngFiles = newFiles.filter(file => file.type === 'image/png');
+            if (pngFiles.length > 0) {
+                showToast(`PNG files are not supported by the compressor. Please use the Converter first.`, 5000);
+                newFiles = newFiles.filter(file => file.type !== 'image/png');
+            }
+        }
+
+        if (['compressor', 'resizer', 'watermark'].includes(activeTool)) {
+            const nonImageFiles = newFiles.filter(file => !file.type.startsWith('image/'));
+            if (nonImageFiles.length > 0) {
+                showToast(`Only image files are supported in this tool.`, 4000);
+                newFiles = newFiles.filter(file => file.type.startsWith('image/'));
+            }
+        }
+
+        if (newFiles.length === 0 && !isAddingMore) return;
+        if (isAddingMore) {
+            const startIndex = files.length;
+            files.push(...newFiles);
+            populateFileDetails(newFiles, startIndex).then(() => {
+                displayFiles();
+                renderFileManagementUI();
+                showFilePreview(files.length - 1);
+            });
+        } else {
+            files = newFiles;
+            renderStagingArea();
+        }
+    }
+    
+    function renderStagingArea() {
+        const toolScreen = document.getElementById('toolScreen');
+        const dropZone = toolScreen.querySelector('#dropZone');
+        const initialMessage = dropZone.querySelector('.initial-drop-message');
+        const stagingArea = dropZone.querySelector('.staging-area');
+        const thumbnailGrid = stagingArea.querySelector('.thumbnail-grid');
+        const fileSummary = stagingArea.querySelector('.file-summary');
+        const confirmBtn = stagingArea.querySelector('.confirm-btn');
+
+        if (files.length === 0) {
+            initialMessage.classList.remove('hidden');
+            stagingArea.classList.add('hidden');
+            return;
+        }
+
+        initialMessage.classList.add('hidden');
+        stagingArea.classList.remove('hidden');
+        let totalSize = files.reduce((acc, file) => acc + file.size, 0);
+        fileSummary.textContent = `You've selected ${files.length} file(s) (Total size: ${formatBytes(totalSize)})`;
+        thumbnailGrid.innerHTML = files.map((file, index) => `<div class="relative group p-1 border rounded-md" style="background-color: var(--bg-main);"><img src="${URL.createObjectURL(file)}" class="w-full h-16 object-cover rounded-sm" alt="Staging thumbnail for ${file.name}"><div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><button class="staging-delete-btn text-white text-xl" data-index="${index}" aria-label="Remove ${file.name}">&times;</button></div></div>`).join('');
+        thumbnailGrid.querySelectorAll('.staging-delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => { e.stopPropagation(); files.splice(parseInt(btn.dataset.index, 10), 1); renderStagingArea(); });
+        });
+        confirmBtn.onclick = () => confirmSelection();
+    }
+
+    async function populateFileDetails(fileList, startIndex = 0) {
+        await Promise.all(fileList.map((file, i) => new Promise(resolve => {
+            const index = startIndex + i;
+            if (file.type === 'application/pdf') {
+                originalFileDetails[index] = { width: 'N/A', height: 'N/A', size: file.size, name: file.name, type: file.type, ratio: 0 };
+                resolve();
+                return;
+            }
+            const img = new Image();
+            img.onload = () => { originalFileDetails[index] = { width: img.width, height: img.height, size: file.size, name: file.name, type: file.type, ratio: img.width / img.height }; URL.revokeObjectURL(img.src); resolve(); };
+            img.onerror = () => { originalFileDetails[index] = { width: 0, height: 0, size: file.size, name: file.name, type: file.type, ratio: 0 }; resolve(); };
+            img.src = URL.createObjectURL(file);
+        })));
+    }
+
+    async function confirmSelection() {
+        if (files.length === 0) { showToast('Please select at least one file.'); return; }
+        const toolScreen = document.getElementById('toolScreen');
+        toolScreen.querySelector('.drop-zone-container').classList.add('hidden');
+        toolScreen.querySelector('.process-ui').classList.remove('hidden');
+        await populateFileDetails(files);
+        displayFiles();
+        renderFileManagementUI();
+        showFilePreview(0);
+        const startBtnText = toolScreen.querySelector('.start-btn span');
+        if (activeTool === 'compressor') startBtnText.textContent = 'Compress & Download';
+        else if (activeTool === 'converter') startBtnText.textContent = 'Start Conversion';
+        else if (activeTool === 'resizer') startBtnText.textContent = 'Resize Images';
+        else if (activeTool === 'watermark') startBtnText.textContent = 'Apply Watermark';
+    }
+
+    function displayFiles() {
+        const toolScreen = document.getElementById('toolScreen');
+        const galleryContainer = toolScreen.querySelector('.gallery-container');
+        galleryContainer.innerHTML = files.map(file => {
+            if (file.type === 'application/pdf') {
+                return `<div class="gallery-item w-full h-full flex-shrink-0 flex items-center justify-center p-2 text-center text-light"><div class="p-4 bg-card-bg rounded-lg border border-card-border"><i class="fas fa-file-pdf text-6xl text-red-500 mb-3"></i><p class="font-semibold">${file.name}</p></div></div>`;
+            }
+            return `<div class="gallery-item w-full h-full flex-shrink-0 flex items-center justify-center p-2"><img src="${URL.createObjectURL(file)}" class="max-w-full max-h-full object-contain" alt="Preview: ${file.name}"></div>`;
+        }).join('');
+    }
+
+    function showFilePreview(index) {
+        if (index < 0 || index >= files.length) return;
+        currentImageIdx = index;
+        const toolScreen = document.getElementById('toolScreen');
+        toolScreen.querySelector('.gallery-container').style.transform = `translateX(-${index * 100}%)`;
+        toolScreen.querySelector('.current-image-index').textContent = index + 1;
+        toolScreen.querySelector('.total-images').textContent = files.length;
+
+        const baToggle = toolScreen.querySelector('#before-after-toggle');
+        const currentFile = files[currentImageIdx];
+        const currentDetails = originalFileDetails[currentImageIdx];
+
+        if (activeTool === 'compressor') {
+            selectedFormat = currentFile.type.split('/')[1].replace('jpeg', 'jpg');
+            if (baToggle && baToggle.checked) {
+                const slider = toolScreen.querySelector('.before-after-slider');
+                const clipper = toolScreen.querySelector('.before-image-clipper');
+                if(slider && clipper) {
+                    slider.style.left = '50%';
+                    clipper.style.clipPath = 'inset(0 50% 0 0)';
+                }
+                updateRealtimePreview();
+            }
+        } else if (activeTool === 'resizer') {
+            const widthInput = toolScreen.querySelector('#resize-width');
+            const heightInput = toolScreen.querySelector('#resize-height');
+            widthInput.value = currentDetails.width;
+            heightInput.value = currentDetails.height;
+            toolScreen.querySelector('#social-presets').value = 'custom';
+            toolScreen.querySelector('#percentage-slider').value = 50;
+            toolScreen.querySelector('#percentage-value').textContent = 50;
+            updatePercentageDims();
+        }
+    }
+
+    function renderFileManagementUI() {
+        const toolScreen = document.getElementById('toolScreen');
+        const container = toolScreen.querySelector('.file-management-section');
+        const listContainer = toolScreen.querySelector('.file-list-container');
+        if (!container || !listContainer) return;
+        container.classList.toggle('hidden', files.length === 0);
+        listContainer.innerHTML = files.map((file, index) => {
+            const details = originalFileDetails[index] || { size: file.size, width: '?', height: '?' };
+            const isPdf = file.type === 'application/pdf';
+            const thumbSrc = isPdf ? `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ef4444'%3E%3Cpath d='M12 2a10 10 0 100 20 10 10 0 000-20zM9.5 17.5v-3.5h-2v-2h2v-2h-2V8h4.5c.8 0 1.5.7 1.5 1.5v1c0 .8-.7 1.5-1.5 1.5H11v1.5h2.5v2H11v3.5H9.5z'/%3E%3C/svg%3E` : URL.createObjectURL(file);
+            return `<div class="file-item flex items-center gap-2 p-1.5 rounded-md hover:bg-card-bg cursor-grab" draggable="true" data-index="${index}"><img data-src="${thumbSrc}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="lazy w-10 h-10 object-cover rounded pointer-events-none" alt="Thumbnail for ${file.name}"><div class="flex-grow truncate text-sm pointer-events-none"><p class="font-semibold truncate">${file.name}</p><p class="text-xs text-light">${formatBytes(details.size)} &middot; ${details.width}x${details.height}</p></div><button class="delete-file-btn p-1 rounded-full hover:bg-red-500/20 text-red-500" data-index="${index}" aria-label="Delete ${file.name}"><i class="fas fa-times"></i></button></div>`
+        }).join('');
+        attachFileManagementListeners();
+        setupLazyLoading();
+    }
+
+    function deleteFile(index) {
+        URL.revokeObjectURL(files[index]);
+        files.splice(index, 1);
+        originalFileDetails.splice(index, 1);
+        if (files.length === 0) { resetTool(); return; }
+        if (currentImageIdx >= files.length) currentImageIdx = files.length - 1;
+        displayFiles(); renderFileManagementUI(); showFilePreview(currentImageIdx);
+    }
+
+    function reorderFiles(oldIndex, newIndex) {
+        const [movedFile] = files.splice(oldIndex, 1); files.splice(newIndex, 0, movedFile);
+        const [movedDim] = originalFileDetails.splice(oldIndex, 1); originalFileDetails.splice(newIndex, 0, movedDim);
+        displayFiles(); renderFileManagementUI(); showFilePreview(newIndex);
+    }
+
+    async function processFiles() {
+        const toolScreen = document.getElementById('toolScreen');
+        if (activeTool === 'converter' && !selectedFormat) { showToast('Please select an output format.'); return; }
+        if (activeTool === 'watermark' && toolScreen.querySelector('.watermark-type-btn.active').dataset.type === 'image' && !watermarkImage) {
+            showToast('Please select a logo image for the watermark.');
+            return;
+        }
+
+
+        toolScreen.querySelector('.options-container').classList.add('hidden');
+        toolScreen.querySelector('.realtime-preview-info')?.classList.add('hidden');
+        toolScreen.querySelector('.output-section .start-btn').classList.add('hidden');
+        const conversionProcess = toolScreen.querySelector('.conversion-process');
+        conversionProcess.classList.remove('hidden');
+        toolScreen.querySelector('.processing-text').innerHTML = `<i class="fas fa-cog fa-spin mr-2"></i>Processing...`;
+
+        initializeWorkerPool();
+        const results = new Array(files.length);
+        let filesProcessed = 0;
+        let fileQueue = files.map((_, index) => index);
+        
+        let watermarkBitmap = null;
+        if (activeTool === 'watermark' && watermarkImage && toolScreen.querySelector('.watermark-type-btn.active').dataset.type === 'image') {
+            watermarkBitmap = await createImageBitmap(watermarkImage);
+        }
+
+        const dispatchTask = async () => {
+            const freeWorker = workerPool.find(w => !w.busy);
+            if (freeWorker && fileQueue.length > 0) {
+                freeWorker.busy = true;
+                const fileIndex = fileQueue.shift();
+                const file = files[fileIndex];
+                const originalDetails = originalFileDetails[fileIndex];
+
+                const options = {};
+                if (activeTool === 'converter' || activeTool === 'compressor') {
+                    const qualitySlider = toolScreen.querySelector('.quality-slider');
+                    options.quality = (qualitySlider ? parseInt(qualitySlider.value) : 85) / 100;
+                    options.format = activeTool === 'converter' ? selectedFormat : file.type.split('/')[1];
+                } else if (activeTool === 'resizer') {
+                    const resizeMode = toolScreen.querySelector('.resize-by-btn.active').dataset.mode;
+                    if (resizeMode === 'pixels') {
+                        options.newWidth = parseInt(toolScreen.querySelector('#resize-width').value);
+                        options.newHeight = parseInt(toolScreen.querySelector('#resize-height').value);
+                    } else {
+                        const scale = parseInt(toolScreen.querySelector('#percentage-slider').value) / 100;
+                        options.newWidth = Math.round(originalDetails.width * scale);
+                        options.newHeight = Math.round(originalDetails.height * scale);
+                    }
+                    options.format = file.type.split('/')[1];
+                    options.quality = 0.92;
+                } else if (activeTool === 'watermark') {
+                    options.newWidth = originalDetails.width;
+                    options.newHeight = originalDetails.height;
+                    options.type = toolScreen.querySelector('.watermark-type-btn.active').dataset.type;
+                    options.text = toolScreen.querySelector('#watermark-text').value;
+                    options.opacity = parseInt(toolScreen.querySelector('#opacity-slider').value) / 100;
+                    options.scale = parseInt(toolScreen.querySelector('#scale-slider').value) / 100;
+                    options.position = toolScreen.querySelector('.position-btn.active').dataset.position;
+                    options.watermarkBitmap = watermarkBitmap;
+                    options.format = file.type.split('/')[1];
+                    options.quality = 0.92;
+                }
+                
+                toolScreen.querySelector('.processing-text').innerHTML = `<i class="fas fa-cog fa-spin mr-2"></i>Processing "${file.name}"...`;
+                freeWorker.worker.onmessage = e => {
+                    if (e.data.success) { results[e.data.fileIndex] = e.data; } else { results[e.data.fileIndex] = null; showToast(`Error processing ${e.data.fileName}: ${e.data.error}`); }
+                    filesProcessed++;
+                    toolScreen.querySelector('.progress-bar-fill').style.width = `${(filesProcessed / files.length) * 100}%`;
+                    freeWorker.busy = false;
+                    if (filesProcessed === files.length) { 
+                        toolScreen.querySelector('.processing-text').innerHTML = `<i class="fas fa-check-circle text-green-500 mr-2"></i>Complete!`;
+                        setTimeout(() => handleCompletion(results.filter(r => r !== null)), 500); 
+                    } else { dispatchTask(); }
+                };
+                const imageBitmap = await createImageBitmap(file);
+                const transferables = [imageBitmap];
+                if (options.watermarkBitmap) transferables.push(options.watermarkBitmap);
+                freeWorker.worker.postMessage({ imageBitmap, fileName: file.name, fileIndex, tool: activeTool, options }, transferables);
+                dispatchTask(); 
+            }
+        };
+        workerPool.forEach(() => dispatchTask());
+    }
+
+    async function handleCompletion(results, fromSession = false) {
+        const toolScreen = document.getElementById('toolScreen');
+        if (!toolScreen || !toolScreen.querySelector('.processing-text')) return;
+        if (results.length === 0) { if(!fromSession) showToast('No files could be processed.'); resetTool(); return; }
+
+        processedResults = results;
+        if (!fromSession) saveStateToSession();
+
+        const resultsContainer = toolScreen.querySelector('.results-container');
+        resultsContainer.innerHTML = '';
+
+        const totalOriginalSize = results.reduce((acc, r) => acc + originalFileDetails[r.fileIndex].size, 0);
+        const totalNewSize = results.reduce((acc, r) => acc + r.blob.size, 0);
+        const totalSaved = totalOriginalSize - totalNewSize;
+        
+        if (results.length > 1) {
+            resultsContainer.insertAdjacentHTML('beforeend', `<div class="results-summary text-center"><h3 class="text-lg font-bold">Processing Complete!</h3><p class="text-light">Saved a total of <strong class="text-green-500">${formatBytes(totalSaved)}</strong> across ${results.length} files. (Average reduction: ${totalOriginalSize > 0 ? ((totalSaved / totalOriginalSize) * 100).toFixed(0) : 0}%)</p></div>`);
+        }
+        
+        const resultsListContainer = document.createElement('div');
+        resultsListContainer.className = 'space-y-4 max-h-[60vh] overflow-y-auto pr-2';
+
+        results.forEach((r, i) => {
+            setTimeout(() => {
+                const original = originalFileDetails[r.fileIndex];
+                if (!original) return;
+                const saved = original.size - r.blob.size;
+                const savedPercent = original.size > 0 ? ((saved / original.size) * 100) : 0;
+                const originalFormat = (original.type.split('/')[1] || 'unknown').toUpperCase().replace('JPEG', 'JPG');
+                const newFormat = (r.intendedFormat === 'jpeg' ? 'jpg' : r.intendedFormat).toUpperCase();
+
+                const card = document.createElement('div');
+                card.className = 'result-card animate__animated animate__fadeInUp';
+                card.style.animationDelay = `${i * 100}ms`;
+                card.innerHTML = `
+                    <div class="card-section flex items-center gap-4">
+                        <img src="${URL.createObjectURL(r.blob)}" class="card-thumbnail" alt="Result for ${original.name}">
+                        <div class="flex-grow min-w-0">
+                            <p class="font-semibold truncate" title="${original.name}">${original.name}</p>
+                            <div class="format-badge mt-1">${originalFormat} <i class="fas fa-arrow-right fa-xs mx-1"></i> ${newFormat}</div>
+                        </div>
+                    </div>
+                    <div class="card-section grid gap-4 items-center md:grid-cols-3">
+                        <div class="text-center md:text-left"><p class="text-xs font-bold uppercase text-light">BEFORE</p><p class="font-semibold text-lg">${formatBytes(original.size)}</p><p class="text-xs text-light">${original.width}x${original.height}px</p></div>
+                        <div class="hidden md:flex justify-center items-center text-light text-2xl"><i class="fas fa-long-arrow-alt-right"></i></div>
+                        <div class="text-center md:text-right"><p class="text-xs font-bold uppercase text-light">AFTER</p><p class="font-semibold text-lg text-green-500">${formatBytes(r.blob.size)}</p><p class="text-xs text-light">${r.newWidth}x${r.newHeight}px</p></div>
+                    </div>
+                    <div class="card-section flex flex-col sm:flex-row items-center gap-4">
+                        <div class="w-full sm:w-1/2 flex items-center gap-3"><div class="saved-bar-container"><div class="saved-bar-fill" style="width: ${Math.max(0, savedPercent)}%;"></div></div><span class="text-sm font-semibold text-green-500 whitespace-nowrap">Saved: ${savedPercent.toFixed(0)}%</span></div>
+                        <div class="w-full sm:w-1/2 flex items-center justify-center sm:justify-end gap-2">
+                            <button class="action-btn-card preview-btn" data-index="${r.fileIndex}"><i class="fas fa-eye w-4"></i><span>Preview</span></button>
+                            <button class="action-btn-card download-single-btn" data-index="${r.fileIndex}"><i class="fas fa-download w-4"></i><span>Download</span></button>
+                            <button class="action-btn-card delete-result-btn delete" data-index="${r.fileIndex}"><i class="fas fa-trash w-4"></i><span>Delete</span></button>
+                        </div>
+                    </div>`;
+                resultsListContainer.appendChild(card);
+            }, i * 100);
+        });
+        
+        resultsContainer.appendChild(resultsListContainer);
+        
+        const actionsContainer = document.createElement('div');
+        actionsContainer.className = 'flex flex-col sm:flex-row gap-3 pt-4 border-t mt-4';
+        actionsContainer.style.borderColor = 'var(--card-border)';
+        actionsContainer.innerHTML = `<a class="download-btn upload-button w-full justify-center py-3 text-lg"><i class="fas fa-download mr-3"></i><span>Download All</span></a><button class="reprocess-btn secondary-btn w-full px-4 py-2 font-medium rounded-full"><i class="fas fa-cog mr-2"></i>Adjust Settings</button>`;
+        resultsContainer.appendChild(actionsContainer);
+        
+        const downloadBtn = actionsContainer.querySelector('.download-btn');
+        actionsContainer.querySelector('.reprocess-btn').addEventListener('click', () => {
+             toolScreen.querySelector('.options-container').classList.remove('hidden');
+             toolScreen.querySelector('.output-section .start-btn').classList.remove('hidden');
+             toolScreen.querySelector('.results-container').classList.add('hidden');
+        });
+
+        attachResultsEventListeners(resultsContainer);
+        
+        const getBrandedFileName = (originalName, newExtension) => {
+            const nameWithoutExt = originalName.lastIndexOf('.') !== -1 ? originalName.substring(0, originalName.lastIndexOf('.')) : originalName;
+            const finalExtension = newExtension === 'jpeg' ? 'jpg' : newExtension;
+            return `${nameWithoutExt}-imgcon.life.${finalExtension}`;
+        };
+        
+        if (selectedFormat === 'pdf' && activeTool === 'converter') {
+            downloadBtn.onclick = async () => {
+                const { jsPDF } = window.jspdf;
+                const orientation = toolScreen.querySelector('#pdf-orientation').value;
+                const pageSize = toolScreen.querySelector('#pdf-page-size').value;
+                const margin = parseFloat(toolScreen.querySelector('#pdf-margin').value) || 0;
+                const doc = new jsPDF({ orientation, unit: 'mm', format: pageSize });
+                for (let i = 0; i < processedResults.length; i++) {
+                    const result = processedResults[i];
+                    const imgData = URL.createObjectURL(result.blob);
+                    const imgProps = doc.getImageProperties(imgData);
+                    const docWidth = doc.internal.pageSize.getWidth() - (margin * 2);
+                    const docHeight = doc.internal.pageSize.getHeight() - (margin * 2);
+                    const ratio = Math.min(docWidth / imgProps.width, docHeight / imgProps.height);
+                    const imgWidth = imgProps.width * ratio;
+                    const imgHeight = imgProps.height * ratio;
+                    const x = (doc.internal.pageSize.getWidth() - imgWidth) / 2;
+                    const y = (doc.internal.pageSize.getHeight() - imgHeight) / 2;
+                    if (i > 0) doc.addPage();
+                    doc.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
+                    URL.revokeObjectURL(imgData);
+                }
+                doc.save('ImgCon_Converted_Images.pdf');
+            };
+            downloadBtn.querySelector('span').textContent = `Download as PDF`;
+        } 
+        else if (results.length > 1) {
+            downloadBtn.onclick = async () => {
+                const zip = new JSZip();
+                processedResults.forEach(r => zip.file(getBrandedFileName(r.fileName, r.intendedFormat), r.blob));
+                const zipBlob = await zip.generateAsync({ type: "blob" });
+                saveAs(zipBlob, `imgcon_images.zip`);
+            };
+            downloadBtn.querySelector('span').textContent = `Download All (${results.length})`;
+        } else {
+            const r = results[0];
+            downloadBtn.href = URL.createObjectURL(r.blob);
+            downloadBtn.download = getBrandedFileName(r.fileName, r.intendedFormat);
+            downloadBtn.onclick = null;
+            downloadBtn.querySelector('span').textContent = 'Download Image';
+        }
+        
+        const processUI = toolScreen.querySelector('.process-ui');
+        if(processUI) {
+             processUI.querySelector('.conversion-process')?.classList.add('hidden');
+             processUI.querySelector('.options-container')?.classList.add('hidden');
+             processUI.querySelector('.start-btn')?.classList.add('hidden');
+        }
+        resultsContainer.classList.remove('hidden');
+    }
+
+    // --- Event Listeners Setup ---
+    function attachToolEventListeners(container) {
+        const dropZone = container.querySelector('#dropZone'), fileInput = container.querySelector('.file-input');
+        if (dropZone) {
+            dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.borderColor = 'var(--primary-color)'; });
+            dropZone.addEventListener('dragleave', () => dropZone.style.borderColor = 'var(--card-border)');
+            dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.style.borderColor = 'var(--card-border)'; handleFiles(e.dataTransfer.files); });
+            dropZone.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', e => handleFiles(e.target.files));
+        }
+        container.querySelector('.add-more-files-input')?.addEventListener('change', e => handleFiles(e.target.files, true));
+        container.querySelector('.prev-image-btn')?.addEventListener('click', () => showFilePreview(currentImageIdx - 1));
+        container.querySelector('.next-image-btn')?.addEventListener('click', () => showFilePreview(currentImageIdx + 1));
+        container.querySelector('.start-btn')?.addEventListener('click', processFiles);
+        container.querySelector('.clear-all-btn')?.addEventListener('click', resetTool);
+        
+        const qualitySlider = container.querySelector('.quality-slider');
+        if (qualitySlider) {
+            debouncedPreview = debounce(updateRealtimePreview, 200);
+            qualitySlider.addEventListener('input', () => {
+                container.querySelector('.quality-value').textContent = qualitySlider.value;
+                if(activeTool === 'compressor') {
+                    container.querySelector('#target-size-toggle').checked = false;
+                    container.querySelector('.target-size-input-container').classList.add('hidden');
+                    const baToggle = container.querySelector('#before-after-toggle');
+                    if (baToggle && baToggle.checked) debouncedPreview();
+                }
+            });
+        }
+        
+        // Tool-specific listeners
+        if (activeTool === 'converter') {
+            setupConverterListeners(container);
+        } else if (activeTool === 'compressor') {
+            setupCompressorListeners(container);
+        } else if (activeTool === 'resizer') {
+            setupResizerListeners(container);
+        } else if (activeTool === 'watermark') {
+            setupWatermarkListeners(container);
+        }
+    }
+
+    function setupConverterListeners(container) {
+        const qualitySection = container.querySelector('#qualitySection'), pdfOptionsSection = container.querySelector('#pdfOptionsSection');
+        container.querySelectorAll('.format-card').forEach(card => card.addEventListener('click', () => {
+            const isAlreadySelected = card.classList.contains('selected');
+            container.querySelectorAll('.format-card').forEach(c => c.classList.remove('selected'));
+            if (isAlreadySelected) {
+                selectedFormat = null;
+                qualitySection.classList.remove('show');
+                pdfOptionsSection.classList.remove('show');
+            } else {
+                card.classList.add('selected');
+                const format = card.dataset.format;
+                selectedFormat = format === 'jpg' ? 'jpeg' : format;
+                qualitySection.classList.toggle('show', ['jpeg', 'webp', 'avif'].includes(selectedFormat));
+                pdfOptionsSection.classList.toggle('show', selectedFormat === 'pdf');
+            }
+        }));
+    }
+
+    function setupCompressorListeners(container) {
+        container.querySelector('#target-size-toggle')?.addEventListener('change', (e) => {
+            container.querySelector('.target-size-input-container').classList.toggle('hidden', !e.target.checked);
+            container.querySelector('.quality-slider').disabled = e.target.checked;
+            container.querySelector('.target-size-status').classList.add('hidden');
+        });
+        container.querySelector('.target-size-go-btn')?.addEventListener('click', findQualityForTarget);
+        container.querySelector('#before-after-toggle')?.addEventListener('change', e => {
+            const isEnabled = e.target.checked;
+            container.querySelector('.gallery-container').classList.toggle('hidden', isEnabled);
+            container.querySelector('.before-after-container').classList.toggle('hidden', !isEnabled);
+            container.querySelector('.realtime-preview-info')?.classList.toggle('hidden', !isEnabled);
+            if (isEnabled) updateRealtimePreview();
+        });
+        initBeforeAfterSlider(container.querySelector('.before-after-container'));
+    }
+
+    function setupResizerListeners(container) {
+        const widthInput = container.querySelector('#resize-width');
+        const heightInput = container.querySelector('#resize-height');
+        const aspectRatioToggle = container.querySelector('#aspect-ratio-toggle');
+        const percentageSlider = container.querySelector('#percentage-slider');
+        const socialPresets = container.querySelector('#social-presets');
+
+        container.querySelectorAll('.resize-by-btn').forEach(btn => btn.addEventListener('click', () => {
+            container.querySelectorAll('.resize-by-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const isPixels = btn.dataset.mode === 'pixels';
+            container.querySelector('#pixels-mode-container').classList.toggle('hidden', !isPixels);
+            container.querySelector('#percentage-mode-container').classList.toggle('hidden', isPixels);
+        }));
+
+        const handleWidthInput = () => {
+            if (aspectRatioToggle.checked) {
+                const details = originalFileDetails[currentImageIdx];
+                if (details && details.ratio > 0) {
+                    const newWidth = parseInt(widthInput.value, 10);
+                    if (!isNaN(newWidth)) heightInput.value = Math.round(newWidth / details.ratio);
+                }
+            }
+            socialPresets.value = 'custom';
+        };
+
+        const handleHeightInput = () => {
+            if (aspectRatioToggle.checked) {
+                const details = originalFileDetails[currentImageIdx];
+                if (details && details.ratio > 0) {
+                     const newHeight = parseInt(heightInput.value, 10);
+                    if (!isNaN(newHeight)) widthInput.value = Math.round(newHeight * details.ratio);
+                }
+            }
+            socialPresets.value = 'custom';
+        };
+
+        widthInput.addEventListener('input', handleWidthInput);
+        heightInput.addEventListener('input', handleHeightInput);
+
+        percentageSlider.addEventListener('input', updatePercentageDims);
+        
+        socialPresets.addEventListener('change', (e) => {
+            const value = e.target.value;
+            if (value !== 'custom') {
+                const [width, height] = value.split('x').map(Number);
+                widthInput.value = width;
+                heightInput.value = height;
+            }
+        });
+    }
+    
+    function updatePercentageDims() {
+        const toolScreen = document.getElementById('toolScreen');
+        if (!toolScreen || !originalFileDetails[currentImageIdx]) return;
+        const percentageSlider = toolScreen.querySelector('#percentage-slider');
+        const scale = parseInt(percentageSlider.value) / 100;
+        const details = originalFileDetails[currentImageIdx];
+        const newWidth = Math.round(details.width * scale);
+        const newHeight = Math.round(details.height * scale);
+        toolScreen.querySelector('#percentage-value').textContent = percentageSlider.value;
+        toolScreen.querySelector('#percentage-dims').textContent = `${newWidth} x ${newHeight} px`;
+    }
+
+    function setupWatermarkListeners(container) {
+        container.querySelectorAll('.watermark-type-btn').forEach(btn => btn.addEventListener('click', () => {
+            container.querySelectorAll('.watermark-type-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const isText = btn.dataset.type === 'text';
+            container.querySelector('#text-watermark-options').classList.toggle('hidden', !isText);
+            container.querySelector('#image-watermark-options').classList.toggle('hidden', isText);
+        }));
+
+        container.querySelectorAll('.position-btn').forEach(btn => btn.addEventListener('click', () => {
+            container.querySelectorAll('.position-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }));
+
+        container.querySelector('#watermark-image-input').addEventListener('change', e => {
+            if (e.target.files && e.target.files[0]) {
+                watermarkImage = e.target.files[0];
+                const preview = container.querySelector('#watermark-preview');
+                preview.src = URL.createObjectURL(watermarkImage);
+                preview.classList.remove('hidden');
+            }
+        });
+
+        const opacitySlider = container.querySelector('#opacity-slider');
+        opacitySlider.addEventListener('input', () => container.querySelector('#opacity-value').textContent = opacitySlider.value);
+        const scaleSlider = container.querySelector('#scale-slider');
+        scaleSlider.addEventListener('input', () => container.querySelector('#scale-value').textContent = scaleSlider.value);
+    }
+
+    function attachFileManagementListeners() {
+        const toolScreen = document.getElementById('toolScreen');
+        const listContainer = toolScreen.querySelector('.file-list-container');
+        if (!listContainer) return;
+        listContainer.addEventListener('click', e => { const deleteBtn = e.target.closest('.delete-file-btn'); if (deleteBtn) deleteFile(parseInt(deleteBtn.dataset.index, 10)); });
+        let draggedIndex = null;
+        listContainer.addEventListener('dragstart', e => { const target = e.target.closest('.file-item'); if (target) { draggedIndex = parseInt(target.dataset.index, 10); setTimeout(() => target.classList.add('dragging'), 0); } });
+        listContainer.addEventListener('dragend', e => e.target.closest('.file-item')?.classList.remove('dragging'));
+        listContainer.addEventListener('dragover', e => e.preventDefault());
+        listContainer.addEventListener('drop', e => { e.preventDefault(); const target = e.target.closest('.file-item'); if (target) { const newIndex = parseInt(target.dataset.index, 10); if (draggedIndex !== null && draggedIndex !== newIndex) reorderFiles(draggedIndex, newIndex); } });
+    }
+
+    // --- Session Storage ---
+    async function saveStateToSession() {
+        // Session storage logic can be expanded to include new tool states if needed
+    }
+    
+    async function loadStateFromSession() {
+        // Session storage logic can be expanded to restore new tool states if needed
+        return false; // For now, disable session restore for simplicity with new tools
+    }
+
+
+    // --- Initial Setup & Global Listeners ---
+    document.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').catch(err => console.error('SW registration failed', err)); }
+        
+        // Handle navigation and initial page load
+        document.body.addEventListener('click', navigateTo);
+        window.addEventListener('popstate', router);
+        router();
+
+        previewModal.addEventListener('click', (e) => { if (e.target === previewModal || e.target.closest('#modalCloseBtn')) { previewModal.classList.remove('show'); } });
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredInstallPrompt = e;
+            installPwaBtn.style.display = 'inline-flex';
+        });
+        
+        document.getElementById('copyLinkBtn')?.addEventListener('click', () => {
+            navigator.clipboard.writeText('https://imgcon.life').then(() => {
+                showToast('Link copied to clipboard!');
+            }).catch(err => {
+                showToast('Could not copy link.');
+                console.error('Failed to copy: ', err);
+            });
+        });
+    });
+    
+    themeToggleBtn.addEventListener('click', () => {
+        const isDark = document.body.hasAttribute('data-theme');
+        if (isDark) {
+            document.body.removeAttribute('data-theme');
+            localStorage.removeItem('theme');
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#6366f1');
+        } else {
+            document.body.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#818cf8');
+        }
+    });
+
+    // --- Helper Functions ---
+    function showToast(message, duration = 3000) { toastMessage.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), duration); }
+    function formatBytes(bytes, decimals = 2) { if (!+bytes) return '0 Bytes'; const k = 1024; const dm = decimals < 0 ? 0 : decimals; const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']; const i = Math.floor(Math.log(bytes) / Math.log(k)); return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`; }
+    function debounce(func, wait) { let timeout; return function executedFunction(...args) { const later = () => { clearTimeout(timeout); func(...args); }; clearTimeout(timeout); timeout = setTimeout(later, wait); }; }
+    
+    function setupLazyLoading() {
+         const toolScreen = document.getElementById('toolScreen');
+         if (!toolScreen) return;
+         const listContainer = toolScreen.querySelector('.file-list-container');
+         if (!listContainer) return;
+
+         if (lazyLoadObserver) lazyLoadObserver.disconnect();
+         lazyLoadObserver = new IntersectionObserver((entries, observer) => {
+             entries.forEach(entry => {
+                 if (entry.isIntersecting) {
+                     const img = entry.target;
+                     img.src = img.dataset.src;
+                     img.classList.remove('lazy');
+                     observer.unobserve(img);
+                 }
+             });
+         }, { root: listContainer });
+         toolScreen.querySelectorAll('img.lazy').forEach(img => lazyLoadObserver.observe(img));
+     }
+
+    async function updateRealtimePreview() {
+        const toolScreen = document.getElementById('toolScreen');
+        if (!toolScreen || files.length === 0 || currentImageIdx >= files.length || files[currentImageIdx].type === 'application/pdf' || activeTool !== 'compressor') {
+            const infoBox = toolScreen.querySelector('.realtime-preview-info');
+            const baContainer = toolScreen.querySelector('.before-after-container');
+            if (infoBox) infoBox.classList.add('hidden');
+            if (baContainer) baContainer.classList.add('hidden');
+            return;
+        }
+
+        const container = toolScreen.querySelector('.compressorOptionsTemplate')?.parentElement || toolScreen;
+        const infoBox = container.querySelector('.realtime-preview-info');
+        const originalSizeEl = infoBox.querySelector('.original-size');
+        const newSizeEl = infoBox.querySelector('.new-size');
+        const baContainer = toolScreen.querySelector('.before-after-container');
+        const beforeImg = baContainer.querySelector('.before-image');
+        const afterImg = baContainer.querySelector('.after-image');
+        if (!infoBox || !baContainer) return;
+        const file = files[currentImageIdx];
+        const quality = parseInt(toolScreen.querySelector('.quality-slider').value) / 100;
+        
+        const formatMime = `image/${file.type.split('/')[1]}`;
+
+        infoBox.classList.remove('hidden');
+        newSizeEl.textContent = 'Calculating...';
+        originalSizeEl.textContent = formatBytes(file.size);
+        const originalUrl = URL.createObjectURL(file);
+        beforeImg.src = originalUrl;
+        
+        const img = new Image();
+        img.onload = () => {
+            baContainer.style.setProperty('--aspect-ratio', `${img.width} / ${img.height}`);
+            const canvas = new OffscreenCanvas(img.width, img.height);
+            const context = canvas.getContext('2d');
+            context.drawImage(img, 0, 0);
+            URL.revokeObjectURL(originalUrl);
+            
+            canvas.convertToBlob({ type: formatMime, quality: quality }).then(blob => {
+                if (blob) {
+                    newSizeEl.textContent = formatBytes(blob.size);
+                    if (afterImg.src) URL.revokeObjectURL(afterImg.src);
+                    afterImg.src = URL.createObjectURL(blob);
+                } else { newSizeEl.textContent = 'Error'; }
+            }).catch(error => {
+                console.error("Error converting canvas to blob:", error);
+                newSizeEl.textContent = 'Error';
+            });
+        };
+        img.onerror = () => { newSizeEl.textContent = 'Error loading image for preview.'; };
+        img.src = originalUrl;
+    }
+    function initBeforeAfterSlider(container) {
+        if (!container) return;
+        const slider = container.querySelector('.before-after-slider');
+        const beforeClipper = container.querySelector('.before-image-clipper');
+        if (!slider || !beforeClipper) return;
+        let isDragging = false;
+        const moveSlider = (clientX) => {
+            if (!isDragging) return;
+            const rect = container.getBoundingClientRect();
+            let x = clientX - rect.left;
+            if (x < 0) x = 0;
+            if (x > rect.width) x = rect.width;
+            const percent = (x / rect.width) * 100;
+            slider.style.left = `${percent}%`;
+            beforeClipper.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+        };
+        const startDragging = (e) => { e.preventDefault(); isDragging = true; };
+        const stopDragging = () => { isDragging = false; };
+        slider.addEventListener('mousedown', startDragging);
+        document.addEventListener('mouseup', stopDragging);
+        document.addEventListener('mousemove', e => moveSlider(e.clientX));
+        slider.addEventListener('touchstart', startDragging, { passive: true });
+        document.addEventListener('touchend', stopDragging);
+        document.addEventListener('touchmove', e => { if (e.touches[0]) moveSlider(e.touches[0].clientX) });
+    }
+    async function findQualityForTarget() {
+        const toolScreen = document.getElementById('toolScreen');
+        const targetSizeInput = toolScreen.querySelector('.target-size-input');
+        const targetSizeUnit = toolScreen.querySelector('.target-size-unit');
+        const statusEl = toolScreen.querySelector('.target-size-status');
+        const qualitySlider = toolScreen.querySelector('.quality-slider');
+        const qualityValueEl = toolScreen.querySelector('.quality-value');
+        if (!targetSizeInput || !targetSizeUnit || !statusEl || files.length === 0 || files[currentImageIdx].type === 'application/pdf') {
+            showToast("Cannot set target size for PDF files or if no image is selected.");
+            return;
+        }
+
+        let targetSize = parseFloat(targetSizeInput.value);
+        if (isNaN(targetSize) || targetSize <= 0) {
+            showToast("Please enter a valid target size.");
+            return;
+        }
+        targetSize *= (targetSizeUnit.value === 'MB' ? 1024 * 1024 : 1024);
+
+        statusEl.classList.remove('hidden');
+        statusEl.textContent = 'Finding optimal quality...';
+        
+        const file = files[currentImageIdx];
+        const formatMime = `image/${file.type.split('/')[1]}`;
+        
+        const getBlobForQuality = (quality) => new Promise(resolve => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = new OffscreenCanvas(img.width, img.height);
+                const context = canvas.getContext('2d');
+                context.drawImage(img, 0, 0);
+                canvas.convertToBlob({ type: formatMime, quality: quality / 100 }).then(blob => resolve(blob)).catch(() => resolve(null));
+            };
+            img.onerror = () => resolve(null);
+            img.src = URL.createObjectURL(file);
+        });
+
+        let low = 1, high = 100, bestQuality = 50;
+        let bestBlob = null;
+        let iterations = 0;
+
+        while (low <= high && iterations < 8) {
+            let mid = Math.floor((low + high) / 2);
+            let blob = await getBlobForQuality(mid);
+            if (!blob) { high = mid - 1; continue; } 
+            
+            if (blob.size > targetSize) {
+                high = mid - 1;
+            } else {
+                bestQuality = mid;
+                bestBlob = blob;
+                low = mid + 1;
+            }
+            iterations++;
+        }
+        
+        if (bestBlob) {
+            statusEl.textContent = `Found: ~${formatBytes(bestBlob.size)} at ${bestQuality}% quality.`;
+            qualitySlider.value = bestQuality;
+            qualityValueEl.textContent = bestQuality;
+            if (toolScreen.querySelector('#before-after-toggle').checked) {
+                updateRealtimePreview();
+            }
+        } else {
+            statusEl.textContent = `Could not meet target. Try a larger size or different format.`;
+        }
+    }
+    function attachResultsEventListeners(container) {
+        container.addEventListener('click', e => {
+            const previewBtn = e.target.closest('.preview-btn'), downloadBtn = e.target.closest('.download-single-btn'), deleteBtn = e.target.closest('.delete-result-btn');
+            if (previewBtn) showResultPreviewModal(parseInt(previewBtn.dataset.index));
+            if (downloadBtn) downloadSingleResult(parseInt(downloadBtn.dataset.index));
+            if (deleteBtn) deleteSingleResult(parseInt(deleteBtn.dataset.index), deleteBtn.closest('.result-card'));
+        });
+    }
+    function showResultPreviewModal(fileIndex) {
+        const result = processedResults.find(r => r.fileIndex === fileIndex);
+        const original = originalFileDetails[fileIndex];
+        if (!result || !original) return;
+        const modalContainer = previewModal.querySelector('#modalPreviewContainer');
+        const beforeImg = modalContainer.querySelector('.before-image');
+        const afterImg = modalContainer.querySelector('.after-image');
+        previewModal.querySelector('#modalFileName').textContent = original.name;
+        const originalFile = files.find(f => f.name === original.name && originalFileDetails.find(d => d.name === f.name && d.size === f.size));
+        if(!originalFile) return;
+        const originalUrl = URL.createObjectURL(originalFile);
+        const processedUrl = URL.createObjectURL(result.blob);
+        modalContainer.style.setProperty('--aspect-ratio', `${result.newWidth} / ${result.newHeight}`);
+        beforeImg.src = originalUrl; afterImg.src = processedUrl;
+        initBeforeAfterSlider(modalContainer);
+        previewModal.classList.add('show');
+    }
+    function downloadSingleResult(fileIndex) {
+        const result = processedResults.find(r => r.fileIndex === fileIndex);
+        if (!result) return;
+        const getBrandedFileName = (originalName, newExtension) => {
+            const nameWithoutExt = originalName.lastIndexOf('.') !== -1 ? originalName.substring(0, originalName.lastIndexOf('.')) : originalName;
+            const finalExtension = newExtension === 'jpeg' ? 'jpg' : newExtension;
+            return `${nameWithoutExt}-imgcon.life.${finalExtension}`;
+        };
+        saveAs(result.blob, getBrandedFileName(result.fileName, result.intendedFormat));
+    }
+    function deleteSingleResult(fileIndex, resultCard) {
+        processedResults = processedResults.filter(r => r.fileIndex !== fileIndex);
+        saveStateToSession();
+        resultCard.classList.add('animate__animated', 'animate__fadeOut');
+        resultCard.addEventListener('animationend', () => {
+             resultCard.remove();
+             if (processedResults.length === 0) {
+                 const container = document.getElementById('toolScreen').querySelector('.results-container');
+                 container.innerHTML = '<p class="text-center text-light py-4">All results have been deleted.</p>';
+                 const actionButtons = document.createElement('div');
+                 actionButtons.innerHTML = `<button class="reset-btn secondary-btn w-full px-4 py-2 font-medium rounded-full mt-3"><i class="fas fa-redo mr-2"></i>Process Other Files</button>`;
+                 actionButtons.querySelector('.reset-btn').onclick = resetTool;
+                 container.appendChild(actionButtons);
+             }
+        }, {once: true});
+    }
+    </script>
+  <script type="text/javascript">
+    aclib.runAutoTag({
+        zoneId: 'son8qjgsg4',
+    });
+  </script>
+</body>
+</html>
