@@ -1,0 +1,16 @@
+{
+  "short_name": "ImgCon",
+  "name": "ImgCon Premium Image Tools",
+  "icons": [
+    {
+      "src": "https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome@5.15.4/svgs/solid/image.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#6366f1",
+  "theme_color": "#6366f1",
+  "display": "standalone",
+  "orientation": "portrait"
+}
