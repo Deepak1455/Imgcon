@@ -76,63 +76,85 @@
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 </head>
-<body class="p-2 sm:p-4 pb-8">
+<body class="p-3 sm:p-6 pb-12 transition-colors duration-300">
 
-    <header class="flex justify-between items-center mb-4 px-2 max-w-7xl mx-auto">
-        <a href="/" class="flex items-center gap-3">
-            <div class="bg-gradient-to-br from-indigo-500 to-purple-500 text-white p-3 rounded-xl shadow-lg shadow-indigo-500/30">
-                <i class="fas fa-bolt text-2xl"></i>
+    <!-- Sticky Floating Header with Backdrop Blur -->
+    <header class="sticky top-2 z-50 backdrop-filter backdrop-blur-lg flex justify-between items-center mb-6 py-3 px-4 max-w-7xl mx-auto rounded-2xl border transition-all duration-300 shadow-sm" style="background-color: var(--card-bg); border-color: var(--card-border);">
+        <a href="/" class="flex items-center gap-3 group">
+            <div class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white p-2.5 rounded-xl shadow-lg shadow-indigo-500/30 transform group-hover:scale-105 transition-transform duration-300">
+                <i class="fas fa-bolt text-xl logo-bolt"></i>
             </div>
             <div>
-                <h1 class="text-xl font-bold tracking-tight" style="color: var(--text-dark);">ImgCon</h1>
-                <p class="text-xs text-light">Premium Image Tools</p>
+                <h1 class="text-xl font-extrabold tracking-tight" style="color: var(--text-dark);">ImgCon</h1>
+                <p class="text-xs font-semibold tracking-wider uppercase opacity-80" style="color: var(--primary-color);">Premium Image Tools</p>
             </div>
         </a>
         <div class="flex items-center gap-2">
-            <a href="/" id="homeBtn" class="secondary-btn px-4 py-2 rounded-full font-semibold hidden"><i class="fas fa-home mr-2"></i>Home</a>
-            <button id="themeToggleBtn" class="p-2 rounded-full w-10 h-10 flex items-center justify-center border" style="background-color: var(--card-bg); border-color: var(--card-border);" aria-label="Toggle Theme">
-                <i class="fas fa-sun text-lg"></i>
-                <i class="fas fa-moon text-lg"></i>
+            <a href="/" id="homeBtn" class="secondary-btn px-4 py-2 rounded-full font-semibold hidden transition-all duration-300 hover:shadow-md"><i class="fas fa-home mr-2"></i>Home</a>
+            <button id="themeToggleBtn" class="p-2 rounded-full w-10 h-10 flex items-center justify-center border transition-all duration-300 hover:scale-105" style="background-color: var(--card-bg); border-color: var(--card-border);" aria-label="Toggle Theme">
+                <i class="fas fa-sun text-lg text-yellow-500 transition-transform duration-500"></i>
+                <i class="fas fa-moon text-lg text-indigo-400 transition-transform duration-500"></i>
             </button>
         </div>
     </header>
 
-    <main class="app-container p-4 sm:p-8 animate__animated animate__fadeInUp relative max-w-7xl mx-auto">
+    <main class="app-container p-5 sm:p-8 animate__animated animate__fadeInUp relative max-w-7xl mx-auto transition-all duration-500">
         <!-- Home Screen -->
         <section id="homeScreen" class="screen text-center">
             <div class="max-w-4xl mx-auto mb-12">
-                <h2 class="text-3xl lg:text-4xl font-bold tracking-tight mb-3">Your All-in-One Image Toolkit</h2>
-                <p class="text-light mb-10 max-w-2xl mx-auto">Convert, compress, resize, and watermark images instantly. All processing is done in your browser for 100% privacy and blazing speed.</p>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <a href="/image-converter" class="tool-choice-card p-8 rounded-2xl cursor-pointer text-left">
-                        <i class="fas fa-sync-alt text-4xl text-indigo-400 mb-4"></i><h3 class="text-2xl font-bold mb-2">Image Converter</h3><p class="text-light">Change image formats with ease. Convert to PNG, JPG, WEBP, AVIF, PDF, and more. Batch conversion supported.</p>
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold mb-4 border" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
+                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                     <span style="color: var(--text-dark);">100% Local & Secure Processing</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight mb-4" style="color: var(--text-dark);">Your All-in-One Image Toolkit</h2>
+                <p class="text-base sm:text-lg mb-10 max-w-2xl mx-auto leading-relaxed" style="color: var(--text-light);">Convert, compress, resize, and watermark images instantly. All processing is done in your browser for 100% privacy and blazing speed.</p>
+                
+                <div class="grid sm:grid-cols-2 gap-6">
+                    <a href="/image-converter" class="tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group">
+                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-sync-alt text-2xl icon-sync"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2" style="color: var(--text-dark);">Image Converter</h3>
+                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">Change image formats with ease. Convert to PNG, JPG, WEBP, AVIF, PDF, and more. Batch conversion supported.</p>
                     </a>
-                    <a href="/image-compressor" class="tool-choice-card p-8 rounded-2xl cursor-pointer text-left">
-                        <i class="fas fa-compress-arrows-alt text-4xl text-green-400 mb-4"></i><h3 class="text-2xl font-bold mb-2">Image Compressor</h3><p class="text-light">Drastically reduce JPG & WEBP file sizes with a live before/after preview and a target size feature.</p>
+                    <a href="/image-compressor" class="tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group">
+                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-green-50 dark:bg-green-900/30 text-green-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-compress-arrows-alt text-2xl icon-compress"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2" style="color: var(--text-dark);">Image Compressor</h3>
+                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">Drastically reduce JPG & WEBP file sizes with a live before/after preview and a target size feature.</p>
                     </a>
-                    <a href="/image-resizer" class="tool-choice-card p-8 rounded-2xl cursor-pointer text-left">
-                        <i class="fas fa-expand-arrows-alt text-4xl text-blue-400 mb-4"></i><h3 class="text-2xl font-bold mb-2">Image Resizer</h3><p class="text-light">Resize images by pixels or percentage. Maintain aspect ratio and use presets for social media.</p>
+                    <a href="/image-resizer" class="tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group">
+                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-expand-arrows-alt text-2xl icon-expand"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2" style="color: var(--text-dark);">Image Resizer</h3>
+                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">Resize images by pixels or percentage. Maintain aspect ratio and use presets for social media.</p>
                     </a>
-                    <a href="/image-watermark" class="tool-choice-card p-8 rounded-2xl cursor-pointer text-left">
-                        <i class="fas fa-copyright text-4xl text-yellow-400 mb-4"></i><h3 class="text-2xl font-bold mb-2">Watermark Tool</h3><p class="text-light">Add a custom text or logo watermark to your images. Control position, size, and transparency.</p>
+                    <a href="/image-watermark" class="tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group">
+                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-yellow-50 dark:bg-yellow-900/30 text-yellow-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-copyright text-2xl icon-copyright"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2" style="color: var(--text-dark);">Watermark Tool</h3>
+                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">Add a custom text or logo watermark to your images. Control position, size, and transparency.</p>
                     </a>
                 </div>
             </div>
 
             <!-- SEO Content Section -->
             <div class="seo-section max-w-5xl mx-auto text-left border-t pt-12" style="border-color: var(--card-border);">
-                <h2 class="text-2xl font-bold mb-6 text-center">Why ImgCon is the Best Free Online Image Tool</h2>
-                <div class="grid md:grid-cols-2 gap-8">
+                <h2 class="text-2xl font-bold mb-6 text-center" style="color: var(--text-dark);">Why ImgCon is the Best Free Online Image Tool</h2>
+                <div class="grid md:grid-cols-2 gap-8 text-sm leading-relaxed" style="color: var(--text-light);">
                     <div>
-                        <h3>Privacy First: 100% Client-Side Processing</h3>
-                        <p>Unlike other online image converters, <strong>ImgCon processes everything directly in your browser</strong>. This means your personal photos never leave your device. It is the most secure way to convert and compress images online, guaranteeing zero data breaches.</p>
-                        <h3>Blazing Fast Performance</h3>
+                        <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Privacy First: 100% Client-Side Processing</h3>
+                        <p class="mb-4">Unlike other online image converters, <strong>ImgCon processes everything directly in your browser</strong>. This means your personal photos never leave your device. It is the most secure way to convert and compress images online, guaranteeing zero data breaches.</p>
+                        <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Blazing Fast Performance</h3>
                         <p>By utilizing advanced WebAssembly technology, ImgCon delivers desktop-class performance in a web app. Batch process hundreds of images in seconds without waiting for slow uploads.</p>
                     </div>
                     <div>
-                        <h3>Works Offline (PWA)</h3>
-                        <p>ImgCon is a Progressive Web App (PWA). You can install it on your device and use it without an internet connection, entirely local and secure.</p>
-                        <h3>Comprehensive Format Support</h3>
+                        <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Works Offline (PWA)</h3>
+                        <p class="mb-4">ImgCon is a Progressive Web App (PWA). You can install it on your device and use it without an internet connection, entirely local and secure.</p>
+                        <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Comprehensive Format Support</h3>
                         <p>We support all modern formats. Convert your images to <strong>WebP</strong> and <strong>AVIF</strong> for superior compression, or stick to classic formats like <strong>JPG</strong> and <strong>PNG</strong>.</p>
                     </div>
                 </div>
@@ -140,53 +162,53 @@
 
             <!-- Testimonials -->
             <div class="mt-16 max-w-5xl mx-auto">
-                <h3 class="text-3xl font-bold mb-8">Trusted by Creatives and Developers</h3>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="testimonial-card p-6 rounded-xl border" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
+                <h3 class="text-2xl sm:text-3xl font-bold mb-8" style="color: var(--text-dark);">Trusted by Creatives and Developers</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="testimonial-card p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-md" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
                         <div class="flex items-center mb-4">
-                            <img src="https://randomuser.me/api/portraits/women/65.jpg" class="w-12 h-12 rounded-full mr-4" alt="Sarah L.">
-                            <div><p class="font-bold">Sarah L.</p><p class="text-sm text-light">Web Developer</p></div>
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Sarah L.">
+                            <div><p class="font-bold text-sm" style="color: var(--text-dark);">Sarah L.</p><p class="text-xs" style="color: var(--text-light);">Web Developer</p></div>
                         </div>
-                        <p class="text-light">"ImgCon is a lifesaver. I use it daily to optimize images for client websites. The fact that it's private and works offline is a huge plus."</p>
+                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">"ImgCon is a lifesaver. I use it daily to optimize images for client websites. The fact that it's private and works offline is a huge plus."</p>
                     </div>
-                    <div class="testimonial-card p-6 rounded-xl border" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
+                    <div class="testimonial-card p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-md" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
                          <div class="flex items-center mb-4">
-                            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-12 h-12 rounded-full mr-4" alt="Mike R.">
-                            <div><p class="font-bold">Mike R.</p><p class="text-sm text-light">Photographer</p></div>
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Mike R.">
+                            <div><p class="font-bold text-sm" style="color: var(--text-dark);">Mike R.</p><p class="text-xs" style="color: var(--text-light);">Photographer</p></div>
                         </div>
-                        <p class="text-light">"I needed a quick way to convert raw photos to JPG for previews without uploading. ImgCon is incredibly fast and respects my privacy."</p>
+                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">"I needed a quick way to convert raw photos to JPG for previews without uploading. ImgCon is incredibly fast and respects my privacy."</p>
                     </div>
-                    <div class="testimonial-card p-6 rounded-xl border" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
+                    <div class="testimonial-card p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-md" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
                          <div class="flex items-center mb-4">
-                            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-12 h-12 rounded-full mr-4" alt="Jessica T.">
-                            <div><p class="font-bold">Jessica T.</p><p class="text-sm text-light">Digital Marketer</p></div>
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Jessica T.">
+                            <div><p class="font-bold text-sm" style="color: var(--text-dark);">Jessica T.</p><p class="text-xs" style="color: var(--text-light);">Digital Marketer</p></div>
                         </div>
-                        <p class="text-light">"The batch processing feature is a game-changer. I can resize and compress dozens of images in seconds. Highly recommended!"</p>
+                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">"The batch processing feature is a game-changer. I can resize and compress dozens of images in seconds. Highly recommended!"</p>
                     </div>
                 </div>
             </div>
 
             <!-- Blog Section -->
             <div class="mt-16 max-w-5xl mx-auto">
-                 <h3 class="text-3xl font-bold mb-2">From Our Blog</h3>
-                 <p class="text-light mb-8">Learn more about image optimization and best practices.</p>
+                 <h3 class="text-2xl sm:text-3xl font-bold mb-2" style="color: var(--text-dark);">From Our Blog</h3>
+                 <p class="text-sm mb-8" style="color: var(--text-light);">Learn more about image optimization and best practices.</p>
                  <div class="grid md:grid-cols-3 gap-6 text-left">
                      <a href="/blog/png-vs-jpg-difference" class="blog-card-link">
-                         <div class="p-6 rounded-xl border tool-choice-card">
-                             <h4 class="font-bold text-lg mb-2">PNG vs JPG: What's the Difference?</h4>
-                             <p class="text-light text-sm">Discover which format is best for your needs and how to choose wisely for web and print...</p>
+                         <div class="p-6 rounded-2xl border tool-choice-card">
+                             <h4 class="font-bold text-lg mb-2" style="color: var(--text-dark);">PNG vs JPG: What's the Difference?</h4>
+                             <p class="text-sm leading-relaxed" style="color: var(--text-light);">Discover which format is best for your needs and how to choose wisely for web and print...</p>
                          </div>
                      </a>
                      <a href="/blog/how-to-reduce-photo-size" class="blog-card-link">
-                         <div class="p-6 rounded-xl border tool-choice-card">
-                             <h4 class="font-bold text-lg mb-2">How to Reduce Photo Size Without Losing Quality</h4>
-                             <p class="text-light text-sm">A practical guide to shrinking image file sizes to speed up your website and save space...</p>
+                         <div class="p-6 rounded-2xl border tool-choice-card">
+                             <h4 class="font-bold text-lg mb-2" style="color: var(--text-dark);">How to Reduce Photo Size Without Losing Quality</h4>
+                             <p class="text-sm leading-relaxed" style="color: var(--text-light);">A practical guide to shrinking image file sizes to speed up your website and save space...</p>
                          </div>
                      </a>
                      <a href="/blog/webp-the-future-of-web-images" class="blog-card-link">
-                         <div class="p-6 rounded-xl border tool-choice-card">
-                            <h4 class="font-bold text-lg mb-2">Why WebP is the Future of Web Images</h4>
-                             <p class="text-light text-sm">Learn about the next-gen image format from Google that offers superior compression and quality...</p>
+                         <div class="p-6 rounded-2xl border tool-choice-card">
+                            <h4 class="font-bold text-lg mb-2" style="color: var(--text-dark);">Why WebP is the Future of Web Images</h4>
+                             <p class="text-sm leading-relaxed" style="color: var(--text-light);">Learn about the next-gen image format from Google that offers superior compression and quality...</p>
                          </div>
                      </a>
                  </div>
@@ -196,7 +218,7 @@
         <!-- Tool Screen -->
         <section id="toolScreen" class="screen hidden"></section>
 
-        <!-- About Us Screen (No bracket placeholders anymore!) -->
+        <!-- About Us Screen -->
         <section id="aboutScreen" class="screen hidden content-page">
             <h2>About ImgCon</h2>
             <p>ImgCon was born out of a simple need: a fast, private, and powerful image utility that works directly in the browser. In a world where data privacy is more important than ever, we noticed that most online image tools required you to upload your files to a server. We wanted to change that.</p>
@@ -216,26 +238,26 @@
                 <h2>ImgCon Blog</h2>
                 <p>Welcome to our blog! Here we share tips, tricks, and insights into the world of digital images and web performance.</p>
                 <div class="space-y-8 mt-6">
-                    <article data-slug="png-vs-jpg-difference">
-                        <h3>PNG vs JPG: What's the Difference and Which One Should You Use?</h3>
-                        <p>When it comes to saving images, two of the most popular file formats you'll encounter are PNG and JPG (or JPEG). Choosing the right one can have a big impact on your image's quality and file size.</p>
-                        <a href="/blog/png-vs-jpg-difference" class="font-bold read-more-btn" style="color: var(--primary-color);">Read More &rarr;</a>
+                    <article data-slug="png-vs-jpg-difference" class="p-6 rounded-2xl border" style="border-color: var(--card-border); background-color: var(--bg-subtle);">
+                        <h3 class="text-xl font-bold mb-2">PNG vs JPG: What's the Difference and Which One Should You Use?</h3>
+                        <p class="text-sm mb-4">When it comes to saving images, two of the most popular file formats you'll encounter are PNG and JPG (or JPEG). Choosing the right one can have a big impact on your image's quality and file size.</p>
+                        <a href="/blog/png-vs-jpg-difference" class="font-bold text-sm read-more-btn flex items-center gap-1 hover:underline" style="color: var(--primary-color);">Read More &rarr;</a>
                     </article>
-                    <article data-slug="how-to-reduce-photo-size">
-                        <h3>How to Reduce Photo Size Without Losing Quality (The Definitive Guide)</h3>
-                        <p>Large image files are a major cause of slow-loading websites and can quickly eat up storage space. This guide will walk you through the best techniques for effective compression.</p>
-                        <a href="/blog/how-to-reduce-photo-size" class="font-bold read-more-btn" style="color: var(--primary-color);">Read More &rarr;</a>
+                    <article data-slug="how-to-reduce-photo-size" class="p-6 rounded-2xl border" style="border-color: var(--card-border); background-color: var(--bg-subtle);">
+                        <h3 class="text-xl font-bold mb-2">How to Reduce Photo Size Without Losing Quality (The Definitive Guide)</h3>
+                        <p class="text-sm mb-4">Large image files are a major cause of slow-loading websites and can quickly eat up storage space. This guide will walk you through the best techniques for effective compression.</p>
+                        <a href="/blog/how-to-reduce-photo-size" class="font-bold text-sm read-more-btn flex items-center gap-1 hover:underline" style="color: var(--primary-color);">Read More &rarr;</a>
                     </article>
-                     <article data-slug="webp-the-future-of-web-images">
-                        <h3>Why WebP is the Future of Web Images</h3>
-                        <p>Developed by Google, WebP is a modern image format that provides superior lossless and lossy compression for images on the web, making websites load instantly.</p>
-                        <a href="/blog/webp-the-future-of-web-images" class="font-bold read-more-btn" style="color: var(--primary-color);">Read More &rarr;</a>
+                     <article data-slug="webp-the-future-of-web-images" class="p-6 rounded-2xl border" style="border-color: var(--card-border); background-color: var(--bg-subtle);">
+                        <h3 class="text-xl font-bold mb-2">Why WebP is the Future of Web Images</h3>
+                        <p class="text-sm mb-4">Developed by Google, WebP is a modern image format that provides superior lossless and lossy compression for images on the web, making websites load instantly.</p>
+                        <a href="/blog/webp-the-future-of-web-images" class="font-bold text-sm read-more-btn flex items-center gap-1 hover:underline" style="color: var(--primary-color);">Read More &rarr;</a>
                     </article>
                 </div>
             </div>
             <div id="blog-post" class="hidden">
-                 <a href="/blog" class="font-bold back-to-blog-btn mb-6 inline-block" style="color: var(--primary-color);">&larr; Back to Blog</a>
-                 <div id="blog-post-content"></div>
+                 <a href="/blog" class="font-bold text-sm back-to-blog-btn mb-6 inline-flex items-center gap-1 hover:underline" style="color: var(--primary-color);">&larr; Back to Blog</a>
+                 <div id="blog-post-content" class="prose max-w-none"></div>
             </div>
         </section>
 
@@ -253,10 +275,10 @@
             </ul>
             <p>Our tool's code (JavaScript) then processes it locally. Once you download the converted file, it is saved directly from your browser to your device. The original file remains untouched.</p>
             <h3>Contact Us</h3>
-            <p>If you have any questions about this Privacy Policy, please feel free to <a href="mailto:privacy@imgcon.life">contact us at privacy@imgcon.life</a>.</p>
+            <p>If you have any questions about this Privacy Policy, please feel free to <a href="mailto:privacy@imgcon.life" class="underline" style="color: var(--primary-color);">contact us at privacy@imgcon.life</a>.</p>
         </section>
 
-        <!-- Terms & Conditions Screen (AdSense Policy Compliance) -->
+        <!-- Terms & Conditions Screen -->
         <section id="termsScreen" class="screen hidden content-page">
             <h2>Terms and Conditions</h2>
             <p><strong>Last Updated:</strong> July 19, 2026</p>
@@ -268,73 +290,76 @@
             <h3>3. Limitation of Liability</h3>
             <p>ImgCon and its team shall not be liable for any direct, indirect, incidental, or consequential damages resulting from the use or inability to use our tools, including file corruption.</p>
             <h3>Contact Us</h3>
-            <p>If you have any questions regarding these Terms, you can contact us at <a href="mailto:contact@imgcon.life">contact@imgcon.life</a>.</p>
+            <p>If you have any questions regarding these Terms, you can contact us at <a href="mailto:contact@imgcon.life" class="underline" style="color: var(--primary-color);">contact@imgcon.life</a>.</p>
         </section>
 
         <div id="card-footer">
-            <h4 class="font-bold text-lg mb-3" style="color: var(--text-dark);">ImgCon</h4>
-            <p class="text-sm">The free, fast, and private way to handle all your image processing needs. Built with privacy at its core.</p>
-            <p class="text-xs mt-4">&copy; 2026 ImgCon. All Rights Reserved. Your images stay on your device.</p>
+            <h4 class="font-extrabold text-lg mb-2" style="color: var(--text-dark);">ImgCon</h4>
+            <p class="text-xs" style="color: var(--text-light);">The free, fast, and private way to handle all your image processing needs. Built with privacy at its core.</p>
+            <p class="text-xs mt-3 opacity-70" style="color: var(--text-light);">&copy; 2026 ImgCon. All Rights Reserved.</p>
         </div>
     </main>
 
-    <footer id="main-footer" class="text-center py-8 mt-8 text-light max-w-7xl mx-auto border-t" style="border-color: var(--card-border);">
-        <div class="grid md:grid-cols-5 gap-8 text-left mb-8">
-            <div>
-                <h4 class="font-bold text-lg mb-3" style="color: var(--text-dark);">ImgCon</h4>
-                <p class="text-sm">The free, fast, and private way to handle all your image processing needs. Built with privacy at its core.</p>
+    <footer id="main-footer" class="text-center py-10 mt-10 max-w-7xl mx-auto border-t" style="border-color: var(--card-border);">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-8 text-left mb-8 px-4">
+            <div class="col-span-2 md:col-span-1">
+                <h4 class="font-extrabold text-lg mb-3" style="color: var(--text-dark);">ImgCon</h4>
+                <p class="text-xs leading-relaxed mb-3" style="color: var(--text-light);">The free, fast, and private way to handle all your image processing needs. Built with privacy at its core.</p>
             </div>
             <div>
-                 <h4 class="font-bold text-lg mb-3" style="color: var(--text-dark);">Tools</h4>
-                 <ul class="space-y-2 text-sm">
-                     <li><a href="/image-converter" class="hover:underline">Image Converter</a></li>
-                     <li><a href="/image-compressor" class="hover:underline">Image Compressor</a></li>
-                     <li><a href="/image-resizer" class="hover:underline">Image Resizer</a></li>
-                     <li><a href="/image-watermark" class="hover:underline">Watermark Tool</a></li>
+                 <h4 class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Tools</h4>
+                 <ul class="space-y-2 text-xs" style="color: var(--text-light);">
+                     <li><a href="/image-converter" class="hover:underline transition-all">Image Converter</a></li>
+                     <li><a href="/image-compressor" class="hover:underline transition-all">Image Compressor</a></li>
+                     <li><a href="/image-resizer" class="hover:underline transition-all">Image Resizer</a></li>
+                     <li><a href="/image-watermark" class="hover:underline transition-all">Watermark Tool</a></li>
                  </ul>
             </div>
              <div>
-                 <h4 class="font-bold text-lg mb-3" style="color: var(--text-dark);">Company</h4>
-                 <ul class="space-y-2 text-sm">
-                     <li><a href="/about-us" class="hover:underline">About Us</a></li>
-                     <li><a href="/blog" class="hover:underline">Blog</a></li>
-                     <li><a href="mailto:contact@imgcon.life" class="hover:underline">Contact Us</a></li>
+                 <h4 class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Company</h4>
+                 <ul class="space-y-2 text-xs" style="color: var(--text-light);">
+                     <li><a href="/about-us" class="hover:underline transition-all">About Us</a></li>
+                     <li><a href="/blog" class="hover:underline transition-all">Blog</a></li>
+                     <li><a href="mailto:contact@imgcon.life" class="hover:underline transition-all">Contact Us</a></li>
                  </ul>
             </div>
             <div>
-                 <h4 class="font-bold text-lg mb-3" style="color: var(--text-dark);">Legal</h4>
-                 <ul class="space-y-2 text-sm">
-                      <li><a href="/privacy-policy" class="hover:underline">Privacy Policy</a></li>
-                      <li><a href="/terms-conditions" class="hover:underline">Terms & Conditions</a></li>
+                 <h4 class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Legal</h4>
+                 <ul class="space-y-2 text-xs" style="color: var(--text-light);">
+                      <li><a href="/privacy-policy" class="hover:underline transition-all">Privacy Policy</a></li>
+                      <li><a href="/terms-conditions" class="hover:underline transition-all">Terms & Conditions</a></li>
                  </ul>
             </div>
-            <div>
-                <h4 class="font-bold text-lg mb-3" style="color: var(--text-dark);">Share ImgCon</h4>
-                <div class="flex flex-wrap items-center gap-3">
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://imgcon.life" target="_blank" rel="noopener noreferrer" class="social-share-btn" style="background-color: #1877F2;" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://twitter.com/intent/tweet?url=https://imgcon.life&text=Check%20out%20ImgCon!" target="_blank" rel="noopener noreferrer" class="social-share-btn" style="background-color: #1DA1F2;" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="https://api.whatsapp.com/send?text=Check%20out%20ImgCon!%20https://imgcon.life" target="_blank" rel="noopener noreferrer" class="social-share-btn" style="background-color: #25D366;" aria-label="Share on WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                    <a href="https://t.me/share/url?url=https://imgcon.life" target="_blank" rel="noopener noreferrer" class="social-share-btn" style="background-color: #0088cc;" aria-label="Share on Telegram"><i class="fab fa-telegram"></i></a>
-                    <button id="copyLinkBtn" class="copy-link-btn flex items-center gap-2" aria-label="Copy link to share">
-                        <i class="fab fa-instagram"></i>
-                        <i class="fas fa-copy"></i>
+            <div class="col-span-2 md:col-span-1">
+                <h4 class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Share ImgCon</h4>
+                <div class="flex flex-wrap items-center gap-2">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://imgcon.life" target="_blank" rel="noopener noreferrer" class="social-share-btn w-9 h-9 flex items-center justify-center rounded-xl text-white transition-transform hover:-translate-y-1" style="background-color: #1877F2;" aria-label="Share on Facebook"><i class="fab fa-facebook-f text-sm"></i></a>
+                    <a href="https://twitter.com/intent/tweet?url=https://imgcon.life&text=Check%20out%20ImgCon!" target="_blank" rel="noopener noreferrer" class="social-share-btn w-9 h-9 flex items-center justify-center rounded-xl text-white transition-transform hover:-translate-y-1" style="background-color: #1DA1F2;" aria-label="Share on Twitter"><i class="fab fa-twitter text-sm"></i></a>
+                    <a href="https://api.whatsapp.com/send?text=Check%20out%20ImgCon!%20https://imgcon.life" target="_blank" rel="noopener noreferrer" class="social-share-btn w-9 h-9 flex items-center justify-center rounded-xl text-white transition-transform hover:-translate-y-1" style="background-color: #25D366;" aria-label="Share on WhatsApp"><i class="fab fa-whatsapp text-sm"></i></a>
+                    <a href="https://t.me/share/url?url=https://imgcon.life" target="_blank" rel="noopener noreferrer" class="social-share-btn w-9 h-9 flex items-center justify-center rounded-xl text-white transition-transform hover:-translate-y-1" style="background-color: #0088cc;" aria-label="Share on Telegram"><i class="fab fa-telegram text-sm"></i></a>
+                    <button id="copyLinkBtn" class="copy-link-btn w-9 h-9 flex items-center justify-center rounded-xl text-white transition-all hover:-translate-y-1 bg-gradient-to-br from-indigo-500 to-purple-600 shadow-sm" aria-label="Copy link to share">
+                        <i class="fas fa-copy text-sm"></i>
                     </button>
                 </div>
            </div>
         </div>
-        <p class="text-sm">&copy; 2026 ImgCon. All Rights Reserved.</p>
+        <p class="text-xs opacity-75 mt-6" style="color: var(--text-light);">&copy; 2026 ImgCon. All Rights Reserved.</p>
     </footer>
 
-    <div id="toast" class="toast"><i class="fas fa-check-circle mr-2"></i><span id="toastMessage"></span></div>
+    <div id="toast" class="toast"><i class="fas fa-check-circle mr-2 text-green-500"></i><span id="toastMessage"></span></div>
 
     <!-- Preview Modal -->
     <div id="previewModal" class="preview-modal">
-        <div class="modal-content">
-            <div class="modal-header flex justify-between items-center"><h3 class="text-lg font-bold" id="modalFileName">Image Preview</h3><button id="modalCloseBtn" class="secondary-btn rounded-full w-8 h-8 flex items-center justify-center p-0">&times;</button></div>
-            <div class="modal-body">
-                <div class="before-after-container h-full w-full" id="modalPreviewContainer">
-                    <div class="before-image-clipper"><img class="before-image" src="" alt="Before"></div>
-                    <img class="after-image" src="" alt="After">
+        <div class="modal-content w-full max-w-4xl">
+            <div class="modal-header flex justify-between items-center pb-2 border-b" style="border-color: var(--card-border);"><h3 class="text-lg font-bold" id="modalFileName" style="color: var(--text-dark);">Image Preview</h3><button id="modalCloseBtn" class="secondary-btn rounded-full w-8 h-8 flex items-center justify-center p-0 transition-transform hover:scale-105">&times;</button></div>
+            <div class="modal-body overflow-hidden py-4">
+                 <!-- Zoom & Drag Guide Info -->
+                 <p class="text-xxs text-center mb-2 font-bold opacity-75 uppercase tracking-wider" style="color: var(--text-light);">💡 Wheel to Zoom • Left Click drag to Pan • Slide to Compare</p>
+                 <div class="before-after-container h-full w-full horizontal-split" id="modalPreviewContainer">
+                    <div class="comparison-viewport">
+                        <div class="before-image-clipper"><img class="before-image" src="" alt="Before"></div>
+                        <img class="after-image" src="" alt="After">
+                    </div>
                     <div class="before-after-slider"></div>
                 </div>
             </div>
@@ -343,26 +368,35 @@
 
     <!-- JS Templates for Dynamic App Loading -->
     <template id="toolLayoutTemplate">
-        <div class="tool-container">
+        <div class="tool-container transition-all duration-500">
             <div class="drop-zone-container">
-                 <div class="drop-zone rounded-2xl p-8 text-center cursor-pointer mb-6 flex flex-col items-center justify-center border-3 border-dashed" id="dropZone" style="border-color: var(--card-border); background-color: var(--bg-subtle);">
-                    <div class="initial-drop-message"><i class="fas fa-cloud-upload-alt text-5xl text-indigo-400 mb-4 drop-shadow-lg"></i><p class="text-lg font-semibold mb-2">Drag & drop files here</p><p class="text-light text-sm">or click to browse</p></div>
-                    <div class="staging-area hidden w-full"><div class="thumbnail-grid grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4 max-h-48 overflow-y-auto p-2 bg-bg-main rounded-lg"></div><p class="file-summary font-semibold text-lg mb-4"></p><button class="confirm-btn upload-button"><i class="fas fa-arrow-right mr-2"></i>Continue</button></div>
+                 <div class="drop-zone rounded-3xl p-8 sm:p-12 text-center cursor-pointer mb-6 flex flex-col items-center justify-center border-2 border-dashed transition-all duration-300 hover:shadow-lg" id="dropZone" style="border-color: var(--card-border); background-color: var(--bg-subtle);">
+                    <div class="initial-drop-message"><i class="fas fa-cloud-upload-alt text-6xl text-indigo-400 mb-4 animate-bounce"></i><p class="text-xl font-bold mb-2" style="color: var(--text-dark);">Drag & drop files here</p><p class="text-sm" style="color: var(--text-light);">or click to browse local storage</p></div>
+                    <div class="staging-area hidden w-full"><div class="thumbnail-grid grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4 max-h-48 overflow-y-auto p-2 rounded-xl" style="background-color: var(--bg-main);"></div><p class="file-summary font-bold text-lg mb-4" style="color: var(--text-dark);"></p><button class="confirm-btn upload-button"><i class="fas fa-arrow-right mr-2"></i>Continue</button></div>
                     <input type="file" class="hidden file-input" accept="image/*" multiple>
                 </div>
             </div>
-            <div class="process-ui grid md:grid-cols-2 gap-8 hidden">
+            <div class="process-ui grid md:grid-cols-2 gap-8 hidden animate__animated animate__fadeIn">
                 <div class="left-column space-y-4">
-                    <div class="preview-container h-64 md:h-96 rounded-xl relative bg-bg-subtle flex items-center justify-center overflow-hidden"><div class="gallery-container w-full h-full flex transition-transform duration-300"></div><div class="before-after-container hidden"><div class="before-image-clipper"><img class="before-image" src="" alt="Before"></div><img class="after-image" src="" alt="After"><div class="before-after-slider"></div></div></div>
-                    <div class="flex justify-between items-center px-2"><button class="prev-image-btn p-2 rounded-full hover:bg-bg-subtle" aria-label="Previous Image"><i class="fas fa-chevron-left"></i></button><div><span class="current-image-index">1</span> / <span class="total-images">1</span></div><button class="next-image-btn p-2 rounded-full hover:bg-bg-subtle" aria-label="Next Image"><i class="fas fa-chevron-right"></i></button></div>
-                     <div class="file-management-section space-y-3"><div class="flex justify-between items-center"><h3 class="text-lg font-semibold">Manage Files <span class="text-sm text-light font-normal">(Drag to reorder for PDF)</span></h3><button class="clear-all-btn text-sm font-semibold text-red-500 hover:text-red-700">Clear All</button></div><div class="file-list-container max-h-48 overflow-y-auto p-2 bg-bg-subtle rounded-lg space-y-2"></div><label class="secondary-btn w-full flex items-center justify-center py-2 rounded-full cursor-pointer"><i class="fas fa-plus mr-2"></i> Add More Images<input type="file" class="hidden add-more-files-input" accept="image/*" multiple></label></div>
+                    <div class="preview-container h-64 md:h-96 rounded-2xl relative flex items-center justify-center overflow-hidden border shadow-inner" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
+                        <div class="gallery-container w-full h-full flex transition-transform duration-500 ease-out"></div>
+                        <div class="before-after-container hidden horizontal-split">
+                            <div class="comparison-viewport">
+                                <div class="before-image-clipper"><img class="before-image" src="" alt="Before"></div>
+                                <img class="after-image" src="" alt="After">
+                            </div>
+                            <div class="before-after-slider"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center px-2" style="color: var(--text-dark);"><button class="prev-image-btn p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors" aria-label="Previous Image"><i class="fas fa-chevron-left"></i></button><div class="font-bold text-sm"><span class="current-image-index">1</span> / <span class="total-images">1</span></div><button class="next-image-btn p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors" aria-label="Next Image"><i class="fas fa-chevron-right"></i></button></div>
+                     <div class="file-management-section space-y-3"><div class="flex justify-between items-center"><h3 class="text-sm font-bold uppercase tracking-wider" style="color: var(--text-dark);">Manage Files <span class="text-xs font-normal normal-case" style="color: var(--text-light);">(Drag to reorder)</span></h3><button class="clear-all-btn text-xs font-bold text-red-500 hover:text-red-600 transition-colors">Clear All</button></div><div class="file-list-container max-h-48 overflow-y-auto p-2 rounded-xl space-y-2 border" style="background-color: var(--bg-subtle); border-color: var(--card-border);"></div><label class="secondary-btn w-full flex items-center justify-center py-2.5 rounded-full cursor-pointer font-bold text-sm transition-all"><i class="fas fa-plus mr-2 text-indigo-500"></i> Add More Images<input type="file" class="hidden add-more-files-input" accept="image/*" multiple></label></div>
                 </div>
                 <div class="right-column space-y-6">
                     <div class="options-container space-y-4"></div>
-                     <div class="conversion-process hidden text-center p-4"><div class="progress-bar-container mb-3"><div class="progress-bar-fill" style="width: 0%;"></div></div><p class="font-medium mt-2 processing-text"></p></div>
+                     <div class="conversion-process hidden text-center p-4"><div class="progress-bar-container mb-3 shadow-inner"><div class="progress-bar-fill" style="width: 0%;"></div></div><p class="font-bold text-sm processing-text" style="color: var(--text-dark);"></p></div>
                     <div class="output-section">
-                        <button class="start-btn upload-button w-full justify-center py-3 text-lg mb-3"><i class="fas fa-cogs mr-3"></i><span>Start</span></button>
-                        <div class="results-container hidden space-y-4"></div>
+                        <button class="start-btn upload-button w-full justify-center py-3 text-lg mb-3 shadow-md"><i class="fas fa-cogs mr-3"></i><span>Start Processing</span></button>
+                        <div class="results-container hidden space-y-4 animate__animated animate__fadeIn"></div>
                     </div>
                 </div>
             </div>
@@ -370,53 +404,116 @@
     </template>
 
     <template id="converterOptionsTemplate">
-        <h3 class="text-xl font-bold">Converter Options</h3><div><label class="font-semibold block mb-3">Output Format</label><div class="grid grid-cols-2 sm:grid-cols-3 gap-4 format-selector"><div class="format-card-container"><div class="format-card cursor-pointer" data-format="png"><div class="card-face card-front"><i class="fas fa-image text-3xl mb-2 text-indigo-400"></i><h4 class="font-bold text-lg">PNG</h4></div><div class="card-face card-back"><i class="fas fa-check-circle text-5xl"></i></div></div></div><div class="format-card-container"><div class="format-card cursor-pointer" data-format="jpg"><div class="card-face card-front"><i class="fas fa-camera-retro text-3xl mb-2 text-yellow-500"></i><h4 class="font-bold text-lg">JPG</h4></div><div class="card-face card-back"><i class="fas fa-check-circle text-5xl"></i></div></div></div><div class="format-card-container"><div class="format-card cursor-pointer" data-format="webp"><div class="card-face card-front"><i class="fas fa-rocket text-3xl mb-2 text-teal-400"></i><h4 class="font-bold text-lg">WEBP</h4></div><div class="card-face card-back"><i class="fas fa-check-circle text-5xl"></i></div></div></div><div class="format-card-container"><div class="format-card cursor-pointer" data-format="avif"><div class="card-face card-front"><i class="fas fa-feather-alt text-3xl mb-2 text-purple-400"></i><h4 class="font-bold text-lg">AVIF</h4></div><div class="card-face card-back"><i class="fas fa-check-circle text-5xl"></i></div></div></div><div class="format-card-container"><div class="format-card cursor-pointer" data-format="pdf"><div class="card-face card-front"><i class="fas fa-file-pdf text-3xl mb-2 text-red-500"></i><h4 class="font-bold text-lg">PDF</h4></div><div class="card-face card-back"><i class="fas fa-check-circle text-5xl"></i></div></div></div><div class="format-card-container"><div class="format-card cursor-pointer" data-format="ico"><div class="card-face card-front"><i class="fas fa-desktop text-3xl mb-2 text-blue-500"></i><h4 class="font-bold text-lg">ICO</h4></div><div class="card-face card-back"><i class="fas fa-check-circle text-5xl"></i></div></div></div></div></div>
-        <div class="options-section bg-bg-subtle rounded-lg" id="qualitySection"><label class="font-semibold block mb-2">Quality (<span class="quality-value">85</span>%)</label><input type="range" class="quality-slider w-full" min="1" max="100" value="85"></div>
-        <div class="options-section bg-bg-subtle rounded-lg" id="pdfOptionsSection"><h4 class="font-semibold block mb-3">PDF Options</h4><div class="grid grid-cols-2 gap-4"><div><label for="pdf-page-size" class="text-sm font-medium">Page Size</label><select id="pdf-page-size" class="w-full mt-1 p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);"><option value="a4">A4</option><option value="letter">Letter</option><option value="legal">Legal</option></select></div><div><label for="pdf-orientation" class="text-sm font-medium">Orientation</label><select id="pdf-orientation" class="w-full mt-1 p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);"><option value="p">Portrait</option><option value="l">Landscape</option></select></div><div class="col-span-2"><label for="pdf-margin" class="text-sm font-medium">Margin (mm)</label><input type="number" id="pdf-margin" class="w-full mt-1 p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);" value="10" min="0"></div></div></div>
+        <h3 class="text-lg font-black uppercase tracking-wider mb-2" style="color: var(--text-dark);">Converter Options</h3>
+        <div>
+            <label class="font-bold text-sm block mb-3" style="color: var(--text-light);">Output Format</label>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 format-selector">
+                <div class="format-card-container">
+                    <div class="format-card cursor-pointer" data-format="png">
+                        <div class="card-face card-front"><i class="fas fa-image text-2xl mb-2 text-indigo-400"></i><h4 class="font-bold text-sm">PNG</h4></div>
+                        <div class="card-face card-back"><i class="fas fa-check-circle text-4xl"></i></div>
+                    </div>
+                </div>
+                <div class="format-card-container">
+                    <div class="format-card cursor-pointer" data-format="jpg">
+                        <div class="card-face card-front"><i class="fas fa-camera-retro text-2xl mb-2 text-yellow-500"></i><h4 class="font-bold text-sm">JPG</h4></div>
+                        <div class="card-face card-back"><i class="fas fa-check-circle text-4xl"></i></div>
+                    </div>
+                </div>
+                <div class="format-card-container">
+                    <div class="format-card cursor-pointer" data-format="webp">
+                        <div class="card-face card-front"><i class="fas fa-rocket text-2xl mb-2 text-teal-400"></i><h4 class="font-bold text-sm">WEBP</h4></div>
+                        <div class="card-face card-back"><i class="fas fa-check-circle text-4xl"></i></div>
+                    </div>
+                </div>
+                <div class="format-card-container">
+                    <div class="format-card cursor-pointer" data-format="avif">
+                        <div class="card-face card-front"><i class="fas fa-feather-alt text-2xl mb-2 text-purple-400"></i><h4 class="font-bold text-sm">AVIF</h4></div>
+                        <div class="card-face card-back"><i class="fas fa-check-circle text-4xl"></i></div>
+                    </div>
+                </div>
+                <div class="format-card-container">
+                    <div class="format-card cursor-pointer" data-format="pdf">
+                        <div class="card-face card-front"><i class="fas fa-file-pdf text-2xl mb-2 text-red-500"></i><h4 class="font-bold text-sm">PDF</h4></div>
+                        <div class="card-face card-back"><i class="fas fa-check-circle text-4xl"></i></div>
+                    </div>
+                </div>
+                <div class="format-card-container">
+                    <div class="format-card cursor-pointer" data-format="ico">
+                        <div class="card-face card-front"><i class="fas fa-desktop text-2xl mb-2 text-blue-500"></i><h4 class="font-bold text-sm">ICO</h4></div>
+                        <div class="card-face card-back"><i class="fas fa-check-circle text-4xl"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="options-section p-4 rounded-xl border" id="qualitySection" style="background-color: var(--bg-subtle); border-color: var(--card-border);"><label class="font-bold text-sm block mb-2" style="color: var(--text-dark);">Quality (<span class="quality-value">85</span>%)</label><input type="range" class="quality-slider w-full accent-indigo-500 cursor-pointer" min="1" max="100" value="85"></div>
+        <div class="options-section p-4 rounded-xl border hidden" id="pdfOptionsSection" style="background-color: var(--bg-subtle); border-color: var(--card-border);"><h4 class="font-bold text-sm block mb-3" style="color: var(--text-dark);">PDF Settings</h4><div class="grid grid-cols-2 gap-4"><div><label for="pdf-page-size" class="text-xs font-semibold" style="color: var(--text-light);">Page Size</label><select id="pdf-page-size" class="w-full mt-1 p-2 rounded-lg border text-sm outline-none transition-all focus:border-indigo-500" style="border-color: var(--card-border); background-color: var(--card-bg); color: var(--text-dark);"><option value="a4">A4</option><option value="letter">Letter</option><option value="legal">Legal</option></select></div><div><label for="pdf-orientation" class="text-xs font-semibold" style="color: var(--text-light);">Orientation</label><select id="pdf-orientation" class="w-full mt-1 p-2 rounded-lg border text-sm outline-none transition-all focus:border-indigo-500" style="border-color: var(--card-border); background-color: var(--card-bg); color: var(--text-dark);"><option value="p">Portrait</option><option value="l">Landscape</option></select></div><div class="col-span-2"><label for="pdf-margin" class="text-xs font-semibold" style="color: var(--text-light);">Margin (mm)</label><input type="number" id="pdf-margin" class="w-full mt-1 p-2 rounded-lg border text-sm outline-none transition-all focus:border-indigo-500" style="border-color: var(--card-border); background-color: var(--card-bg); color: var(--text-dark);" value="10" min="0"></div></div></div>
     </template>
 
     <template id="compressorOptionsTemplate">
-        <h3 class="text-xl font-bold">Compressor Options</h3>
-        <div class="options-section show p-4 bg-bg-subtle rounded-lg">
+        <h3 class="text-lg font-black uppercase tracking-wider mb-2" style="color: var(--text-dark);">Compressor Options</h3>
+        
+        <!-- EXIF METADATA toggle option -->
+        <div class="flex items-center justify-between p-4 rounded-xl border mb-3" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
+            <label for="metadata-toggle" class="font-bold text-sm" style="color: var(--text-dark);">Strip Exif Metadata (Saves extra space)</label>
+            <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                <input type="checkbox" id="metadata-toggle" class="target-size-toggle absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-300" style="right: 1rem; border-color: var(--card-border);" checked>
+                <label for="metadata-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300"></label>
+            </div>
+        </div>
+
+        <div class="options-section show p-4 rounded-xl border" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
             <div class="flex items-center justify-between mb-2">
-                <label class="font-semibold">Compression Level (<span class="quality-value">80</span>%)</label>
+                <label class="font-bold text-sm" style="color: var(--text-dark);">Compression Level (<span class="quality-value">80</span>%)</label>
                 <div id="png-info" class="tooltip hidden">
                     <i class="fas fa-info-circle text-light cursor-pointer"></i>
-                    <span class="tooltip-text">PNG compression is lossless. Reduction may be minimal. For bigger savings, consider converting to JPG or WEBP.</span>
+                    <span class="tooltip-text">PNG compression is lossless. For bigger savings, convert to WEBP.</span>
                 </div>
             </div>
-            <input type="range" class="quality-slider w-full" min="1" max="100" value="80" step="1">
+            <input type="range" class="quality-slider w-full accent-indigo-500 cursor-pointer" min="1" max="100" value="80" step="1">
         </div>
-        <div class="p-4 bg-bg-subtle rounded-lg space-y-3"><div class="flex items-center justify-between"><label for="target-size-toggle" class="font-semibold">Target File Size</label><div class="relative inline-block w-10 mr-2 align-middle select-none"><input type="checkbox" id="target-size-toggle" class="target-size-toggle absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" style="right: 1rem;"><label for="target-size-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label></div></div><div class="target-size-input-container hidden flex items-center gap-2"><input type="number" class="target-size-input w-full p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);" placeholder="e.g., 100"><select class="target-size-unit p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);"><option value="KB">KB</option><option value="MB">MB</option></select><button class="target-size-go-btn p-2 rounded-md text-white w-12" style="background-color: var(--primary-color);"><i class="fas fa-search"></i></button></div><p class="target-size-status text-sm text-light text-center hidden"></p></div>
-        <div class="flex items-center justify-between p-4 bg-bg-subtle rounded-lg"><label for="before-after-toggle" class="font-semibold">Before/After Preview</label><div class="relative inline-block w-10 mr-2 align-middle select-none"><input type="checkbox" name="before-after-toggle" id="before-after-toggle" class="target-size-toggle absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" style="right: 1rem;"><label for="before-after-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label></div></div>
-        <div class="realtime-preview-info p-4 bg-bg-subtle rounded-lg text-center hidden"><p class="font-semibold">Estimated Size</p><div class="flex justify-center items-baseline gap-3 mt-2"><span class="original-size text-light line-through">0 KB</span><i class="fas fa-arrow-right text-light"></i><span class="new-size text-2xl font-bold text-success">0 KB</span></div></div>
+        
+        <!-- Target File size parameters -->
+        <div class="p-4 rounded-xl border space-y-3" style="background-color: var(--bg-subtle); border-color: var(--card-border);"><div class="flex items-center justify-between"><label for="target-size-toggle" class="font-bold text-sm" style="color: var(--text-dark);">Target File Size</label><div class="relative inline-block w-10 mr-2 align-middle select-none"><input type="checkbox" id="target-size-toggle" class="target-size-toggle absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-300" style="right: 1rem; border-color: var(--card-border);"><label for="target-size-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300"></label></div></div><div class="target-size-input-container hidden flex items-center gap-2"><input type="number" id="target-size-kb-input" class="target-size-input w-full p-2 rounded-lg border text-sm focus:border-indigo-500 outline-none" style="border-color: var(--card-border); background-color: var(--card-bg); color: var(--text-dark);" placeholder="e.g., 100" value="100"><select id="target-size-unit-select" class="target-size-unit p-2 rounded-lg border text-sm focus:border-indigo-500 outline-none" style="border-color: var(--card-border); background-color: var(--card-bg); color: var(--text-dark);"><option value="KB">KB</option><option value="MB">MB</option></select></div><p class="target-size-status text-xs font-semibold text-center hidden" style="color: var(--text-light);"></p></div>
+        
+        <!-- Split Direction toggle configuration -->
+        <div class="flex items-center justify-between p-4 rounded-xl border" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
+            <label for="split-orientation" class="font-bold text-sm" style="color: var(--text-dark);">Slider Orientation</label>
+            <select id="split-orientation" class="p-1.5 rounded-lg border text-xs outline-none cursor-pointer" style="border-color: var(--card-border); background-color: var(--card-bg); color: var(--text-dark);">
+                <option value="horizontal-split">Horizontal Split</option>
+                <option value="vertical-split">Vertical Split</option>
+            </select>
+        </div>
+
+        <div class="flex items-center justify-between p-4 rounded-xl border" style="background-color: var(--bg-subtle); border-color: var(--card-border);"><label for="before-after-toggle" class="font-bold text-sm" style="color: var(--text-dark);">Before/After Preview</label><div class="relative inline-block w-10 mr-2 align-middle select-none"><input type="checkbox" name="before-after-toggle" id="before-after-toggle" class="target-size-toggle absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-300" style="right: 1rem; border-color: var(--card-border);"><label for="before-after-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300"></label></div></div>
+        <div class="realtime-preview-info p-4 rounded-xl border text-center hidden" style="background-color: var(--bg-subtle); border-color: var(--card-border);"><p class="font-bold text-sm" style="color: var(--text-dark);">Estimated Size</p><div class="flex justify-center items-baseline gap-3 mt-2"><span class="original-size text-sm text-light line-through">0 KB</span><i class="fas fa-arrow-right text-xs" style="color: var(--text-light);"></i><span class="new-size text-xl font-extrabold text-success">0 KB</span></div></div>
     </template>
 
     <template id="resizerOptionsTemplate">
-        <h3 class="text-xl font-bold">Resizer Options</h3>
-        <div class="p-4 bg-bg-subtle rounded-lg space-y-4">
+        <h3 class="text-lg font-black uppercase tracking-wider mb-2" style="color: var(--text-dark);">Resizer Options</h3>
+        <div class="p-4 rounded-xl border space-y-4" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
             <div>
-                <label class="font-semibold text-sm">Resize By</label>
-                <div class="flex mt-2 rounded-lg border p-1" style="border-color: var(--card-border); background-color: var(--card-bg);">
-                    <button class="resize-by-btn active w-1/2 p-2 rounded-md text-sm" data-mode="pixels">Pixels</button>
-                    <button class="resize-by-btn w-1/2 p-2 rounded-md text-sm" data-mode="percentage">Percentage</button>
+                <label class="font-bold text-sm" style="color: var(--text-light);">Resize By</label>
+                <div class="flex mt-2 rounded-xl border p-1" style="border-color: var(--card-border); background-color: var(--card-bg);">
+                    <button class="resize-by-btn active w-1/2 p-2 rounded-lg text-xs font-bold transition-all duration-300" data-mode="pixels">Pixels</button>
+                    <button class="resize-by-btn w-1/2 p-2 rounded-lg text-xs font-bold transition-all duration-300" data-mode="percentage">Percentage</button>
                 </div>
             </div>
             <!-- Pixels Mode -->
             <div id="pixels-mode-container" class="space-y-3">
                 <div class="grid grid-cols-2 gap-3 items-center">
                     <div>
-                        <label for="resize-width" class="text-sm font-medium">Width (px)</label>
-                        <input type="number" id="resize-width" class="w-full mt-1 p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);">
+                        <label for="resize-width" class="text-xs font-bold" style="color: var(--text-light);">Width (px)</label>
+                        <input type="number" id="resize-width" class="w-full mt-1 p-2 rounded-lg border text-sm outline-none focus:border-indigo-500" style="border-color: var(--card-border); background-color: var(--card-bg); color: var(--text-dark);">
                     </div>
                     <div>
-                        <label for="resize-height" class="text-sm font-medium">Height (px)</label>
-                        <input type="number" id="resize-height" class="w-full mt-1 p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);">
+                        <label for="resize-height" class="text-xs font-bold" style="color: var(--text-light);">Height (px)</label>
+                        <input type="number" id="resize-height" class="w-full mt-1 p-2 rounded-lg border text-sm outline-none focus:border-indigo-500" style="border-color: var(--card-border); background-color: var(--card-bg); color: var(--text-dark);">
                     </div>
                 </div>
                 <div>
-                    <label for="social-presets" class="text-sm font-medium">Social Media Presets</label>
-                    <select id="social-presets" class="w-full mt-1 p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);">
+                    <label for="social-presets" class="text-xs font-bold" style="color: var(--text-light);">Social Media Presets</label>
+                    <select id="social-presets" class="w-full mt-1 p-2 rounded-lg border text-sm outline-none focus:border-indigo-500" style="border-color: var(--card-border); background-color: var(--card-bg); color: var(--text-dark);">
                         <option value="custom">Custom Size</option>
                         <option value="1080x1080">Instagram Post (1080x1080)</option>
                         <option value="1080x1350">Instagram Portrait (1080x1350)</option>
@@ -431,87 +528,87 @@
             <!-- Percentage Mode -->
             <div id="percentage-mode-container" class="hidden space-y-3">
                 <div>
-                    <label class="font-semibold block mb-2">Scale (<span id="percentage-value">50</span>%)</label>
-                    <input type="range" id="percentage-slider" class="w-full" min="1" max="100" value="50">
+                    <label class="font-bold text-sm block mb-2" style="color: var(--text-dark);">Scale (<span id="percentage-value">50</span>%)</label>
+                    <input type="range" id="percentage-slider" class="w-full accent-indigo-500 cursor-pointer" min="1" max="100" value="50">
                 </div>
-                <div class="text-center text-sm text-light">
-                    New Dimensions: <span id="percentage-dims">0 x 0 px</span>
+                <div class="text-center text-xs font-semibold" style="color: var(--text-light);">
+                    New Dimensions: <span id="percentage-dims" class="font-bold" style="color: var(--text-dark);">0 x 0 px</span>
                 </div>
             </div>
              <div class="flex items-center justify-between pt-3 border-t" style="border-color: var(--card-border);">
-                <label for="aspect-ratio-toggle" class="font-semibold text-sm">Maintain Aspect Ratio</label>
+                <label for="aspect-ratio-toggle" class="font-bold text-xs" style="color: var(--text-dark);">Maintain Aspect Ratio</label>
                 <div class="relative inline-block w-10 mr-2 align-middle select-none">
-                    <input type="checkbox" id="aspect-ratio-toggle" class="target-size-toggle absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" style="right: 0.1rem;" checked>
-                    <label for="aspect-ratio-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" style="background-color: var(--primary-color);"></label>
+                    <input type="checkbox" id="aspect-ratio-toggle" class="target-size-toggle absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-300" style="right: 0.1rem; border-color: var(--card-border);" checked>
+                    <label for="aspect-ratio-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300" style="background-color: var(--primary-color);"></label>
                 </div>
             </div>
         </div>
     </template>
     
     <template id="watermarkOptionsTemplate">
-        <h3 class="text-xl font-bold">Watermark Options</h3>
-        <div class="p-4 bg-bg-subtle rounded-lg space-y-4">
+        <h3 class="text-lg font-black uppercase tracking-wider mb-2" style="color: var(--text-dark);">Watermark Options</h3>
+        <div class="p-4 rounded-xl border space-y-4" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
             <div>
-                <label class="font-semibold text-sm">Watermark Type</label>
-                <div class="flex mt-2 rounded-lg border p-1" style="border-color: var(--card-border); background-color: var(--card-bg);">
-                    <button class="watermark-type-btn active w-1/2 p-2 rounded-md text-sm" data-type="text">Text</button>
-                    <button class="watermark-type-btn w-1/2 p-2 rounded-md text-sm" data-type="image">Image</button>
+                <label class="font-bold text-xs" style="color: var(--text-light);">Watermark Type</label>
+                <div class="flex mt-2 rounded-xl border p-1" style="border-color: var(--card-border); background-color: var(--card-bg);">
+                    <button class="watermark-type-btn active w-1/2 p-2 rounded-lg text-xs font-bold transition-all duration-300" data-type="text">Text</button>
+                    <button class="watermark-type-btn w-1/2 p-2 rounded-lg text-xs font-bold transition-all duration-300" data-type="image">Image</button>
                 </div>
             </div>
             <!-- Text Watermark -->
             <div id="text-watermark-options">
-                <label for="watermark-text" class="text-sm font-medium">Watermark Text</label>
-                <input type="text" id="watermark-text" class="w-full mt-1 p-2 rounded-md border" style="border-color: var(--card-border); background-color: var(--card-bg);" value="© ImgCon">
+                <label for="watermark-text" class="text-xs font-bold" style="color: var(--text-light);">Watermark Text</label>
+                <input type="text" id="watermark-text" class="w-full mt-1 p-2 rounded-lg border text-sm outline-none focus:border-indigo-500" style="border-color: var(--card-border); background-color: var(--card-bg); color: var(--text-dark);" value="© ImgCon">
             </div>
             <!-- Image Watermark -->
             <div id="image-watermark-options" class="hidden">
-                 <label for="watermark-image-input" class="secondary-btn w-full flex items-center justify-center py-2 rounded-full cursor-pointer"><i class="fas fa-upload mr-2"></i> Choose Logo<input type="file" id="watermark-image-input" class="hidden" accept="image/png, image/jpeg, image/webp"></label>
-                 <img id="watermark-preview" class="hidden max-h-16 mx-auto mt-2 p-1 border rounded" style="border-color: var(--card-border);">
+                 <label for="watermark-image-input" class="secondary-btn w-full flex items-center justify-center py-2.5 rounded-full cursor-pointer text-xs font-bold transition-all"><i class="fas fa-upload mr-2 text-indigo-500"></i> Choose Logo<input type="file" id="watermark-image-input" class="hidden" accept="image/png, image/jpeg, image/webp"></label>
+                 <img id="watermark-preview" class="hidden max-h-16 mx-auto mt-3 p-1.5 border rounded-lg" style="border-color: var(--card-border);">
             </div>
              <div class="pt-4 border-t" style="border-color: var(--card-border);">
-                <label class="font-semibold block mb-2 text-sm">Opacity (<span id="opacity-value">70</span>%)</label>
-                <input type="range" id="opacity-slider" class="w-full" min="0" max="100" value="70">
+                <label class="font-bold text-xs block mb-2" style="color: var(--text-dark);">Opacity (<span id="opacity-value">70</span>%)</label>
+                <input type="range" id="opacity-slider" class="w-full accent-indigo-500 cursor-pointer" min="0" max="100" value="70">
             </div>
             <div>
-                <label class="font-semibold block mb-2 text-sm">Scale (<span id="scale-value">20</span>%)</label>
-                <input type="range" id="scale-slider" class="w-full" min="1" max="100" value="20">
+                <label class="font-bold text-xs block mb-2" style="color: var(--text-dark);">Scale (<span id="scale-value">20</span>%)</label>
+                <input type="range" id="scale-slider" class="w-full accent-indigo-500 cursor-pointer" min="1" max="100" value="20">
             </div>
             <div>
-                 <label class="font-semibold block mb-2 text-sm">Position</label>
+                 <label class="font-bold text-xs block mb-2" style="color: var(--text-dark);">Position</label>
                  <div class="grid grid-cols-3 gap-2">
-                     <button class="position-btn p-2 border rounded" data-position="top-left"><i class="fas fa-arrow-up"></i><i class="fas fa-arrow-left"></i></button>
-                     <button class="position-btn p-2 border rounded" data-position="top-center"><i class="fas fa-arrow-up"></i></button>
-                     <button class="position-btn p-2 border rounded" data-position="top-right"><i class="fas fa-arrow-up"></i><i class="fas fa-arrow-right"></i></button>
-                     <button class="position-btn p-2 border rounded" data-position="center-left"><i class="fas fa-arrow-left"></i></button>
-                     <button class="position-btn p-2 border rounded active" data-position="center"><i class="fas fa-crosshairs"></i></button>
-                     <button class="position-btn p-2 border rounded" data-position="center-right"><i class="fas fa-arrow-right"></i></button>
-                     <button class="position-btn p-2 border rounded" data-position="bottom-left"><i class="fas fa-arrow-down"></i><i class="fas fa-arrow-left"></i></button>
-                     <button class="position-btn p-2 border rounded" data-position="bottom-center"><i class="fas fa-arrow-down"></i></button>
-                     <button class="position-btn p-2 border rounded" data-position="bottom-right"><i class="fas fa-arrow-down"></i><i class="fas fa-arrow-right"></i></button>
+                     <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="top-left" aria-label="Top Left"><i class="fas fa-arrow-up text-xs"></i><i class="fas fa-arrow-left text-xs ml-0.5"></i></button>
+                     <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="top-center" aria-label="Top Center"><i class="fas fa-arrow-up text-xs"></i></button>
+                     <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="top-right" aria-label="Top Right"><i class="fas fa-arrow-up text-xs"></i><i class="fas fa-arrow-right text-xs ml-0.5"></i></button>
+                     <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="center-left" aria-label="Center Left"><i class="fas fa-arrow-left text-xs"></i></button>
+                     <button class="position-btn p-2 border rounded-lg active" data-position="center" aria-label="Center"><i class="fas fa-crosshairs text-xs"></i></button>
+                     <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="center-right" aria-label="Center Right"><i class="fas fa-arrow-right text-xs"></i></button>
+                     <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="bottom-left" aria-label="Bottom Left"><i class="fas fa-arrow-down text-xs"></i><i class="fas fa-arrow-left text-xs ml-0.5"></i></button>
+                     <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="bottom-center" aria-label="Bottom Center"><i class="fas fa-arrow-down text-xs"></i></button>
+                     <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="bottom-right" aria-label="Bottom Right"><i class="fas fa-arrow-down text-xs"></i><i class="fas fa-arrow-right text-xs ml-0.5"></i></button>
                  </div>
             </div>
         </div>
     </template>
     
     <template id="blogPostsTemplate">
-        <div data-slug="png-vs-jpg-difference">
-            <h2>PNG vs JPG: What's the Difference and Which One Should You Use?</h2>
+        <div data-slug="png-vs-jpg-difference" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">PNG vs JPG: What's the Difference and Which One Should You Use?</h2>
             <p>When it comes to saving images, two of the most popular file formats you'll encounter are PNG and JPG. While they may seem similar, they are fundamentally different and are best suited for different tasks.</p>
-            <h3>JPG (Joint Photographic Experts Group)</h3>
+            <h3 class="text-lg font-bold">JPG (Joint Photographic Experts Group)</h3>
             <p>JPGs are the most common file format for digital photos. They use lossy compression to make file sizes very small, which is great for loading websites quickly.</p>
-            <h3>PNG (Portable Network Graphics)</h3>
+            <h3 class="text-lg font-bold">PNG (Portable Network Graphics)</h3>
             <p>PNGs use lossless compression. Quality remains perfect, and it supports transparent backgrounds—ideal for logos and web design.</p>
         </div>
 
-        <div data-slug="how-to-reduce-photo-size">
-            <h2>How to Reduce Photo Size Without Losing Quality (The Definitive Guide)</h2>
+        <div data-slug="how-to-reduce-photo-size" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">How to Reduce Photo Size Without Losing Quality (The Definitive Guide)</h2>
             <p>Large image files cause websites to load slowly. This guide will walk you through the best techniques for compressing image sizes cleanly.</p>
-            <h3>Using the Right Tools</h3>
+            <h3 class="text-lg font-bold">Using the Right Tools</h3>
             <p>ImgCon's Image Compressor allows you to find the sweet spot between size and quality. For web images, a quality setting of 75-85% is ideal.</p>
         </div>
 
-        <div data-slug="webp-the-future-of-web-images">
-            <h2>Why WebP is the Future of Web Images</h2>
+        <div data-slug="webp-the-future-of-web-images" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">Why WebP is the Future of Web Images</h2>
             <p>Developed by Google, WebP provides superior lossless and lossy compression. On average, WebP images are 26% smaller compared to PNGs, and 25-34% smaller than JPGs, making websites load instantly.</p>
         </div>
     </template>
