@@ -1038,3 +1038,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('popstate', router);
     router();
 });
+
+/* Add this inside style.css */
+.logo-image {
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+header a:hover .logo-image {
+    transform: scale(1.12) rotate(6deg);
+}
