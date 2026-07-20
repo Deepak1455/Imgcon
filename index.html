@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- SEO & Google Verification -->
   <meta name="google-site-verification" content="ABC123XYZ" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ImgCon - Private & Fast Image Converter, Compressor & Resizer</title>
 
-  <!-- Advanced Meta Tags for Rankings -->
   <meta name="description" content="ImgCon: The ultimate free online tool to convert, compress, resize, and watermark images without uploading. 100% private, incredibly fast, supports batch processing, and works offline.">
   <meta name="keywords" content="image converter, image compressor, image resizer, watermark tool, photo resizer, image optimizer online, jpg to png, png to pdf, webp converter, avif converter, reduce image size, bulk image resizer, private image converter, imgcon, free image tools, pwa image tool, offline image converter, target size compression, before after slider, photo resize online, image convert to jpg, file size reducer">
   <meta name="author" content="ImgCon">
@@ -20,55 +18,58 @@
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
 
-  <!-- Open Graph / Facebook SEO -->
+  <!-- Open Graph / SEO -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="ImgCon - Private, Offline-Ready Image Converter, Compressor, Resizer & Watermark Tool">
   <meta property="og:description" content="Instantly convert, compress, resize, and watermark your images right in your browser. No uploads required. 100% private, free, and works offline.">
   <meta property="og:image" content="https://imgcon.life/og-image.png">
   <meta property="og:url" content="https://imgcon.life">
 
-  <!-- Twitter Card SEO -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ImgCon - Private, Offline-Ready Image Converter, Compressor, Resizer & Watermark Tool">
-  <meta name="twitter:description" content="Instantly convert, compress, resize, and watermark your images right in your browser. No uploads required. 100% private, free, and works offline.">
-  <meta name="twitter:image" content="https://imgcon.life/og-image.png">
+  <!-- CRITICAL ASSET PRELOADING -->
+  <link rel="preload" href="logo.png" as="image">
 
-  <!-- JSON-LD Structured Data for Advanced Google Rankings -->
-  <script type="application/ld+json">
-  { 
-    "@context": "https://schema.org", 
-    "@type": "SoftwareApplication", 
-    "name": "ImgCon", 
-    "description": "A free online tool to convert, compress, resize, and watermark images directly in the browser. It supports batch processing, works offline, and handles formats like JPG, PNG, WebP, AVIF, and PDF.", 
-    "url": "https://imgcon.life", 
-    "applicationCategory": "MultimediaApplication", 
-    "operatingSystem": "All", 
-    "offers": { 
-      "@type": "Offer", 
-      "price": "0", 
-      "priceCurrency": "USD" 
-    } 
-  }
-  </script>
-  <script type="application/ld+json">
-  { 
-    "@context": "https://schema.org", 
-    "@type": "FAQPage", 
-    "mainEntity": [{ 
-      "@type": "Question", 
-      "name": "Is ImgCon really free and safe?", 
-      "acceptedAnswer": { 
-        "@type": "Answer", 
-        "text": "Yes, ImgCon is completely free with no processing limits. All tasks are performed locally in your browser, so your images are never uploaded to our servers, making it 100% safe." 
-      } 
-    }] 
-  }
-  </script>
+  <!-- CRITICAL PATH INLINE CSS (For Instant FCP/LCP) -->
+  <style>
+    :root {
+      --primary-color: #6366f1;
+      --primary-hover: #4f46e5;
+      --bg-main: #f8fafc;
+      --bg-subtle: #f1f5f9;
+      --card-bg: #ffffff;
+      --card-border: #e5e7eb;
+      --text-dark: #1e293b;
+      --text-light: #475569;
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+    [data-theme="dark"] {
+      --primary-color: #818cf8;
+      --primary-hover: #a78bfa;
+      --bg-main: #0f172a;
+      --bg-subtle: #1e293b;
+      --card-bg: #111827;
+      --card-border: #374151;
+      --text-dark: #f3f4f6;
+      --text-light: #cbd5e1;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      margin: 0;
+      padding: 12px;
+    }
+    .app-container {
+      background-color: var(--card-bg);
+      border-radius: 1.5rem;
+      border: 1px solid var(--card-border);
+      overflow: hidden;
+      max-width: 80rem;
+      margin: 0 auto;
+    }
+  </style>
 
-  <!-- External Stylesheets & Fonts -->
-  <link rel="icon" type="image/svg+xml" href="https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome@5.15.4/svgs/solid/image.svg">
-  
-  <!-- PERFORMANCE FIX: Asynchronous Non-blocking CSS Loading (Lighthouse Optimization) -->
+  <!-- ASYNCHRONOUS CSS LOADING (Lighthouse Optimization) -->
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"></noscript>
 
@@ -79,19 +80,12 @@
   <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript>
   
   <link rel="stylesheet" href="style.css">
-
-  <!-- PERFORMANCE FIX: Deferred script loading to prevent render-blocking FCP penalty -->
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js" defer></script>
 </head>
 <body class="p-3 sm:p-6 pb-12 transition-colors duration-300">
 
-    <!-- Sticky Floating Header with Backdrop Blur -->
     <header class="sticky top-2 z-50 backdrop-filter backdrop-blur-lg flex justify-between items-center mb-6 py-3 px-4 max-w-7xl mx-auto rounded-2xl border transition-all duration-300 shadow-sm" style="background-color: var(--card-bg); border-color: var(--card-border);">
         <a href="/" class="flex items-center gap-3 group">
-            <!-- Explicit dimensions provided to prevent Layout Shifts (CLS) -->
-            <img src="logo.png" alt="ImgCon Logo" width="40" height="40" class="w-10 h-10 object-contain logo-image">
+            <img src="logo.png" alt="ImgCon Logo" width="40" height="40" class="w-10 h-10 object-contain logo-image" fetchpriority="high">
             <div>
                 <h1 class="text-xl font-extrabold tracking-tight" style="color: var(--text-dark);">ImgCon</h1>
                 <p class="text-xs font-semibold tracking-wider uppercase opacity-80" style="color: var(--primary-color);">Premium Image Tools</p>
@@ -174,21 +168,21 @@
                 <div class="grid md:grid-cols-3 gap-6">
                     <div class="testimonial-card p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-md" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
                         <div class="flex items-center mb-4">
-                            <img src="https://randomuser.me/api/portraits/women/65.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Sarah L.">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Sarah L." loading="lazy">
                             <div><p class="font-bold text-sm" style="color: var(--text-dark);">Sarah L.</p><p class="text-xs" style="color: var(--text-light);">Web Developer</p></div>
                         </div>
                         <p class="text-sm leading-relaxed" style="color: var(--text-light);">"ImgCon is a lifesaver. I use it daily to optimize images for client websites. The fact that it's private and works offline is a huge plus."</p>
                     </div>
                     <div class="testimonial-card p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-md" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
                          <div class="flex items-center mb-4">
-                            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Mike R.">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Mike R." loading="lazy">
                             <div><p class="font-bold text-sm" style="color: var(--text-dark);">Mike R.</p><p class="text-xs" style="color: var(--text-light);">Photographer</p></div>
                         </div>
                         <p class="text-sm leading-relaxed" style="color: var(--text-light);">"I needed a quick way to convert raw photos to JPG for previews without uploading. ImgCon is incredibly fast and respects my privacy."</p>
                     </div>
                     <div class="testimonial-card p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-md" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
                          <div class="flex items-center mb-4">
-                            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Jessica T.">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Jessica T." loading="lazy">
                             <div><p class="font-bold text-sm" style="color: var(--text-dark);">Jessica T.</p><p class="text-xs" style="color: var(--text-light);">Digital Marketer</p></div>
                         </div>
                         <p class="text-sm leading-relaxed" style="color: var(--text-light);">"The batch processing feature is a game-changer. I can resize and compress dozens of images in seconds. Highly recommended!"</p>
@@ -315,7 +309,6 @@
                 <p class="text-xs leading-relaxed mb-3" style="color: var(--text-light);">The free, fast, and private way to handle all your image processing needs. Built with privacy at its core.</p>
             </div>
             <div>
-                 <!-- ACCESSIBILITY FIX: Swapped h4 with standard p tag to resolve heading hierarchy violation -->
                  <p class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Tools</p>
                  <ul class="space-y-2 text-xs" style="color: var(--text-light);">
                      <li><a href="/image-converter" class="hover:underline transition-all">Image Converter</a></li>
@@ -362,7 +355,6 @@
         <div class="modal-content w-full max-w-4xl">
             <div class="modal-header flex justify-between items-center pb-2 border-b" style="border-color: var(--card-border);"><h3 class="text-lg font-bold" id="modalFileName" style="color: var(--text-dark);">Image Preview</h3><button id="modalCloseBtn" class="secondary-btn rounded-full w-8 h-8 flex items-center justify-center p-0 transition-transform hover:scale-105">&times;</button></div>
             <div class="modal-body overflow-hidden py-4">
-                 <!-- Zoom & Drag Guide Info -->
                  <p class="text-xxs text-center mb-2 font-bold opacity-75 uppercase tracking-wider" style="color: var(--text-light);">💡 Wheel to Zoom • Left Click drag to Pan • Slide to Compare</p>
                  <div class="before-after-container h-full w-full horizontal-split" id="modalPreviewContainer">
                     <div class="comparison-viewport">
@@ -462,7 +454,6 @@
     <template id="compressorOptionsTemplate">
         <h3 class="text-lg font-black uppercase tracking-wider mb-2" style="color: var(--text-dark);">Compressor Options</h3>
         
-        <!-- EXIF METADATA toggle option -->
         <div class="flex items-center justify-between p-4 rounded-xl border mb-3" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
             <label for="metadata-toggle" class="font-bold text-sm" style="color: var(--text-dark);">Strip Exif Metadata (Saves extra space)</label>
             <div class="relative inline-block w-10 mr-2 align-middle select-none">
@@ -482,10 +473,8 @@
             <input type="range" class="quality-slider w-full accent-indigo-500 cursor-pointer" min="1" max="100" value="80" step="1">
         </div>
         
-        <!-- Target File size parameters -->
         <div class="p-4 rounded-xl border space-y-3" style="background-color: var(--bg-subtle); border-color: var(--card-border);"><div class="flex items-center justify-between"><label for="target-size-toggle" class="font-bold text-sm" style="color: var(--text-dark);">Target File Size</label><div class="relative inline-block w-10 mr-2 align-middle select-none"><input type="checkbox" id="target-size-toggle" class="target-size-toggle absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-300" style="right: 1rem; border-color: var(--card-border);"><label for="target-size-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300"></label></div></div><div class="target-size-input-container hidden flex items-center gap-2"><input type="number" id="target-size-kb-input" class="target-size-input w-full p-2 rounded-lg border text-sm focus:border-indigo-500 outline-none" style="border-color: var(--card-border); background-color: var(--card-bg); color: var(--text-dark);" placeholder="e.g., 100" value="100"><select id="target-size-unit-select" class="target-size-unit p-2 rounded-lg border text-sm focus:border-indigo-500 outline-none" style="border-color: var(--card-border); background-color: var(--card-bg); color: var(--text-dark);"><option value="KB">KB</option><option value="MB">MB</option></select></div><p class="target-size-status text-xs font-semibold text-center hidden" style="color: var(--text-light);"></p></div>
         
-        <!-- Split Direction toggle configuration -->
         <div class="flex items-center justify-between p-4 rounded-xl border" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
             <label for="split-orientation" class="font-bold text-sm" style="color: var(--text-dark);">Slider Orientation</label>
             <select id="split-orientation" class="p-1.5 rounded-lg border text-xs outline-none cursor-pointer" style="border-color: var(--card-border); background-color: var(--card-bg); color: var(--text-dark);">
@@ -508,7 +497,6 @@
                     <button class="resize-by-btn w-1/2 p-2 rounded-lg text-xs font-bold transition-all duration-300" data-mode="percentage">Percentage</button>
                 </div>
             </div>
-            <!-- Pixels Mode -->
             <div id="pixels-mode-container" class="space-y-3">
                 <div class="grid grid-cols-2 gap-3 items-center">
                     <div>
@@ -534,7 +522,6 @@
                     </select>
                 </div>
             </div>
-            <!-- Percentage Mode -->
             <div id="percentage-mode-container" class="hidden space-y-3">
                 <div>
                     <label class="font-bold text-sm block mb-2" style="color: var(--text-dark);">Scale (<span id="percentage-value">50</span>%)</label>
@@ -564,12 +551,10 @@
                     <button class="watermark-type-btn w-1/2 p-2 rounded-lg text-xs font-bold transition-all duration-300" data-type="image">Image</button>
                 </div>
             </div>
-            <!-- Text Watermark -->
             <div id="text-watermark-options">
                 <label for="watermark-text" class="text-xs font-bold" style="color: var(--text-light);">Watermark Text</label>
                 <input type="text" id="watermark-text" class="w-full mt-1 p-2 rounded-lg border text-sm outline-none focus:border-indigo-500" style="border-color: var(--card-border); background-color: var(--card-bg); color: var(--text-dark);" value="© ImgCon">
             </div>
-            <!-- Image Watermark -->
             <div id="image-watermark-options" class="hidden">
                  <label for="watermark-image-input" class="secondary-btn w-full flex items-center justify-center py-2.5 rounded-full cursor-pointer text-xs font-bold transition-all"><i class="fas fa-upload mr-2 text-indigo-500"></i> Choose Logo<input type="file" id="watermark-image-input" class="hidden" accept="image/png, image/jpeg, image/webp"></label>
                  <img id="watermark-preview" class="hidden max-h-16 mx-auto mt-3 p-1.5 border rounded-lg" style="border-color: var(--card-border);">
