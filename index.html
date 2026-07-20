@@ -67,22 +67,31 @@
 
   <!-- External Stylesheets & Fonts -->
   <link rel="icon" type="image/svg+xml" href="https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome@5.15.4/svgs/solid/image.svg">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+  
+  <!-- PERFORMANCE FIX: Asynchronous Non-blocking CSS Loading (Lighthouse Optimization) -->
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"></noscript>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript>
+  
   <link rel="stylesheet" href="style.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+  <!-- PERFORMANCE FIX: Deferred script loading to prevent render-blocking FCP penalty -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js" defer></script>
 </head>
 <body class="p-3 sm:p-6 pb-12 transition-colors duration-300">
 
-    <!-- Sticky Floating Header with Backdrop Blur & Logo Image integration -->
+    <!-- Sticky Floating Header with Backdrop Blur -->
     <header class="sticky top-2 z-50 backdrop-filter backdrop-blur-lg flex justify-between items-center mb-6 py-3 px-4 max-w-7xl mx-auto rounded-2xl border transition-all duration-300 shadow-sm" style="background-color: var(--card-bg); border-color: var(--card-border);">
         <a href="/" class="flex items-center gap-3 group">
-            <!-- logo.png renders with GPU-accelerated spring animations on hover -->
-            <img src="logo.png" alt="ImgCon Logo" class="w-10 h-10 object-contain logo-image">
+            <!-- Explicit dimensions provided to prevent Layout Shifts (CLS) -->
+            <img src="logo.png" alt="ImgCon Logo" width="40" height="40" class="w-10 h-10 object-contain logo-image">
             <div>
                 <h1 class="text-xl font-extrabold tracking-tight" style="color: var(--text-dark);">ImgCon</h1>
                 <p class="text-xs font-semibold tracking-wider uppercase opacity-80" style="color: var(--primary-color);">Premium Image Tools</p>
@@ -302,11 +311,12 @@
     <footer id="main-footer" class="text-center py-10 mt-10 max-w-7xl mx-auto border-t" style="border-color: var(--card-border);">
         <div class="grid grid-cols-2 md:grid-cols-5 gap-8 text-left mb-8 px-4">
             <div class="col-span-2 md:col-span-1">
-                <h4 class="font-extrabold text-lg mb-3" style="color: var(--text-dark);">ImgCon</h4>
+                <p class="font-extrabold text-lg mb-3" style="color: var(--text-dark);">ImgCon</p>
                 <p class="text-xs leading-relaxed mb-3" style="color: var(--text-light);">The free, fast, and private way to handle all your image processing needs. Built with privacy at its core.</p>
             </div>
             <div>
-                 <h4 class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Tools</h4>
+                 <!-- ACCESSIBILITY FIX: Swapped h4 with standard p tag to resolve heading hierarchy violation -->
+                 <p class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Tools</p>
                  <ul class="space-y-2 text-xs" style="color: var(--text-light);">
                      <li><a href="/image-converter" class="hover:underline transition-all">Image Converter</a></li>
                      <li><a href="/image-compressor" class="hover:underline transition-all">Image Compressor</a></li>
@@ -315,7 +325,7 @@
                  </ul>
             </div>
              <div>
-                 <h4 class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Company</h4>
+                 <p class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Company</p>
                  <ul class="space-y-2 text-xs" style="color: var(--text-light);">
                      <li><a href="/about-us" class="hover:underline transition-all">About Us</a></li>
                      <li><a href="/blog" class="hover:underline transition-all">Blog</a></li>
@@ -323,14 +333,14 @@
                  </ul>
             </div>
             <div>
-                 <h4 class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Legal</h4>
+                 <p class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Legal</p>
                  <ul class="space-y-2 text-xs" style="color: var(--text-light);">
                       <li><a href="/privacy-policy" class="hover:underline transition-all">Privacy Policy</a></li>
                       <li><a href="/terms-conditions" class="hover:underline transition-all">Terms & Conditions</a></li>
                  </ul>
             </div>
             <div class="col-span-2 md:col-span-1">
-                <h4 class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Share ImgCon</h4>
+                <p class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Share ImgCon</p>
                 <div class="flex flex-wrap items-center gap-2">
                     <a href="https://www.facebook.com/sharer/sharer.php?u=https://imgcon.life" target="_blank" rel="noopener noreferrer" class="social-share-btn w-9 h-9 flex items-center justify-center rounded-xl text-white transition-transform hover:-translate-y-1" style="background-color: #1877F2;" aria-label="Share on Facebook"><i class="fab fa-facebook-f text-sm"></i></a>
                     <a href="https://twitter.com/intent/tweet?url=https://imgcon.life&text=Check%20out%20ImgCon!" target="_blank" rel="noopener noreferrer" class="social-share-btn w-9 h-9 flex items-center justify-center rounded-xl text-white transition-transform hover:-translate-y-1" style="background-color: #1DA1F2;" aria-label="Share on Twitter"><i class="fab fa-twitter text-sm"></i></a>
@@ -356,8 +366,8 @@
                  <p class="text-xxs text-center mb-2 font-bold opacity-75 uppercase tracking-wider" style="color: var(--text-light);">💡 Wheel to Zoom • Left Click drag to Pan • Slide to Compare</p>
                  <div class="before-after-container h-full w-full horizontal-split" id="modalPreviewContainer">
                     <div class="comparison-viewport">
-                        <div class="before-image-clipper"><img class="before-image" src="" alt="Before"></div>
-                        <img class="after-image" src="" alt="After">
+                        <div class="before-image-clipper"><img class="before-image" src="" alt="Before" width="800" height="600"></div>
+                        <img class="after-image" src="" alt="After" width="800" height="600">
                     </div>
                     <div class="before-after-slider"></div>
                 </div>
@@ -381,8 +391,8 @@
                         <div class="gallery-container w-full h-full flex transition-transform duration-500 ease-out"></div>
                         <div class="before-after-container hidden horizontal-split">
                             <div class="comparison-viewport">
-                                <div class="before-image-clipper"><img class="before-image" src="" alt="Before"></div>
-                                <img class="after-image" src="" alt="After">
+                                <div class="before-image-clipper"><img class="before-image" src="" alt="Before" width="800" height="600"></div>
+                                <img class="after-image" src="" alt="After" width="800" height="600">
                             </div>
                             <div class="before-after-slider"></div>
                         </div>
