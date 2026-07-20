@@ -6,7 +6,8 @@
     --card-bg: #ffffff; 
     --card-border: #e5e7eb; 
     --text-dark: #1e293b; 
-    --text-light: #64748b; 
+    /* ACCESSIBILITY FIX: Slate 600 color used for higher color contrast (resolves PageSpeed Insights Amber Warning) */
+    --text-light: #475569; 
     --success: #10b981; 
     --danger: #ef4444; 
     --shadow-color: rgba(99, 102, 241, 0.1); 
@@ -22,7 +23,8 @@
     --card-bg: #111827; 
     --card-border: #374151; 
     --text-dark: #f3f4f6; 
-    --text-light: #9ca3af; 
+    /* ACCESSIBILITY FIX: Brighter light-text used for perfect dark mode visibility and contrast */
+    --text-light: #cbd5e1; 
     --shadow-color: rgba(0, 0, 0, 0.3); 
     --shadow-lg-color: rgba(0, 0, 0, 0.4);
 }
@@ -66,42 +68,6 @@
     100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
 }
 
-/* --- ADVANCED SMART ICON KEYFRAMES --- */
-@keyframes lightningStrike {
-    0%, 100% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 0 rgba(255,255,255,0)); }
-    20% { transform: scale(1.15) translateY(-2px); filter: drop-shadow(0 0 12px #fbbf24); }
-    40% { transform: scale(0.9) skewX(-12deg); }
-    60% { transform: scale(1.22) translateY(1px) skewX(10deg); filter: drop-shadow(0 0 16px #fbbf24); }
-    80% { transform: scale(0.95); }
-}
-
-@keyframes elasticRotate {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-@keyframes squeezePop {
-    0%, 100% { transform: scale(1); }
-    30% { transform: scale(0.72); }
-    60% { transform: scale(1.22); }
-    80% { transform: scale(0.94); }
-}
-
-@keyframes expandWiggle {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    30% { transform: scale(1.26) rotate(-8deg); }
-    50% { transform: scale(1.14) rotate(8deg); }
-    70% { transform: scale(1.22) rotate(-4deg); }
-}
-
-@keyframes swingCopyright {
-    0%, 100% { transform: rotate(0deg) scale(1); }
-    20% { transform: rotate(-16deg) scale(1.12); }
-    40% { transform: rotate(14deg) scale(1.12); }
-    60% { transform: rotate(-9deg) scale(1.12); }
-    80% { transform: rotate(5deg) scale(1.12); }
-}
-
 /* Background Animated Gradient Layer */
 body::before {
     content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
@@ -123,7 +89,7 @@ body {
     transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
 }
 
-/* Container */
+/* Smart Height morph container */
 .app-container { 
     background-color: var(--card-bg); 
     box-shadow: 0 20px 40px -15px var(--shadow-color); 
@@ -133,7 +99,7 @@ body {
     transition: min-height 0.38s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.4s, border-color 0.4s, box-shadow 0.4s;
 }
 
-/* Screen Transitions */
+/* Screen Transit animations */
 .screen { 
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -153,7 +119,7 @@ body {
     transform: translateY(12px) scale(0.985); 
 }
 
-/* Buttons and Actions */
+/* Action Buttons */
 .upload-button { 
     position: relative;
     background: linear-gradient(135deg, var(--primary-color), var(--primary-hover)); 
@@ -189,6 +155,7 @@ body {
     box-shadow: 0 8px 25px -5px var(--shadow-lg-color); 
 }
 
+/* Pulse Heartbeat for Main Process start button */
 .start-btn {
     animation: heartbeat 2.2s infinite;
 }
@@ -211,12 +178,11 @@ body {
 }
 
 /* Header Bolt and Theme toggles styling */
-.logo-bolt {
-    transition: var(--transition-smooth);
+.logo-image {
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
-header a:hover .logo-bolt {
-    animation: lightningStrike 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    color: #fbbf24 !important;
+header a:hover .logo-image {
+    transform: scale(1.1) rotate(5deg);
 }
 
 #themeToggleBtn i {
@@ -233,7 +199,7 @@ header a:hover .logo-bolt {
     transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Cards Micro-Animations */
+/* Tool Cards Grid Effects */
 .tool-choice-card { 
     border: 1px solid var(--card-border); 
     border-radius: 1.25rem;
@@ -553,10 +519,3 @@ body:not([data-theme="dark"]) .fa-moon { display: none; }
 .content-page p { margin-bottom: 1rem; color: var(--text-light); }
 
 #card-footer { display: none; text-align: center; padding: 1.5rem; margin-top: 2rem; border-top: 1px solid var(--card-border); }
-/* Add this inside style.css */
-.logo-image {
-    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-}
-header a:hover .logo-image {
-    transform: scale(1.12) rotate(6deg);
-}
