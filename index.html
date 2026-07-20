@@ -78,12 +78,11 @@
 </head>
 <body class="p-3 sm:p-6 pb-12 transition-colors duration-300">
 
-    <!-- Sticky Floating Header with Backdrop Blur -->
+    <!-- Sticky Floating Header with Backdrop Blur & Logo Image integration -->
     <header class="sticky top-2 z-50 backdrop-filter backdrop-blur-lg flex justify-between items-center mb-6 py-3 px-4 max-w-7xl mx-auto rounded-2xl border transition-all duration-300 shadow-sm" style="background-color: var(--card-bg); border-color: var(--card-border);">
         <a href="/" class="flex items-center gap-3 group">
-            <div class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white p-2.5 rounded-xl shadow-lg shadow-indigo-500/30 transform group-hover:scale-105 transition-transform duration-300">
-                <i class="fas fa-bolt text-xl logo-bolt"></i>
-            </div>
+            <!-- logo.png renders with GPU-accelerated spring animations on hover -->
+            <img src="logo.png" alt="ImgCon Logo" class="w-10 h-10 object-contain logo-image">
             <div>
                 <h1 class="text-xl font-extrabold tracking-tight" style="color: var(--text-dark);">ImgCon</h1>
                 <p class="text-xs font-semibold tracking-wider uppercase opacity-80" style="color: var(--primary-color);">Premium Image Tools</p>
