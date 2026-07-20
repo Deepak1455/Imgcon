@@ -1,3 +1,5 @@
+
+
 // --- State Management ---
 let files = [], originalFileDetails = [], processedResults = [], currentImageIdx = 0, selectedFormat = null, workerPool = [], activeTool = null, debouncedPreview, lazyLoadObserver, deferredInstallPrompt = null, watermarkImage = null;
 const SESSION_STORAGE_KEY = 'imgcon_session_v3';
@@ -12,6 +14,24 @@ const previewModal = document.getElementById('previewModal');
 const mainContainer = document.querySelector('main.app-container');
 const mainFooter = document.getElementById('main-footer');
 const cardFooter = document.getElementById('card-footer');
+
+// --- Dynamic External Library Loader (Removes TBT & FCP penalty) ---
+const loadedLibraries = {};
+function loadExternalLibrary(src) {
+    if (loadedLibraries[src]) return loadedLibraries[src];
+    loadedLibraries[src] = new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.onload = () => resolve();
+        script.onerror = (err) => {
+            delete loadedLibraries[src];
+            reject(err);
+        };
+        document.head.appendChild(script);
+    });
+    return loadedLibraries[src];
+}
 
 // --- PWA Service Worker ---
 if ('serviceWorker' in navigator) {
@@ -44,7 +64,7 @@ const router = async () => {
     document.title = route.title;
 
     if (route.screen === 'blogScreen') {
-        if (activeTool) resetTool(); // Safely auto-reset any active tool on switch
+        if (activeTool) resetTool();
         showPage('blogScreen');
         const blogListing = document.getElementById('blog-listing');
         const blogPost = document.getElementById('blog-post');
@@ -68,16 +88,15 @@ const router = async () => {
         }
     } else if (route.tool) {
         if (activeTool !== route.tool) {
-            if (activeTool) resetTool(); // Safe clean transition to other tool
+            if (activeTool) resetTool();
             showTool(route.tool);
         }
     } else {
-        if (activeTool) resetTool(); // Complete cleanup when going back to home/static pages
+        if (activeTool) resetTool();
         showPage(route.screen);
     }
 };
 
-// --- Client-Side Router ignores download triggers & Blob URLs ---
 const navigateTo = (e) => {
     const link = e.target.closest('a');
     if (link) {
@@ -102,16 +121,19 @@ function initializeWorkerPool() {
     for (let i = 0; i < numWorkers; i++) workerPool.push({ worker: new Worker(workerUrl), busy: false });
 }
 
-// --- UI Navigation ---
+// --- UI Navigation with clientHeight Reflow fix ---
 function showPage(pageId) {
     allScreens.forEach(s => s.classList.add('hidden'));
     const activeScreen = document.getElementById(pageId);
     if (activeScreen) {
          activeScreen.classList.remove('hidden');
-         // Smooth dynamic height transitions matching the style.css animations
-         setTimeout(() => {
-             mainContainer.style.minHeight = activeScreen.clientHeight + 'px';
-         }, 50);
+         // requestAnimationFrame used to prevent Forced Synchronous Layout Thrashing
+         requestAnimationFrame(() => {
+             const h = activeScreen.clientHeight;
+             requestAnimationFrame(() => {
+                 mainContainer.style.minHeight = h + 'px';
+             });
+         });
     }
 
     const isHomePage = pageId === 'homeScreen';
@@ -159,19 +181,14 @@ function setupToolUI(toolName) {
     attachToolEventListeners(toolScreen);
 }
 
-// --- SMART FIX: Complete Memory & UI State Reset on Page Switch ---
 function resetTool() {
     files.forEach(f => { 
-        if (f.previewUrl) {
-            URL.revokeObjectURL(f.previewUrl); 
-        }
+        if (f.previewUrl) URL.revokeObjectURL(f.previewUrl); 
     });
     
     if (processedResults && processedResults.length > 0) {
         processedResults.forEach(r => {
-            if (r.blob) {
-                URL.revokeObjectURL(URL.createObjectURL(r.blob));
-            }
+            if (r.blob) URL.revokeObjectURL(URL.createObjectURL(r.blob));
         });
     }
     
@@ -245,7 +262,6 @@ async function confirmSelection() {
     renderFileManagementUI();
     showFilePreview(0);
     
-    // Dynamic pre-population of native sizes for Image Resizer
     if (activeTool === 'resizer' && originalFileDetails[0]) {
         const widthInput = toolScreen.querySelector('#resize-width');
         const heightInput = toolScreen.querySelector('#resize-height');
@@ -261,7 +277,7 @@ async function confirmSelection() {
 function displayFiles() {
     const toolScreen = document.getElementById('toolScreen');
     const galleryContainer = toolScreen.querySelector('.gallery-container');
-    galleryContainer.innerHTML = files.map(file => `<div class="gallery-item w-full h-full flex-shrink-0 flex items-center justify-center p-2"><img src="${file.previewUrl}" class="max-w-full max-h-full object-contain"></div>`).join('');
+    galleryContainer.innerHTML = files.map(file => `<div class="gallery-item w-full h-full flex-shrink-0 flex items-center justify-center p-2"><img src="${file.previewUrl}" class="max-w-full max-h-full object-contain" loading="lazy"></div>`).join('');
 }
 
 function showFilePreview(index) {
@@ -272,7 +288,6 @@ function showFilePreview(index) {
     toolScreen.querySelector('.current-image-index').textContent = index + 1;
     toolScreen.querySelector('.total-images').textContent = files.length;
     
-    // Auto-update resizer values with selected image dimensions
     if (activeTool === 'resizer' && originalFileDetails[index]) {
         const widthInput = toolScreen.querySelector('#resize-width');
         const heightInput = toolScreen.querySelector('#resize-height');
@@ -283,14 +298,13 @@ function showFilePreview(index) {
     }
 }
 
-// --- Smooth Drag-and-Drop Reordering ---
 function renderFileManagementUI() {
     const toolScreen = document.getElementById('toolScreen');
     const listContainer = toolScreen.querySelector('.file-list-container');
     if (!listContainer) return;
     listContainer.innerHTML = files.map((file, index) => {
         const details = originalFileDetails[index] || { size: file.size, width: '?', height: '?' };
-        return `<div class="file-item flex items-center gap-2 p-1.5 rounded-md hover:bg-card-bg cursor-grab transition-all border border-transparent hover:border-indigo-200" draggable="true" data-index="${index}"><img src="${file.previewUrl}" class="w-10 h-10 object-cover rounded shadow-sm"><div class="flex-grow truncate text-xs"><p class="font-bold truncate" style="color: var(--text-dark);">${file.name}</p><p class="text-xxs text-light" style="color: var(--text-light);">${formatBytes(details.size)} &middot; ${details.width}x${details.height}</p></div><button class="delete-file-btn p-1 rounded-full text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" data-index="${index}"><i class="fas fa-times"></i></button></div>`;
+        return `<div class="file-item flex items-center gap-2 p-1.5 rounded-md hover:bg-card-bg cursor-grab transition-all border border-transparent hover:border-indigo-200" draggable="true" data-index="${index}"><img src="${file.previewUrl}" class="w-10 h-10 object-cover rounded shadow-sm" loading="lazy"><div class="flex-grow truncate text-xs"><p class="font-bold truncate" style="color: var(--text-dark);">${file.name}</p><p class="text-xxs text-light" style="color: var(--text-light);">${formatBytes(details.size)} &middot; ${details.width}x${details.height}</p></div><button class="delete-file-btn p-1 rounded-full text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" data-index="${index}"><i class="fas fa-times"></i></button></div>`;
     }).join('');
     
     attachFileManagementListeners();
@@ -365,7 +379,6 @@ function attachFileManagementListeners() {
     });
 }
 
-// --- Helper function for Promise-wrapped Compression (Binary Search Solver) ---
 function runSingleCompressionPromise(workerItem, file, quality, targetWidth, targetHeight, format) {
     return new Promise(async (resolve) => {
         workerItem.worker.onmessage = (e) => {
@@ -382,7 +395,30 @@ function runSingleCompressionPromise(workerItem, file, quality, targetWidth, tar
     });
 }
 
-// --- Web Worker Execution Flow ---
+// --- Dynamic PDF Compilation Handler (On-demand library load) ---
+async function compilePDF(results) {
+    await loadExternalLibrary('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+    
+    for (let i = 0; i < results.length; i++) {
+        const res = results[i];
+        if (i > 0) pdf.addPage();
+        
+        const dataUrl = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(res.blob);
+        });
+        
+        const width = res.newWidth || 800;
+        const height = res.newHeight || 600;
+        pdf.addImage(dataUrl, 'JPEG', 10, 10, 190, (190 * height) / width);
+    }
+    return pdf.output('blob');
+}
+
+// --- Web Worker Process Flow ---
 async function processFiles() {
     const toolScreen = document.getElementById('toolScreen');
     if (activeTool === 'converter' && !selectedFormat) { showToast('Please select an output format.'); return; }
@@ -397,11 +433,9 @@ async function processFiles() {
     const results = new Array(files.length);
     let filesProcessed = 0;
     
-    // Core Parameters Reading
     let qualitySlider = toolScreen.querySelector('.quality-slider');
     let qualityVal = qualitySlider ? parseInt(qualitySlider.value, 10) / 100 : 0.85;
 
-    // Advanced Target Size Binary Search implementation
     const isTargetSizeActive = document.getElementById('target-size-toggle')?.checked;
     
     for (let index = 0; index < files.length; index++) {
@@ -410,7 +444,6 @@ async function processFiles() {
         let targetWidth = originalDetails.width;
         let targetHeight = originalDetails.height;
 
-        // Apply resizer values dynamically
         if (activeTool === 'resizer') {
             const mode = toolScreen.querySelector('.resize-by-btn.active').dataset.mode;
             if (mode === 'pixels') {
@@ -425,7 +458,6 @@ async function processFiles() {
 
         const formatExt = selectedFormat || file.type.split('/')[1] || 'jpeg';
 
-        // TARGET SIZE SOLVER LOOP (Binary Search on Web Workers)
         if (activeTool === 'compressor' && isTargetSizeActive) {
             const targetSizeInputVal = parseFloat(document.getElementById('target-size-kb-input').value) || 100;
             const targetUnit = document.getElementById('target-size-unit-select').value;
@@ -437,16 +469,15 @@ async function processFiles() {
             const freeWorker = workerPool.find(w => !w.busy) || workerPool[0];
             if (freeWorker) {
                 freeWorker.busy = true;
-                // Binary search trail runs (Max 5 iterations)
                 for (let iter = 0; iter < 5; iter++) {
                     let mid = (low + high) / 2;
                     let trailResult = await runSingleCompressionPromise(freeWorker, file, mid, targetWidth, targetHeight, formatExt);
                     if (trailResult.success) {
                         if (trailResult.blob.size <= targetBytes) {
                             bestResult = trailResult;
-                            low = mid + 0.01; // Trial a higher quality
+                            low = mid + 0.01;
                         } else {
-                            high = mid - 0.01; // Lower quality needed
+                            high = mid - 0.01;
                         }
                     }
                 }
@@ -455,7 +486,6 @@ async function processFiles() {
                     bestResult.fileIndex = index;
                     results[index] = bestResult;
                 } else {
-                    // Failover to default low quality
                     const defaultResult = await runSingleCompressionPromise(freeWorker, file, 0.1, targetWidth, targetHeight, formatExt);
                     defaultResult.fileIndex = index;
                     results[index] = defaultResult;
@@ -477,7 +507,6 @@ async function processFiles() {
             newHeight: targetHeight
         };
 
-        // Add Watermark Options directly to options for Web Worker parsing
         if (activeTool === 'watermark') {
             const activeType = toolScreen.querySelector('.watermark-type-btn.active').dataset.type;
             const textValue = document.getElementById('watermark-text')?.value || '© ImgCon';
@@ -514,7 +543,6 @@ async function processFiles() {
     }
 }
 
-// --- Dynamic PDF & Final File Compilation ---
 async function handleCompletion(results) {
     const toolScreen = document.getElementById('toolScreen');
     processedResults = results;
@@ -539,11 +567,8 @@ async function handleCompletion(results) {
         const originalDetails = originalFileDetails[res.fileIndex];
         const isPdf = res.intendedFormat === 'pdf';
         
-        // Calculate dynamic file savings
         const savedPercent = Math.round(((originalDetails.size - res.blob.size) / originalDetails.size) * 100);
         const isSavedPositive = savedPercent >= 0;
-        
-        // Generate Object URL for instant fast downloads
         const downloadUrl = URL.createObjectURL(res.blob);
         
         const fileNode = document.createElement('div');
@@ -552,10 +577,9 @@ async function handleCompletion(results) {
         fileNode.style.backgroundColor = 'var(--card-bg)';
         
         fileNode.innerHTML = `
-            <!-- Header Section (Thumb, Title, Format Transition) -->
             <div class="flex items-center gap-4 mb-5 border-b pb-4" style="border-color: var(--bg-subtle);">
                 <div class="relative w-14 h-14 rounded-xl overflow-hidden border shadow-sm" style="border-color: var(--card-border);">
-                    <img src="${originalFile.previewUrl}" class="w-full h-full object-cover">
+                    <img src="${originalFile.previewUrl}" class="w-full h-full object-cover" loading="lazy">
                 </div>
                 <div class="flex-grow truncate">
                     <h4 class="font-bold text-sm truncate" style="color: var(--text-dark);">${res.fileName}</h4>
@@ -567,7 +591,6 @@ async function handleCompletion(results) {
                 </div>
             </div>
 
-            <!-- Stats Section (Before vs After Layout) -->
             <div class="grid grid-cols-2 gap-4 text-center mb-5 p-3 rounded-xl" style="background-color: var(--bg-subtle);">
                 <div class="border-r" style="border-color: var(--card-border);">
                     <p class="text-xxs font-extrabold uppercase tracking-widest text-gray-400">Before</p>
@@ -581,7 +604,6 @@ async function handleCompletion(results) {
                 </div>
             </div>
 
-            <!-- Savings Bar Indicator (Smooth Animation) -->
             <div class="space-y-2 mb-6">
                 <div class="flex justify-between items-center text-xs font-bold">
                     <span style="color: var(--text-light);">${isSavedPositive ? 'File Size Reduced' : 'Lossless Re-encoding Increase'}</span>
@@ -601,7 +623,6 @@ async function handleCompletion(results) {
                 ` : ''}
             </div>
 
-            <!-- Action buttons Layout exactly matching the user's reference -->
             <div class="flex flex-wrap items-center justify-center gap-3">
                 ${!isPdf ? `
                     <button class="preview-before-after-btn flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-bold transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800" style="background-color: var(--card-bg); border-color: var(--card-border); color: var(--text-dark);" data-index="${i}">
@@ -619,7 +640,6 @@ async function handleCompletion(results) {
         
         resultsContainer.appendChild(fileNode);
         
-        // Trigger smooth savings bar animation with micro-delay
         setTimeout(() => {
             const bar = fileNode.querySelector('.savings-bar-fill');
             if (bar) {
@@ -628,7 +648,6 @@ async function handleCompletion(results) {
         }, 150);
     });
 
-    // Modal Compare Before/After Event trigger bind
     resultsContainer.querySelectorAll('.preview-before-after-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const idx = parseInt(e.target.closest('.preview-before-after-btn').dataset.index, 10);
@@ -636,7 +655,6 @@ async function handleCompletion(results) {
         });
     });
 
-    // Delete processed card result trigger bind
     resultsContainer.querySelectorAll('.delete-result-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const idx = parseInt(e.target.closest('.delete-result-btn').dataset.index, 10);
@@ -653,13 +671,26 @@ async function handleCompletion(results) {
     downloadBtn.className = 'download-btn upload-button w-full justify-center py-3.5 text-sm mt-4 shadow-md';
     downloadBtn.innerHTML = `<i class="fas fa-file-archive mr-3"></i><span>Download All (ZIP)</span>`;
     
+    // Dynamic JSZip and FileSaver loading inside trigger to optimize performance
     downloadBtn.onclick = async () => {
         if (processedResults.length > 1) {
-            const zip = new JSZip();
-            processedResults.forEach(r => zip.file(r.fileName.replace(/\.[^/.]+$/, "") + '.' + r.intendedFormat, r.blob));
-            const zipBlob = await zip.generateAsync({ type: "blob" });
-            saveAs(zipBlob, `optimized_images.zip`);
+            downloadBtn.innerHTML = `<i class="fas fa-spinner fa-spin mr-3"></i><span>Creating ZIP...</span>`;
+            try {
+                await Promise.all([
+                    loadExternalLibrary('https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js'),
+                    loadExternalLibrary('https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js')
+                ]);
+                const zip = new JSZip();
+                processedResults.forEach(r => zip.file(r.fileName.replace(/\.[^/.]+$/, "") + '.' + r.intendedFormat, r.blob));
+                const zipBlob = await zip.generateAsync({ type: "blob" });
+                saveAs(zipBlob, `optimized_images.zip`);
+            } catch (err) {
+                showToast("Failed to compile ZIP archive.");
+            } finally {
+                downloadBtn.innerHTML = `<i class="fas fa-file-archive mr-3"></i><span>Download All (ZIP)</span>`;
+            }
         } else {
+            await loadExternalLibrary('https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js');
             saveAs(processedResults[0].blob, processedResults[0].fileName);
         }
     };
@@ -672,7 +703,7 @@ async function handleCompletion(results) {
     resultsContainer.classList.remove('hidden');
 }
 
-// --- Open Comparison Modal with Synchronized zoom & Split-Direction ---
+// --- Open Comparison Modal ---
 function openComparisonModal(index) {
     const result = processedResults[index];
     const originalFile = files[result.fileIndex];
@@ -690,17 +721,15 @@ function openComparisonModal(index) {
     document.getElementById('modalFileName').textContent = `Quality Comparison: ${result.fileName}`;
     previewModal.classList.add('show');
     
-    // Reset view transforms
     const viewport = container.querySelector('.comparison-viewport');
     if (viewport) {
         viewport.style.transform = `translate(0px, 0px) scale(1)`;
     }
 
-    // Initialize BeforeAfter sliders with panning and zooming
     initBeforeAfterSlider(container);
 }
 
-// --- ADVANCED Zoom & Pan Before-After Slider System ---
+// --- Zoom & Pan Before-After Slider System ---
 function initBeforeAfterSlider(container) {
     const slider = container.querySelector('.before-after-slider');
     const clipper = container.querySelector('.before-image-clipper');
@@ -711,7 +740,6 @@ function initBeforeAfterSlider(container) {
     let isSliderDragging = false;
     let isPanning = false;
     
-    // Zoom & Pan state values
     let scale = 1;
     let translateX = 0;
     let translateY = 0;
@@ -720,7 +748,6 @@ function initBeforeAfterSlider(container) {
 
     const isVertical = container.classList.contains('vertical-split');
 
-    // Slider placement updates
     const updateSliderPosition = (clientX, clientY) => {
         const rect = container.getBoundingClientRect();
         if (isVertical) {
@@ -740,19 +767,16 @@ function initBeforeAfterSlider(container) {
         }
     };
 
-    // Viewport transform updates
     const updateViewportTransform = () => {
         viewport.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
     };
 
-    // Mouse and Touch event mappings
     const handleDown = (e) => {
         const target = e.target;
         if (target === slider || slider.contains(target)) {
             isSliderDragging = true;
             e.preventDefault();
         } else {
-            // Start Grab-panning
             isPanning = true;
             startX = (e.touches ? e.touches[0].clientX : e.clientX) - translateX;
             startY = (e.touches ? e.touches[0].clientY : e.clientY) - translateY;
@@ -787,13 +811,12 @@ function initBeforeAfterSlider(container) {
         window.removeEventListener('touchend', handleUp);
     };
 
-    // Synchronized Wheel zoom handler
     const handleWheel = (e) => {
         e.preventDefault();
         const zoomIntensity = 0.1;
         
         scale += e.deltaY < 0 ? zoomIntensity : -zoomIntensity;
-        scale = Math.min(Math.max(1, scale), 5); // Constraint scale: 1x to 5x
+        scale = Math.min(Math.max(1, scale), 5);
 
         if (scale === 1) {
             translateX = 0;
@@ -802,7 +825,6 @@ function initBeforeAfterSlider(container) {
         updateViewportTransform();
     };
 
-    // Bind event listeners
     container.addEventListener('mousedown', handleDown);
     container.addEventListener('touchstart', handleDown, { passive: false });
     container.addEventListener('wheel', handleWheel, { passive: false });
@@ -867,14 +889,12 @@ function attachToolEventListeners(container) {
     container.querySelector('.start-btn')?.addEventListener('click', processFiles);
     container.querySelector('.clear-all-btn')?.addEventListener('click', resetTool);
     
-    // Global listener for all quality sliders to update value spans in real time
     container.querySelectorAll('.quality-slider').forEach(slider => {
         slider.addEventListener('input', (e) => {
             const parent = slider.closest('.options-section') || slider.parentElement;
             const valSpan = parent.querySelector('.quality-value');
             if (valSpan) {
                 valSpan.textContent = e.target.value;
-                // Bounce scale dynamic effect
                 valSpan.style.transform = 'scale(1.25)';
                 setTimeout(() => valSpan.style.transform = 'scale(1)', 100);
             }
@@ -882,7 +902,6 @@ function attachToolEventListeners(container) {
         });
     });
 
-    // Converter specifics
     if (activeTool === 'converter') {
         container.querySelectorAll('.format-card').forEach(card => card.addEventListener('click', () => {
             container.querySelectorAll('.format-card').forEach(c => c.classList.remove('selected'));
@@ -895,7 +914,6 @@ function attachToolEventListeners(container) {
         }));
     }
 
-    // Watermark specific logo picker and parameters
     if (activeTool === 'watermark') {
         const typeButtons = container.querySelectorAll('.watermark-type-btn');
         typeButtons.forEach(btn => btn.addEventListener('click', () => {
@@ -931,7 +949,6 @@ function attachToolEventListeners(container) {
         }));
     }
 
-    // Compressor Target Size and before-after toggle
     if (activeTool === 'compressor') {
         const toggle = container.querySelector('#target-size-toggle');
         const unitContainer = container.querySelector('.target-size-input-container');
@@ -951,7 +968,6 @@ function attachToolEventListeners(container) {
         });
     }
 
-    // Resizer layout controls & Aspect Ratio Logic
     if (activeTool === 'resizer') {
         const modeButtons = container.querySelectorAll('.resize-by-btn');
         const widthInput = container.querySelector('#resize-width');
@@ -971,7 +987,6 @@ function attachToolEventListeners(container) {
             container.querySelector('#percentage-value').textContent = e.target.value;
         });
 
-        // Dynamic presets integration
         socialPresets?.addEventListener('change', () => {
             if (socialPresets.value !== 'custom') {
                 const [w, h] = socialPresets.value.split('x').map(Number);
@@ -982,7 +997,6 @@ function attachToolEventListeners(container) {
             }
         });
 
-        // Aspect Ratio live locks
         widthInput?.addEventListener('input', () => {
             if (aspectToggle?.checked && files.length > 0) {
                 const ratio = originalFileDetails[currentImageIdx].ratio;
@@ -1020,13 +1034,11 @@ themeToggleBtn.addEventListener('click', () => {
 function showToast(message) { toastMessage.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
 function formatBytes(bytes) { if (!+bytes) return '0 Bytes'; const k = 1024; const sizes = ['Bytes', 'KB', 'MB']; const i = Math.floor(Math.log(bytes) / Math.log(k)); return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`; }
 
-// --- Copy share link action ---
 document.getElementById('copyLinkBtn')?.addEventListener('click', () => {
     navigator.clipboard.writeText(window.location.href);
     showToast('Link copied to clipboard!');
 });
 
-// --- Modal Close ---
 document.getElementById('modalCloseBtn')?.addEventListener('click', () => {
     previewModal.classList.remove('show');
 });
