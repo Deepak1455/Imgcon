@@ -1,5 +1,3 @@
-
-
 // --- State Management ---
 let files = [], originalFileDetails = [], processedResults = [], currentImageIdx = 0, selectedFormat = null, workerPool = [], activeTool = null, debouncedPreview, lazyLoadObserver, deferredInstallPrompt = null, watermarkImage = null;
 const SESSION_STORAGE_KEY = 'imgcon_session_v3';
@@ -42,7 +40,7 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// --- Router (Auto-Reset Integrated) ---
+// --- Router (Auto-Reset & SEO Blog Routes Integrated) ---
 const routes = {
     '/': { screen: 'homeScreen', title: 'ImgCon - Free Online Image Converter & Compressor' },
     '/image-converter': { screen: 'toolScreen', tool: 'converter', title: 'Image Converter - Convert JPG, PNG, WebP' },
@@ -55,7 +53,9 @@ const routes = {
     '/terms-conditions': { screen: 'termsScreen', title: 'Terms and Conditions - ImgCon' },
     '/blog/png-vs-jpg-difference': { screen: 'blogScreen', title: 'PNG vs JPG Differences | ImgCon Blog', isPost: true },
     '/blog/how-to-reduce-photo-size': { screen: 'blogScreen', title: 'How to Reduce Photo Size | ImgCon Blog', isPost: true },
-    '/blog/webp-the-future-of-web-images': { screen: 'blogScreen', title: 'Why WebP is the Future | ImgCon Blog', isPost: true }
+    '/blog/webp-the-future-of-web-images': { screen: 'blogScreen', title: 'Why WebP is the Future | ImgCon Blog', isPost: true },
+    '/blog/avif-vs-webp-speed-battle': { screen: 'blogScreen', title: 'AVIF vs WebP Speed Battle | ImgCon Blog', isPost: true },
+    '/blog/image-compression-seo-pagespeed': { screen: 'blogScreen', title: 'Image Compression for SEO & PageSpeed | ImgCon Blog', isPost: true }
 };
 
 const router = async () => {
@@ -127,7 +127,6 @@ function showPage(pageId) {
     const activeScreen = document.getElementById(pageId);
     if (activeScreen) {
          activeScreen.classList.remove('hidden');
-         // requestAnimationFrame used to prevent Forced Synchronous Layout Thrashing
          requestAnimationFrame(() => {
              const h = activeScreen.clientHeight;
              requestAnimationFrame(() => {
@@ -311,6 +310,7 @@ function renderFileManagementUI() {
     initDragAndDropReorder(listContainer);
 }
 
+// --- Smooth HTML Drag & Drop Reordering ---
 function initDragAndDropReorder(listContainer) {
     let dragSrcEl = null;
     const items = listContainer.querySelectorAll('.file-item');
