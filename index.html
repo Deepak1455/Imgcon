@@ -10,6 +10,10 @@
 
     gtag('config', 'G-6SWYBN309Y');
   </script>
+
+  <!-- Google AdSense Auto Ads Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6616979929366975" crossorigin="anonymous"></script>
+
   <!-- SEO & Google Verification -->
   <meta name="google-site-verification" content="ABC123XYZ" />
   <meta charset="UTF-8">
@@ -274,6 +278,18 @@
         <!-- Tool Screen -->
         <section id="toolScreen" class="screen hidden"></section>
 
+        <!-- Blog Screen (Pre-rendered for Perfect SEO and Load Stability) -->
+        <section id="blogScreen" class="screen hidden">
+            <div id="blog-listing" class="max-w-4xl mx-auto space-y-6"></div>
+            <div id="blog-post" class="hidden max-w-4xl mx-auto text-left">
+                <div id="blog-reading-progress"></div>
+                <a href="/blog" id="back-to-blog-btn" class="secondary-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold mb-6 transition-all duration-300 hover:shadow-md">
+                    <i class="fas fa-arrow-left"></i> Back to Blog
+                </a>
+                <div id="blog-post-content" class="blog-prose"></div>
+            </div>
+        </section>
+
         <!-- About Us Screen -->
         <section id="aboutScreen" class="screen hidden content-page">
             <h2>About ImgCon</h2>
@@ -287,8 +303,6 @@
             <p><strong>Accessible to Everyone:</strong> Powerful tools should be available to all. ImgCon is completely free to use, supported by non-intrusive ads, ensuring that everyone can benefit from it.</p>
             <p>Thank you for using ImgCon. We hope it makes your workflow a little bit easier and a lot more secure.</p>
         </section>
-
-
 
         <!-- Privacy Policy Screen -->
         <section id="privacyScreen" class="screen hidden content-page">
