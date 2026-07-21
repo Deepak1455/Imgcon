@@ -40,7 +40,7 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// --- Router (Auto-Reset & Clean Path Routing for Perfect SEO Indexing) ---
+// --- Router (Auto-Reset & Hash Routing for 100% 404 Prevention on Refresh) ---
 const routes = {
     '/': { screen: 'homeScreen', title: 'ImgCon - Free Online Image Converter & Compressor' },
     '/image-converter': { screen: 'toolScreen', tool: 'converter', title: 'Image Converter - Convert JPG, PNG, WebP' },
@@ -59,7 +59,13 @@ const routes = {
 };
 
 const router = async () => {
-    const path = window.location.pathname; // हैश की जगह क्लीन पाथ यूआरएल उपयोग करें
+    // यदि यूआरएल में हैश नहीं है, तो डिफ़ॉल्ट रूप से '#/' सेट करें
+    if (!window.location.hash || window.location.hash === '#') {
+        window.history.replaceState(null, '', '#/');
+    }
+    
+    // हैश के बाद का पैथ पढ़ें (जैसे '#/image-compressor' से '/image-compressor')
+    const path = window.location.hash.slice(1) || '/';
     const route = routes[path] || routes['/'];
     document.title = route.title;
 
@@ -70,39 +76,21 @@ const router = async () => {
         const blogPost = document.getElementById('blog-post');
         const blogPostContent = document.getElementById('blog-post-content');
 
-        // सुरक्षा जांच (Defensive Check): यदि HTML में एलिमेंट गायब हो तो क्रैश होने से बचाएं
-        if (!blogListing || !blogPost || !blogPostContent) {
-            console.error("Critical blog DOM elements are missing from the index.html!");
-            return;
-        }
-
-        // स्मार्ट पाथ डिटेक्शन: लोकल मोबाइल टेस्टिंग (file:) और सर्वर (https:) दोनों के लिए डायनामिक पाथ
-        const blogScriptPath = window.location.protocol === 'file:' ? 'imgconblog.js' : '/imgconblog.js';
-
-        blogListing.innerHTML = `<div class="text-center p-6"><i class="fas fa-spinner fa-spin text-2xl" style="color: var(--primary-color);"></i></div>`;
-        try {
-            await loadExternalLibrary(blogScriptPath);
-            
-            if (route.isPost) {
-                const slug = path.split('/').pop();
-                const postHTML = window.ImgConBlog.getPost(slug);
-                if (postHTML) {
-                    blogPostContent.innerHTML = postHTML;
-                    blogListing.classList.add('hidden');
-                    blogPost.classList.remove('hidden');
-                } else {
-                    window.ImgConBlog.renderList(blogListing);
-                    blogListing.classList.remove('hidden');
-                    blogPost.classList.add('hidden');
-                }
+        if (route.isPost) {
+            const slug = path.split('/').pop();
+            const postTemplate = document.getElementById('blogPostsTemplate');
+            const postContent = postTemplate.content.querySelector(`[data-slug="${slug}"]`);
+            if (postContent) {
+                blogPostContent.innerHTML = postContent.innerHTML;
+                blogListing.classList.add('hidden');
+                blogPost.classList.remove('hidden');
             } else {
-                window.ImgConBlog.renderList(blogListing);
                 blogListing.classList.remove('hidden');
                 blogPost.classList.add('hidden');
             }
-        } catch (err) {
-            blogListing.innerHTML = `<p class="text-red-500 font-bold text-center">Failed to load blog posts. Please check your folder structure.</p>`;
-            console.error("Blog load error:", err);
+        } else {
+            blogListing.classList.remove('hidden');
+            blogPost.classList.add('hidden');
         }
     } else if (route.tool) {
         if (activeTool !== route.tool) {
@@ -123,9 +111,10 @@ const navigateTo = (e) => {
         }
         e.preventDefault();
         
-        // बिना हैश के सीधे सुंदर यूआरएल पाथ पर नेविगेट करें
-        if (window.location.pathname !== link.pathname) {
-            history.pushState({}, '', link.pathname);
+        // गिटहब पेजेस के लिए सामान्य पाथ को सुरक्षित हैश पाथ में बदलें
+        const targetHash = '#' + link.pathname;
+        if (window.location.hash !== targetHash) {
+            history.pushState(null, '', targetHash);
             router();
         }
     }
@@ -170,7 +159,6 @@ function showPage(pageId) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Show Tool UI
 function showTool(toolName, preloadedFiles = null) {
     activeTool = toolName;
     showPage('toolScreen');
@@ -1071,5 +1059,3 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('hashchange', router); // Listen to hash changes for perfect refresh support
     router();
 });
-
---- END OF FILE text/plain ---
