@@ -86,18 +86,6 @@
                 margin: 0 auto 1rem auto;
                 display: block;
             }
-            .blog-meta-badge {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.35rem;
-                font-size: 0.75rem;
-                font-weight: 600;
-                padding: 0.25rem 0.75rem;
-                border-radius: 9999px;
-                background-color: var(--bg-subtle);
-                color: var(--text-light);
-                border: 1px solid var(--card-border);
-            }
         `;
         document.head.appendChild(style);
     }
@@ -300,15 +288,27 @@
     };
 
     /**
-     * 3. Helper to calculate reading time based on content length
+     * 3. Dynamic Route Injector
+     * Safely registers all 20 posts into script.js's global routes object on load.
      */
-    function getReadingTime(htmlContent) {
-        // Strip tags to count actual text words
-        const text = htmlContent.replace(/<[^>]*>/g, ' ');
-        const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
-        const speed = 200; // Average reading speed (WPM)
-        const mins = Math.ceil(words / speed);
-        return `${mins} min read`;
+    function injectRoutesIntoGlobalRouter() {
+        try {
+            const globalRoutes = window.routes || (typeof routes !== 'undefined' ? routes : null);
+            if (globalRoutes && typeof globalRoutes === 'object') {
+                Object.keys(posts).forEach(slug => {
+                    const rPath = `/blog/${slug}`;
+                    if (!globalRoutes[rPath]) {
+                        globalRoutes[rPath] = {
+                            screen: 'blogScreen',
+                            title: posts[slug].title + ' | ImgCon Blog',
+                            isPost: true
+                        };
+                    }
+                });
+            }
+        } catch (e) {
+            // fail-silent
+        }
     }
 
     /**
@@ -410,9 +410,11 @@
 
     /**
      * 7. Bulletproof SPA Hash Routing Guard
+     * Time-delayed sync ensures mobile-rendering triggers load on exact requested post.
      */
     function handleRouteChanges() {
         ensureBlogElements();
+        injectRoutesIntoGlobalRouter();
         
         const path = window.location.hash.slice(1) || '/';
         const blogScreen = document.getElementById('blogScreen');
@@ -432,7 +434,6 @@
                 blogScreen.classList.remove('hidden');
             }
             
-            // Hide all other screens to avoid page layout collision
             document.querySelectorAll('.screen').forEach(screen => {
                 if (screen.id !== 'blogScreen') {
                     screen.classList.add('hidden');
@@ -455,7 +456,6 @@
                     blogScreen.classList.remove('hidden');
                 }
                 
-                // Hide all other screens to avoid page layout collision
                 document.querySelectorAll('.screen').forEach(screen => {
                     if (screen.id !== 'blogScreen') {
                         screen.classList.add('hidden');
@@ -463,11 +463,10 @@
                 });
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                // If a post is not found (or lag in DOM creation), gently redirect back to listings
+                // Fail-safe redirect if lag in execution on mobile
                 window.location.hash = '#/blog';
             }
         } else {
-            // Safe clean shutdown of blog view when visiting main app views
             if (blogScreen) {
                 blogScreen.classList.add('hidden');
             }
@@ -507,15 +506,9 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6" id="blog-articles-container">
                     ${Object.keys(posts).map(slug => {
                         const post = posts[slug];
-                        const readingTime = getReadingTime(post.content);
                         return `
                             <article data-slug="${slug}" class="p-6 rounded-2xl border text-left hover:shadow-md transition-all duration-300 flex flex-col justify-between" style="border-color: var(--card-border); background-color: var(--card-bg);">
                                 <div>
-                                    <div class="flex items-center gap-2 mb-3">
-                                        <span class="blog-meta-badge">
-                                            <i class="far fa-clock"></i> ${readingTime}
-                                        </span>
-                                    </div>
                                     <h3 class="text-xl font-bold mb-2" style="color: var(--text-dark);">${post.title}</h3>
                                     <p class="text-sm mb-4" style="color: var(--text-light);">${post.excerpt}</p>
                                 </div>
@@ -556,7 +549,6 @@
 
     /**
      * 9. Navigation Click Interceptor (SPA Hijacker)
-     * Captures and intercepts clicks on any blog links to bypass script.js's path-building bug.
      */
     document.addEventListener('click', function (e) {
         const link = e.target.closest('a');
@@ -565,7 +557,6 @@
         const href = link.getAttribute('href');
         if (!href) return;
 
-        // Check if the clicked target is a blog path
         const isBlogLink = href.startsWith('/blog') || 
                            href.startsWith('#/blog') || 
                            link.pathname.startsWith('/blog') || 
@@ -573,10 +564,9 @@
 
         if (isBlogLink) {
             e.preventDefault();
-            e.stopPropagation(); // Stop script.js from intercepting and breaking the path
+            e.stopPropagation();
             e.stopImmediatePropagation();
 
-            // Formulate standardized hash-route manually
             let targetHash = '#/blog';
             if (href.startsWith('/blog/')) {
                 targetHash = '#/blog/' + href.slice(6);
@@ -590,16 +580,17 @@
 
             if (window.location.hash !== targetHash) {
                 history.pushState(null, '', targetHash);
-                // Dispatch hashchange event to trigger sync update on both routers
                 window.dispatchEvent(new Event('hashchange'));
             }
         }
-    }, true); // useCapture is true to process this before other global handlers on the page
+    }, true);
 
-    // 10. Synchronous Initial Run
+    // 10. Synchronous Initial Run (with a tiny deferred safe timeout)
     ensureBlogElements();
     syncBlogTemplates();
+    injectRoutesIntoGlobalRouter();
     handleRouteChanges();
+    setTimeout(handleRouteChanges, 30);
 
     // 11. Event Observers
     window.addEventListener('hashchange', handleRouteChanges);
@@ -609,6 +600,8 @@
     document.addEventListener('DOMContentLoaded', () => {
         ensureBlogElements();
         syncBlogTemplates();
+        injectRoutesIntoGlobalRouter();
         handleRouteChanges();
+        setTimeout(handleRouteChanges, 50);
     });
 })();
