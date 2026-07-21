@@ -195,21 +195,22 @@
 
     /**
      * 3. DOM Recovery Mechanism
-     * Automatically inserts required containers into index.html if not present.
+     * Appends containers immediately into DOM to prevent timing mismatches.
      */
     function ensureBlogElements() {
+        const container = document.querySelector('.app-container') || document.querySelector('main') || document.body;
+        
         let blogScreen = document.getElementById('blogScreen');
         if (!blogScreen) {
             blogScreen = document.createElement('section');
             blogScreen.id = 'blogScreen';
             blogScreen.className = 'screen hidden';
             
-            const toolScreen = document.getElementById('toolScreen');
-            if (toolScreen) {
-                toolScreen.parentNode.insertBefore(blogScreen, toolScreen.nextSibling);
-            } else {
-                const container = document.querySelector('main.app-container');
-                if (container) container.appendChild(blogScreen);
+            const footer = document.getElementById('card-footer') || document.querySelector('footer');
+            if (footer && footer.parentNode) {
+                footer.parentNode.insertBefore(blogScreen, footer);
+            } else if (container) {
+                container.appendChild(blogScreen);
             }
         }
         
@@ -227,13 +228,12 @@
             blogPost.id = 'blog-post';
             blogPost.className = 'hidden max-w-4xl mx-auto text-left';
             
-            // Reading progress bar setup
             const progressBar = document.createElement('div');
             progressBar.id = 'blog-reading-progress';
             blogPost.appendChild(progressBar);
 
             const backBtn = document.createElement('a');
-            backBtn.href = '/blog';
+            backBtn.href = '#/blog';
             backBtn.id = 'back-to-blog-btn';
             backBtn.className = 'secondary-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold mb-6 transition-all duration-300 hover:shadow-md';
             backBtn.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Blog';
@@ -250,7 +250,7 @@
 
     /**
      * 4. Dynamic Template Sync
-     * Updates the HTML template block dynamically so script.js's router works with full content.
+     * Direct fragment sync to avoid element nesting issues in template.content query.
      */
     function syncBlogTemplates() {
         let template = document.getElementById('blogPostsTemplate');
@@ -260,8 +260,7 @@
             document.body.appendChild(template);
         }
         
-        template.innerHTML = '';
-        const tempContainer = document.createElement('div');
+        const fragment = document.createDocumentFragment();
         Object.keys(posts).forEach(slug => {
             const post = posts[slug];
             const postDiv = document.createElement('div');
@@ -271,9 +270,11 @@
                 <h2 class="text-2xl sm:text-3xl font-black mb-4" style="color: var(--text-dark);">${post.title}</h2>
                 <div class="blog-prose mt-6">${post.content}</div>
             `;
-            tempContainer.appendChild(postDiv);
+            fragment.appendChild(postDiv);
         });
-        template.content.appendChild(tempContainer);
+        
+        template.content.innerHTML = '';
+        template.content.appendChild(fragment);
     }
 
     /**
@@ -285,40 +286,78 @@
         if (blogPost && progressBar && !blogPost.classList.contains('hidden')) {
             const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
+            const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
             progressBar.style.width = scrolled + "%";
         }
     }
 
-    // 6. Router Integration and Routing Hooks
+    /**
+     * 6. Bulletproof SPA Hash Routing Guard
+     * Synchronizes and safely transitions views.
+     */
     function handleRouteChanges() {
         ensureBlogElements();
+        
         const path = window.location.hash.slice(1) || '/';
+        const blogScreen = document.getElementById('blogScreen');
         const blogListing = document.getElementById('blog-listing');
         const blogPost = document.getElementById('blog-post');
         const blogPostContent = document.getElementById('blog-post-content');
 
-        if (path === '/blog') {
+        if (path === '/blog' || path === '/blog/') {
+            // Render and show listing, hide post detail
             if (blogListing) {
                 window.ImgConBlog.renderList(blogListing);
                 blogListing.classList.remove('hidden');
             }
-            if (blogPost) blogPost.classList.add('hidden');
+            if (blogPost) {
+                blogPost.classList.add('hidden');
+            }
+            if (blogScreen) {
+                blogScreen.classList.remove('hidden');
+            }
+            
+            // Fallback: Hide other main screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                if (screen.id !== 'blogScreen') {
+                    screen.classList.add('hidden');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
         } else if (path.startsWith('/blog/')) {
             const slug = path.split('/').pop();
             const post = posts[slug];
             if (post) {
-                if (blogListing) blogListing.classList.add('hidden');
+                // Show post detail, hide listing
+                if (blogListing) {
+                    blogListing.classList.add('hidden');
+                }
                 if (blogPost && blogPostContent) {
                     blogPostContent.innerHTML = post.content;
                     blogPost.classList.remove('hidden');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
+                if (blogScreen) {
+                    blogScreen.classList.remove('hidden');
+                }
+                
+                // Fallback: Hide other main screens
+                document.querySelectorAll('.screen').forEach(screen => {
+                    if (screen.id !== 'blogScreen') {
+                        screen.classList.add('hidden');
+                    }
+                });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        } else {
+            // Hide the blog screen entirely when navigating to other sections (home/tools/about)
+            if (blogScreen) {
+                blogScreen.classList.add('hidden');
             }
         }
     }
 
-    // 7. Global Export
+    // 7. Global API Export
     window.ImgConBlog = {
         renderList: function (container) {
             if (!container) return;
@@ -328,7 +367,7 @@
                     <p class="text-sm mt-2" style="color: var(--text-light);">Image optimization, speed, and standard web guidelines compiled in a clean database.</p>
                 </div>
                 
-                <!-- Live Instant Search Bar -->
+                <!-- Live Search Bar -->
                 <div class="mb-8 p-4 rounded-2xl border" style="background-color: var(--card-bg); border-color: var(--card-border);">
                     <div class="relative">
                         <input type="text" id="blog-search-input" placeholder="Search articles..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border text-sm outline-none focus:border-indigo-500 transition-all duration-300" style="border-color: var(--card-border); background-color: var(--bg-subtle); color: var(--text-dark);">
@@ -336,21 +375,22 @@
                     </div>
                 </div>
 
-                <div class="space-y-6 mt-6" id="blog-articles-container">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6" id="blog-articles-container">
                     ${Object.keys(posts).map(slug => {
                         const post = posts[slug];
                         return `
-                            <article data-slug="${slug}" class="p-6 rounded-2xl border text-left hover:shadow-md transition-all duration-300" style="border-color: var(--card-border); background-color: var(--card-bg);">
-                                <h3 class="text-xl font-bold mb-2" style="color: var(--text-dark);">${post.title}</h3>
-                                <p class="text-sm mb-4" style="color: var(--text-light);">${post.excerpt}</p>
-                                <a href="/blog/${slug}" class="font-bold text-sm read-more-btn flex items-center gap-1 hover:underline" style="color: var(--primary-color);">Read More &rarr;</a>
+                            <article data-slug="${slug}" class="p-6 rounded-2xl border text-left hover:shadow-md transition-all duration-300 flex flex-col justify-between" style="border-color: var(--card-border); background-color: var(--card-bg);">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-2" style="color: var(--text-dark);">${post.title}</h3>
+                                    <p class="text-sm mb-4" style="color: var(--text-light);">${post.excerpt}</p>
+                                </div>
+                                <a href="#/blog/${slug}" class="font-bold text-sm read-more-btn flex items-center gap-1 hover:underline mt-auto" style="color: var(--primary-color);">Read More &rarr;</a>
                             </article>
                         `;
                     }).join('')}
                 </div>
             `;
 
-            // Dynamic filter inside list UI
             const searchInput = container.querySelector('#blog-search-input');
             const articlesContainer = container.querySelector('#blog-articles-container');
             if (searchInput && articlesContainer) {
@@ -361,7 +401,7 @@
                         const title = article.querySelector('h3').textContent.toLowerCase();
                         const excerpt = article.querySelector('p').textContent.toLowerCase();
                         if (title.includes(query) || excerpt.includes(query)) {
-                            article.style.display = 'block';
+                            article.style.display = 'flex';
                         } else {
                             article.style.display = 'none';
                         }
@@ -379,14 +419,40 @@
         }
     };
 
-    // 8. Event Listeners & Router Sync
-    window.addEventListener('hashchange', () => setTimeout(handleRouteChanges, 20));
-    window.addEventListener('popstate', () => setTimeout(handleRouteChanges, 20));
+    /**
+     * 8. Navigation Click Interceptor (SPA Guard)
+     * Automatically converts any hard-coded /blog links to SPA hash routes.
+     */
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (link) {
+            const href = link.getAttribute('href');
+            if (href && (href.startsWith('/blog') || href.startsWith('#/blog'))) {
+                e.preventDefault();
+                let cleanPath = href;
+                if (href.startsWith('/blog')) {
+                    cleanPath = '#/blog' + href.slice(5);
+                }
+                if (window.location.hash !== cleanPath) {
+                    window.location.hash = cleanPath;
+                }
+            }
+        }
+    }, true);
+
+    // 9. Synchronous Initial Run
+    ensureBlogElements();
+    syncBlogTemplates();
+    handleRouteChanges();
+
+    // 10. Event Observers
+    window.addEventListener('hashchange', handleRouteChanges);
+    window.addEventListener('popstate', handleRouteChanges);
     window.addEventListener('scroll', updateReadingProgress);
 
     document.addEventListener('DOMContentLoaded', () => {
         ensureBlogElements();
         syncBlogTemplates();
-        setTimeout(handleRouteChanges, 50);
+        handleRouteChanges();
     });
 })();
