@@ -195,7 +195,6 @@
 
     /**
      * 3. DOM Recovery Mechanism
-     * Appends containers immediately into DOM to prevent timing mismatches.
      */
     function ensureBlogElements() {
         const container = document.querySelector('.app-container') || document.querySelector('main') || document.body;
@@ -233,7 +232,7 @@
             blogPost.appendChild(progressBar);
 
             const backBtn = document.createElement('a');
-            backBtn.href = '#/blog';
+            backBtn.href = '/blog';
             backBtn.id = 'back-to-blog-btn';
             backBtn.className = 'secondary-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold mb-6 transition-all duration-300 hover:shadow-md';
             backBtn.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Blog';
@@ -250,7 +249,6 @@
 
     /**
      * 4. Dynamic Template Sync
-     * Direct fragment sync to avoid element nesting issues in template.content query.
      */
     function syncBlogTemplates() {
         let template = document.getElementById('blogPostsTemplate');
@@ -293,7 +291,6 @@
 
     /**
      * 6. Bulletproof SPA Hash Routing Guard
-     * Synchronizes and safely transitions views.
      */
     function handleRouteChanges() {
         ensureBlogElements();
@@ -305,7 +302,6 @@
         const blogPostContent = document.getElementById('blog-post-content');
 
         if (path === '/blog' || path === '/blog/') {
-            // Render and show listing, hide post detail
             if (blogListing) {
                 window.ImgConBlog.renderList(blogListing);
                 blogListing.classList.remove('hidden');
@@ -317,7 +313,7 @@
                 blogScreen.classList.remove('hidden');
             }
             
-            // Fallback: Hide other main screens
+            // Hide all other screens to avoid page layout collision
             document.querySelectorAll('.screen').forEach(screen => {
                 if (screen.id !== 'blogScreen') {
                     screen.classList.add('hidden');
@@ -329,7 +325,6 @@
             const slug = path.split('/').pop();
             const post = posts[slug];
             if (post) {
-                // Show post detail, hide listing
                 if (blogListing) {
                     blogListing.classList.add('hidden');
                 }
@@ -341,7 +336,7 @@
                     blogScreen.classList.remove('hidden');
                 }
                 
-                // Fallback: Hide other main screens
+                // Hide all other screens to avoid page layout collision
                 document.querySelectorAll('.screen').forEach(screen => {
                     if (screen.id !== 'blogScreen') {
                         screen.classList.add('hidden');
@@ -350,7 +345,7 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         } else {
-            // Hide the blog screen entirely when navigating to other sections (home/tools/about)
+            // Safe clean shutdown of blog view when visiting main app views
             if (blogScreen) {
                 blogScreen.classList.add('hidden');
             }
@@ -384,7 +379,7 @@
                                     <h3 class="text-xl font-bold mb-2" style="color: var(--text-dark);">${post.title}</h3>
                                     <p class="text-sm mb-4" style="color: var(--text-light);">${post.excerpt}</p>
                                 </div>
-                                <a href="#/blog/${slug}" class="font-bold text-sm read-more-btn flex items-center gap-1 hover:underline mt-auto" style="color: var(--primary-color);">Read More &rarr;</a>
+                                <a href="/blog/${slug}" class="font-bold text-sm read-more-btn flex items-center gap-1 hover:underline mt-auto" style="color: var(--primary-color);">Read More &rarr;</a>
                             </article>
                         `;
                     }).join('')}
@@ -420,25 +415,46 @@
     };
 
     /**
-     * 8. Navigation Click Interceptor (SPA Guard)
-     * Automatically converts any hard-coded /blog links to SPA hash routes.
+     * 8. Navigation Click Interceptor (SPA Hijacker)
+     * Captures and intercepts clicks on any blog links to bypass script.js's path-building bug.
      */
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', function (e) {
         const link = e.target.closest('a');
-        if (link) {
-            const href = link.getAttribute('href');
-            if (href && (href.startsWith('/blog') || href.startsWith('#/blog'))) {
-                e.preventDefault();
-                let cleanPath = href;
-                if (href.startsWith('/blog')) {
-                    cleanPath = '#/blog' + href.slice(5);
-                }
-                if (window.location.hash !== cleanPath) {
-                    window.location.hash = cleanPath;
-                }
+        if (!link) return;
+
+        const href = link.getAttribute('href');
+        if (!href) return;
+
+        // Check if the clicked target is a blog path
+        const isBlogLink = href.startsWith('/blog') || 
+                           href.startsWith('#/blog') || 
+                           link.pathname.startsWith('/blog') || 
+                           (link.hash && link.hash.startsWith('#/blog'));
+
+        if (isBlogLink) {
+            e.preventDefault();
+            e.stopPropagation(); // Stop script.js from intercepting and breaking the path
+            e.stopImmediatePropagation();
+
+            // Formulate standardized hash-route manually
+            let targetHash = '#/blog';
+            if (href.startsWith('/blog/')) {
+                targetHash = '#/blog/' + href.slice(6);
+            } else if (href.startsWith('#/blog/')) {
+                targetHash = href;
+            } else if (link.pathname.startsWith('/blog/')) {
+                targetHash = '#/blog/' + link.pathname.slice(6);
+            } else if (link.hash && link.hash.startsWith('#/blog/')) {
+                targetHash = link.hash;
+            }
+
+            if (window.location.hash !== targetHash) {
+                history.pushState(null, '', targetHash);
+                // Dispatch hashchange event to trigger sync update on both routers
+                window.dispatchEvent(new Event('hashchange'));
             }
         }
-    }, true);
+    }, true); // useCapture is true to process this before other global handlers on the page
 
     // 9. Synchronous Initial Run
     ensureBlogElements();
