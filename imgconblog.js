@@ -86,6 +86,18 @@
                 margin: 0 auto 1rem auto;
                 display: block;
             }
+            .blog-meta-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+                font-size: 0.75rem;
+                font-weight: 600;
+                padding: 0.25rem 0.75rem;
+                border-radius: 9999px;
+                background-color: var(--bg-subtle);
+                color: var(--text-light);
+                border: 1px solid var(--card-border);
+            }
         `;
         document.head.appendChild(style);
     }
@@ -146,7 +158,6 @@
                 <p>Google uses Core Web Vitals as ranking signals. Specifically, LCP (Largest Contentful Paint) measures how quickly the main content of your webpage loads. Optimizing above-the-fold images directly lowers your LCP score, boosting your search engine ranking.</p>
             `
         },
-        // 15 NEW BLOG POSTS ADDED BELOW
         "what-is-svg-vector-graphics": {
             title: "What is SVG? Understanding Vector Graphics for Modern Web Design",
             excerpt: "SVG graphics are scale-independent web assets. Learn why scalable vector graphics are essential for responsive interfaces, icons, and logos...",
@@ -289,8 +300,19 @@
     };
 
     /**
-     * 3. DOM Recovery Mechanism
-     * Appends containers immediately into DOM to prevent timing mismatches.
+     * 3. Helper to calculate reading time based on content length
+     */
+    function getReadingTime(htmlContent) {
+        // Strip tags to count actual text words
+        const text = htmlContent.replace(/<[^>]*>/g, ' ');
+        const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+        const speed = 200; // Average reading speed (WPM)
+        const mins = Math.ceil(words / speed);
+        return `${mins} min read`;
+    }
+
+    /**
+     * 4. DOM Recovery Mechanism
      */
     function ensureBlogElements() {
         const container = document.querySelector('.app-container') || document.querySelector('main') || document.body;
@@ -344,18 +366,21 @@
     }
 
     /**
-     * 4. Dynamic Template Sync
-     * Direct fragment sync to avoid element nesting issues in template.content query.
+     * 5. Dynamic Template Sync
+     * Safe, cross-browser manual node manipulation of DocumentFragment
      */
     function syncBlogTemplates() {
-        let template = document.getElementById('blogPostsTemplate');
-        if (!template) {
-            template = document.createElement('template');
-            template.id = 'blogPostsTemplate';
-            document.body.appendChild(template);
+        const template = document.getElementById('blogPostsTemplate');
+        if (!template) return;
+        
+        const content = template.content;
+        
+        // Safe removal of existing elements on mobile browsers
+        while (content.firstChild) {
+            content.removeChild(content.firstChild);
         }
         
-        const fragment = document.createDocumentFragment();
+        // Rebuild and append each post node safely
         Object.keys(posts).forEach(slug => {
             const post = posts[slug];
             const postDiv = document.createElement('div');
@@ -365,15 +390,12 @@
                 <h2 class="text-2xl sm:text-3xl font-black mb-4" style="color: var(--text-dark);">${post.title}</h2>
                 <div class="blog-prose mt-6">${post.content}</div>
             `;
-            fragment.appendChild(postDiv);
+            content.appendChild(postDiv);
         });
-        
-        template.content.innerHTML = '';
-        template.content.appendChild(fragment);
     }
 
     /**
-     * 5. Scroll Progress Tracker
+     * 6. Scroll Progress Tracker
      */
     function updateReadingProgress() {
         const blogPost = document.getElementById('blog-post');
@@ -387,7 +409,7 @@
     }
 
     /**
-     * 6. Bulletproof SPA Hash Routing Guard
+     * 7. Bulletproof SPA Hash Routing Guard
      */
     function handleRouteChanges() {
         ensureBlogElements();
@@ -440,6 +462,9 @@
                     }
                 });
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                // If a post is not found (or lag in DOM creation), gently redirect back to listings
+                window.location.hash = '#/blog';
             }
         } else {
             // Safe clean shutdown of blog view when visiting main app views
@@ -449,10 +474,12 @@
         }
     }
 
-    // 7. Global API Export
+    // 8. Global API Export
     window.ImgConBlog = {
         renderList: function (container) {
             if (!container) return;
+            const totalCount = Object.keys(posts).length;
+            
             container.innerHTML = `
                 <div class="text-center mb-10">
                     <!-- Dynamic logo.png with safety onerror fallback -->
@@ -460,7 +487,13 @@
                         <img src="logo.png" alt="ImgCon Logo" onerror="this.style.display='none'">
                     </div>
                     <h2 class="text-3xl font-extrabold tracking-tight" style="color: var(--text-dark);">ImgCon Blog</h2>
-                    <p class="text-sm mt-2" style="color: var(--text-light);">Image optimization, speed, and standard web guidelines compiled in a clean database.</p>
+                    <p class="text-sm mt-2 mb-4" style="color: var(--text-light);">Image optimization, speed, and standard web guidelines compiled in a clean database.</p>
+                    
+                    <!-- Smart Blog Counter Badge -->
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
+                         <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                         <span style="color: var(--text-dark);">${totalCount} Premium Articles Published</span>
+                    </div>
                 </div>
                 
                 <!-- Live Search Bar -->
@@ -474,9 +507,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6" id="blog-articles-container">
                     ${Object.keys(posts).map(slug => {
                         const post = posts[slug];
+                        const readingTime = getReadingTime(post.content);
                         return `
                             <article data-slug="${slug}" class="p-6 rounded-2xl border text-left hover:shadow-md transition-all duration-300 flex flex-col justify-between" style="border-color: var(--card-border); background-color: var(--card-bg);">
                                 <div>
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <span class="blog-meta-badge">
+                                            <i class="far fa-clock"></i> ${readingTime}
+                                        </span>
+                                    </div>
                                     <h3 class="text-xl font-bold mb-2" style="color: var(--text-dark);">${post.title}</h3>
                                     <p class="text-sm mb-4" style="color: var(--text-light);">${post.excerpt}</p>
                                 </div>
@@ -516,7 +555,7 @@
     };
 
     /**
-     * 8. Navigation Click Interceptor (SPA Hijacker)
+     * 9. Navigation Click Interceptor (SPA Hijacker)
      * Captures and intercepts clicks on any blog links to bypass script.js's path-building bug.
      */
     document.addEventListener('click', function (e) {
@@ -557,12 +596,12 @@
         }
     }, true); // useCapture is true to process this before other global handlers on the page
 
-    // 9. Synchronous Initial Run
+    // 10. Synchronous Initial Run
     ensureBlogElements();
     syncBlogTemplates();
     handleRouteChanges();
 
-    // 10. Event Observers
+    // 11. Event Observers
     window.addEventListener('hashchange', handleRouteChanges);
     window.addEventListener('popstate', handleRouteChanges);
     window.addEventListener('scroll', updateReadingProgress);
