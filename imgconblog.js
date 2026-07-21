@@ -68,6 +68,17 @@
                 font-size: 0.85rem;
                 font-family: monospace;
             }
+            #blog-reading-progress {
+                position: sticky;
+                top: 0;
+                left: 0;
+                height: 4px;
+                width: 0%;
+                background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+                z-index: 100;
+                border-radius: 2px;
+                will-change: width;
+            }
         `;
         document.head.appendChild(style);
     }
@@ -182,18 +193,154 @@
         }
     };
 
-    // 3. Export global ImgConBlog module to window scope
+    /**
+     * 3. DOM Recovery Mechanism
+     * Automatically inserts required containers into index.html if not present.
+     */
+    function ensureBlogElements() {
+        let blogScreen = document.getElementById('blogScreen');
+        if (!blogScreen) {
+            blogScreen = document.createElement('section');
+            blogScreen.id = 'blogScreen';
+            blogScreen.className = 'screen hidden';
+            
+            const toolScreen = document.getElementById('toolScreen');
+            if (toolScreen) {
+                toolScreen.parentNode.insertBefore(blogScreen, toolScreen.nextSibling);
+            } else {
+                const container = document.querySelector('main.app-container');
+                if (container) container.appendChild(blogScreen);
+            }
+        }
+        
+        let blogListing = document.getElementById('blog-listing');
+        if (!blogListing) {
+            blogListing = document.createElement('div');
+            blogListing.id = 'blog-listing';
+            blogListing.className = 'max-w-4xl mx-auto space-y-6';
+            blogScreen.appendChild(blogListing);
+        }
+        
+        let blogPost = document.getElementById('blog-post');
+        if (!blogPost) {
+            blogPost = document.createElement('div');
+            blogPost.id = 'blog-post';
+            blogPost.className = 'hidden max-w-4xl mx-auto text-left';
+            
+            // Reading progress bar setup
+            const progressBar = document.createElement('div');
+            progressBar.id = 'blog-reading-progress';
+            blogPost.appendChild(progressBar);
+
+            const backBtn = document.createElement('a');
+            backBtn.href = '/blog';
+            backBtn.id = 'back-to-blog-btn';
+            backBtn.className = 'secondary-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold mb-6 transition-all duration-300 hover:shadow-md';
+            backBtn.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Blog';
+            blogPost.appendChild(backBtn);
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.id = 'blog-post-content';
+            contentDiv.className = 'blog-prose';
+            blogPost.appendChild(contentDiv);
+            
+            blogScreen.appendChild(blogPost);
+        }
+    }
+
+    /**
+     * 4. Dynamic Template Sync
+     * Updates the HTML template block dynamically so script.js's router works with full content.
+     */
+    function syncBlogTemplates() {
+        let template = document.getElementById('blogPostsTemplate');
+        if (!template) {
+            template = document.createElement('template');
+            template.id = 'blogPostsTemplate';
+            document.body.appendChild(template);
+        }
+        
+        template.innerHTML = '';
+        const tempContainer = document.createElement('div');
+        Object.keys(posts).forEach(slug => {
+            const post = posts[slug];
+            const postDiv = document.createElement('div');
+            postDiv.setAttribute('data-slug', slug);
+            postDiv.className = 'space-y-4';
+            postDiv.innerHTML = `
+                <h2 class="text-2xl sm:text-3xl font-black mb-4" style="color: var(--text-dark);">${post.title}</h2>
+                <div class="blog-prose mt-6">${post.content}</div>
+            `;
+            tempContainer.appendChild(postDiv);
+        });
+        template.content.appendChild(tempContainer);
+    }
+
+    /**
+     * 5. Scroll Progress Tracker
+     */
+    function updateReadingProgress() {
+        const blogPost = document.getElementById('blog-post');
+        const progressBar = document.getElementById('blog-reading-progress');
+        if (blogPost && progressBar && !blogPost.classList.contains('hidden')) {
+            const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + "%";
+        }
+    }
+
+    // 6. Router Integration and Routing Hooks
+    function handleRouteChanges() {
+        ensureBlogElements();
+        const path = window.location.hash.slice(1) || '/';
+        const blogListing = document.getElementById('blog-listing');
+        const blogPost = document.getElementById('blog-post');
+        const blogPostContent = document.getElementById('blog-post-content');
+
+        if (path === '/blog') {
+            if (blogListing) {
+                window.ImgConBlog.renderList(blogListing);
+                blogListing.classList.remove('hidden');
+            }
+            if (blogPost) blogPost.classList.add('hidden');
+        } else if (path.startsWith('/blog/')) {
+            const slug = path.split('/').pop();
+            const post = posts[slug];
+            if (post) {
+                if (blogListing) blogListing.classList.add('hidden');
+                if (blogPost && blogPostContent) {
+                    blogPostContent.innerHTML = post.content;
+                    blogPost.classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+        }
+    }
+
+    // 7. Global Export
     window.ImgConBlog = {
         renderList: function (container) {
             if (!container) return;
             container.innerHTML = `
-                <h2>ImgCon Blog</h2>
-                <p class="text-sm" style="color: var(--text-light); margin-bottom: 2rem;">Welcome to our blog! Here we share tips, tricks, and insights into the world of digital images and web performance.</p>
-                <div class="space-y-8 mt-6">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-extrabold tracking-tight" style="color: var(--text-dark);">ImgCon Blog</h2>
+                    <p class="text-sm mt-2" style="color: var(--text-light);">Image optimization, speed, and standard web guidelines compiled in a clean database.</p>
+                </div>
+                
+                <!-- Live Instant Search Bar -->
+                <div class="mb-8 p-4 rounded-2xl border" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                    <div class="relative">
+                        <input type="text" id="blog-search-input" placeholder="Search articles..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border text-sm outline-none focus:border-indigo-500 transition-all duration-300" style="border-color: var(--card-border); background-color: var(--bg-subtle); color: var(--text-dark);">
+                        <i class="fas fa-search absolute left-3.5 top-3.5 text-gray-400 text-sm"></i>
+                    </div>
+                </div>
+
+                <div class="space-y-6 mt-6" id="blog-articles-container">
                     ${Object.keys(posts).map(slug => {
                         const post = posts[slug];
                         return `
-                            <article data-slug="${slug}" class="p-6 rounded-2xl border text-left animate__animated animate__fadeInUp" style="border-color: var(--card-border); background-color: var(--bg-subtle);">
+                            <article data-slug="${slug}" class="p-6 rounded-2xl border text-left hover:shadow-md transition-all duration-300" style="border-color: var(--card-border); background-color: var(--card-bg);">
                                 <h3 class="text-xl font-bold mb-2" style="color: var(--text-dark);">${post.title}</h3>
                                 <p class="text-sm mb-4" style="color: var(--text-light);">${post.excerpt}</p>
                                 <a href="/blog/${slug}" class="font-bold text-sm read-more-btn flex items-center gap-1 hover:underline" style="color: var(--primary-color);">Read More &rarr;</a>
@@ -202,6 +349,25 @@
                     }).join('')}
                 </div>
             `;
+
+            // Dynamic filter inside list UI
+            const searchInput = container.querySelector('#blog-search-input');
+            const articlesContainer = container.querySelector('#blog-articles-container');
+            if (searchInput && articlesContainer) {
+                searchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase();
+                    const articles = articlesContainer.querySelectorAll('article');
+                    articles.forEach(article => {
+                        const title = article.querySelector('h3').textContent.toLowerCase();
+                        const excerpt = article.querySelector('p').textContent.toLowerCase();
+                        if (title.includes(query) || excerpt.includes(query)) {
+                            article.style.display = 'block';
+                        } else {
+                            article.style.display = 'none';
+                        }
+                    });
+                });
+            }
         },
         getPost: function (slug) {
             const post = posts[slug];
@@ -212,4 +378,15 @@
             `;
         }
     };
+
+    // 8. Event Listeners & Router Sync
+    window.addEventListener('hashchange', () => setTimeout(handleRouteChanges, 20));
+    window.addEventListener('popstate', () => setTimeout(handleRouteChanges, 20));
+    window.addEventListener('scroll', updateReadingProgress);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        ensureBlogElements();
+        syncBlogTemplates();
+        setTimeout(handleRouteChanges, 50);
+    });
 })();
