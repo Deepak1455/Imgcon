@@ -69,14 +69,14 @@
                 font-family: monospace;
             }
             #blog-reading-progress {
-                position: sticky;
+                position: fixed;
                 top: 0;
                 left: 0;
                 height: 4px;
                 width: 0%;
                 background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
-                z-index: 100;
-                border-radius: 2px;
+                z-index: 9999;
+                transition: width 0.1s ease-out;
                 will-change: width;
             }
         `;
@@ -195,9 +195,11 @@
 
     /**
      * 3. DOM Recovery Mechanism
-     * Automatically inserts required containers into index.html if not present.
+     * Generates all required containers dynamically if not present in the index.html
      */
     function ensureBlogElements() {
+        if (!document.body) return; // Wait for document body to exist
+        
         let blogScreen = document.getElementById('blogScreen');
         if (!blogScreen) {
             blogScreen = document.createElement('section');
@@ -208,7 +210,7 @@
             if (toolScreen) {
                 toolScreen.parentNode.insertBefore(blogScreen, toolScreen.nextSibling);
             } else {
-                const container = document.querySelector('main.app-container');
+                const container = document.querySelector('.app-container') || document.body;
                 if (container) container.appendChild(blogScreen);
             }
         }
@@ -233,10 +235,17 @@
             blogPost.appendChild(progressBar);
 
             const backBtn = document.createElement('a');
-            backBtn.href = '/blog';
+            backBtn.href = '#/blog';
             backBtn.id = 'back-to-blog-btn';
             backBtn.className = 'secondary-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold mb-6 transition-all duration-300 hover:shadow-md';
             backBtn.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Blog';
+            
+            // Force hash change on back button click
+            backBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.hash = '#/blog';
+            });
+
             blogPost.appendChild(backBtn);
             
             const contentDiv = document.createElement('div');
@@ -249,8 +258,20 @@
     }
 
     /**
-     * 4. Dynamic Template Sync
-     * Updates the HTML template block dynamically so script.js's router works with full content.
+     * 4. Safe DOM Interception
+     * Prevents script.js from crashing if it queries elements before they are parsed.
+     */
+    const originalGetElementById = document.getElementById;
+    document.getElementById = function (id) {
+        if (id === 'blogScreen' || id === 'blog-listing' || id === 'blog-post' || id === 'blog-post-content' || id === 'blogPostsTemplate') {
+            ensureBlogElements();
+            syncBlogTemplates();
+        }
+        return originalGetElementById.apply(this, arguments);
+    };
+
+    /**
+     * 5. Dynamic Template Sync
      */
     function syncBlogTemplates() {
         let template = document.getElementById('blogPostsTemplate');
@@ -277,7 +298,7 @@
     }
 
     /**
-     * 5. Scroll Progress Tracker
+     * 6. Scroll Progress Tracker
      */
     function updateReadingProgress() {
         const blogPost = document.getElementById('blog-post');
@@ -290,7 +311,9 @@
         }
     }
 
-    // 6. Router Integration and Routing Hooks
+    /**
+     * 7. Router Override (Bypasses local script.js limitations)
+     */
     function handleRouteChanges() {
         ensureBlogElements();
         const path = window.location.hash.slice(1) || '/';
@@ -299,6 +322,12 @@
         const blogPostContent = document.getElementById('blog-post-content');
 
         if (path === '/blog') {
+            // Hide all other pages
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.add('hidden'));
+            
+            const blogScreen = document.getElementById('blogScreen');
+            if (blogScreen) blogScreen.classList.remove('hidden');
+
             if (blogListing) {
                 window.ImgConBlog.renderList(blogListing);
                 blogListing.classList.remove('hidden');
@@ -308,6 +337,12 @@
             const slug = path.split('/').pop();
             const post = posts[slug];
             if (post) {
+                // Hide all other pages
+                document.querySelectorAll('.screen').forEach(screen => screen.classList.add('hidden'));
+                
+                const blogScreen = document.getElementById('blogScreen');
+                if (blogScreen) blogScreen.classList.remove('hidden');
+
                 if (blogListing) blogListing.classList.add('hidden');
                 if (blogPost && blogPostContent) {
                     blogPostContent.innerHTML = post.content;
@@ -318,11 +353,18 @@
         }
     }
 
-    // 7. Global Export
+    // 8. Global Export
     window.ImgConBlog = {
         renderList: function (container) {
             if (!container) return;
             container.innerHTML = `
+                <!-- Close Blog / Back to Tools Button -->
+                <div class="text-left mb-6">
+                    <a href="#/" class="secondary-btn inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 hover:shadow-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Tools
+                    </a>
+                </div>
+
                 <div class="text-center mb-10">
                     <h2 class="text-3xl font-extrabold tracking-tight" style="color: var(--text-dark);">ImgCon Blog</h2>
                     <p class="text-sm mt-2" style="color: var(--text-light);">Image optimization, speed, and standard web guidelines compiled in a clean database.</p>
@@ -336,14 +378,17 @@
                     </div>
                 </div>
 
-                <div class="space-y-6 mt-6" id="blog-articles-container">
+                <div class="grid grid-cols-1 gap-6 id="blog-articles-container">
                     ${Object.keys(posts).map(slug => {
                         const post = posts[slug];
                         return `
                             <article data-slug="${slug}" class="p-6 rounded-2xl border text-left hover:shadow-md transition-all duration-300" style="border-color: var(--card-border); background-color: var(--card-bg);">
                                 <h3 class="text-xl font-bold mb-2" style="color: var(--text-dark);">${post.title}</h3>
                                 <p class="text-sm mb-4" style="color: var(--text-light);">${post.excerpt}</p>
-                                <a href="/blog/${slug}" class="font-bold text-sm read-more-btn flex items-center gap-1 hover:underline" style="color: var(--primary-color);">Read More &rarr;</a>
+                                <div class="flex items-center justify-between mt-4">
+                                    <span class="text-xs px-2.5 py-1 rounded-full font-semibold" style="background-color: var(--bg-subtle); color: var(--primary-color);">Image Guide</span>
+                                    <a href="#/blog/${slug}" class="font-bold text-sm read-more-btn flex items-center gap-1 hover:underline" style="color: var(--primary-color);">Read More &rarr;</a>
+                                </div>
                             </article>
                         `;
                     }).join('')}
@@ -353,10 +398,10 @@
             // Dynamic filter inside list UI
             const searchInput = container.querySelector('#blog-search-input');
             const articlesContainer = container.querySelector('#blog-articles-container');
-            if (searchInput && articlesContainer) {
+            if (searchInput) {
                 searchInput.addEventListener('input', (e) => {
                     const query = e.target.value.toLowerCase();
-                    const articles = articlesContainer.querySelectorAll('article');
+                    const articles = container.querySelectorAll('article');
                     articles.forEach(article => {
                         const title = article.querySelector('h3').textContent.toLowerCase();
                         const excerpt = article.querySelector('p').textContent.toLowerCase();
@@ -379,14 +424,40 @@
         }
     };
 
-    // 8. Event Listeners & Router Sync
+    /**
+     * 9. Global Click Capture Phase Interceptor
+     * Intercepts all blog-related clicks immediately to prevent browser reloads and correctly handle hash-routing.
+     */
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (link) {
+            const href = link.getAttribute('href');
+            if (href && (href.startsWith('/blog') || href.startsWith('#/blog'))) {
+                e.preventDefault();
+                let path = href;
+                if (path.startsWith('#')) {
+                    path = path.slice(1);
+                }
+                window.location.hash = '#' + path;
+            }
+        }
+    }, true); // True activates capture phase to intercept prior to script.js router
+
+    // 10. Event Listeners & Router Sync
     window.addEventListener('hashchange', () => setTimeout(handleRouteChanges, 20));
     window.addEventListener('popstate', () => setTimeout(handleRouteChanges, 20));
     window.addEventListener('scroll', updateReadingProgress);
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // Initial run
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            ensureBlogElements();
+            syncBlogTemplates();
+            setTimeout(handleRouteChanges, 50);
+        });
+    } else {
         ensureBlogElements();
         syncBlogTemplates();
         setTimeout(handleRouteChanges, 50);
-    });
+    }
 })();
