@@ -2,6 +2,7 @@ const CACHE_NAME = 'imgcon-cache-v4';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
+    '/imgconblog.js',
     '/style.css',
     '/script.js',
     '/manifest.json',
