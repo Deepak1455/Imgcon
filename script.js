@@ -40,7 +40,7 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// --- Router (Auto-Reset & SEO Blog Routes Integrated) ---
+// --- Router (Auto-Reset & Hash Routing for 100% 404 Prevention on Refresh) ---
 const routes = {
     '/': { screen: 'homeScreen', title: 'ImgCon - Free Online Image Converter & Compressor' },
     '/image-converter': { screen: 'toolScreen', tool: 'converter', title: 'Image Converter - Convert JPG, PNG, WebP' },
@@ -59,7 +59,13 @@ const routes = {
 };
 
 const router = async () => {
-    const path = window.location.pathname;
+    // यदि यूआरएल में हैश नहीं है, तो डिफ़ॉल्ट रूप से '#/' सेट करें
+    if (!window.location.hash || window.location.hash === '#') {
+        window.history.replaceState(null, '', '#/');
+    }
+    
+    // हैश के बाद का पैथ पढ़ें (जैसे '#/image-compressor' से '/image-compressor')
+    const path = window.location.hash.slice(1) || '/';
     const route = routes[path] || routes['/'];
     document.title = route.title;
 
@@ -104,8 +110,11 @@ const navigateTo = (e) => {
             return; 
         }
         e.preventDefault();
-        if (window.location.pathname !== link.pathname) {
-            history.pushState({}, '', link.pathname);
+        
+        // गिटहब पेजेस के लिए सामान्य पाथ को सुरक्षित हैश पाथ में बदलें
+        const targetHash = '#' + link.pathname;
+        if (window.location.hash !== targetHash) {
+            history.pushState(null, '', targetHash);
             router();
         }
     }
@@ -310,7 +319,6 @@ function renderFileManagementUI() {
     initDragAndDropReorder(listContainer);
 }
 
-// --- Smooth HTML Drag & Drop Reordering ---
 function initDragAndDropReorder(listContainer) {
     let dragSrcEl = null;
     const items = listContainer.querySelectorAll('.file-item');
@@ -1048,5 +1056,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     document.body.addEventListener('click', navigateTo);
     window.addEventListener('popstate', router);
+    window.addEventListener('hashchange', router); // Listen to hash changes for perfect refresh support
     router();
 });
