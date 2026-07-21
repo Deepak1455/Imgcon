@@ -79,122 +79,218 @@
                 border-radius: 2px;
                 will-change: width;
             }
+            .blog-logo-container img {
+                max-height: 60px;
+                width: auto;
+                object-fit: contain;
+                margin: 0 auto 1rem auto;
+                display: block;
+            }
         `;
         document.head.appendChild(style);
     }
 
-    // 2. High-Quality SEO-optimized blog articles HTML database
+    // 2. High-Quality SEO-optimized blog articles HTML database (Total 20 Articles)
     const posts = {
         "png-vs-jpg-difference": {
             title: "PNG vs JPG: What's the Difference and Which One Should You Use?",
             excerpt: "When it comes to saving images, choosing between PNG and JPG can have a big impact on your image's quality and file size. Learn which one to use for photography vs graphics...",
             content: `
-                <p>When it comes to saving, uploading, or exporting images, two of the most popular file formats you'll encounter are <strong>PNG (Portable Network Graphics)</strong> and <strong>JPG or JPEG (Joint Photographic Experts Group)</strong>. While they may look identical on your screen at first glance, they are fundamentally different in terms of compression, file size, quality, and use cases. Choosing the wrong format can result in bloated websites or blurry images.</p>
-                
+                <p>When it comes to saving, uploading, or exporting images, two of the most popular file formats you'll encounter are <strong>PNG (Portable Network Graphics)</strong> and <strong>JPG or JPEG (Joint Photographic Experts Group)</strong>. While they may look identical on your screen at first glance, they are fundamentally different in terms of compression, file size, quality, and use cases.</p>
                 <h2>What is JPG (Joint Photographic Experts Group)?</h2>
-                <p>JPG is the standard file format for digital photography and web images. It uses a <strong>lossy compression</strong> algorithm. This means that when an image is saved as a JPG, some unnecessary data is permanently discarded to reduce the file size. This reduction makes JPGs incredibly lightweight and perfect for web delivery where fast loading times are critical.</p>
-                <ul>
-                    <li><strong>Best For:</strong> Real-world photographs, complex color gradients, and scenery.</li>
-                    <li><strong>Pros:</strong> Extremely small file sizes, compatible with every device and browser.</li>
-                    <li><strong>Cons:</strong> Quality degrades every time you edit and re-save the file; does not support transparent backgrounds.</li>
-                </ul>
-
+                <p>JPG is the standard file format for digital photography and web images. It uses a <strong>lossy compression</strong> algorithm. This means that when an image is saved as a JPG, some unnecessary data is permanently discarded to reduce the file size.</p>
                 <h2>What is PNG (Portable Network Graphics)?</h2>
-                <p>PNG was created as a modern successor to the older GIF format. It uses <strong>lossless compression</strong>, meaning that no image data is lost during compression. The image quality remains perfectly intact, regardless of how many times you open, edit, and save the file. Crucially, PNG supports <strong>alpha transparency</strong>, allowing parts of the image to be fully transparent.</p>
-                <ul>
-                    <li><strong>Best For:</strong> Logos, transparent graphics, screenshots, text-heavy images, and digital illustrations.</li>
-                    <li><strong>Pros:</strong> Supports transparency, infinite re-saving without quality loss, sharp edges on text.</li>
-                    <li><strong>Cons:</strong> File sizes are significantly larger than JPGs, which can slow down website loading speeds.</li>
-                </ul>
-
-                <h2>Summary: Which One Should You Choose?</h2>
-                <p>If you are uploading complex, colorful photos to your website, use <strong>JPG</strong>. If you are uploading a brand logo, a website icon, or a graphic that requires a transparent background, use <strong>PNG</strong>. For the best of both worlds, modern web formats like WebP or AVIF should be considered.</p>
+                <p>PNG was created as a modern successor to the older GIF format. It uses <strong>lossless compression</strong>, meaning that no image data is lost during compression. The image quality remains perfectly intact. Crucially, PNG supports <strong>alpha transparency</strong>, allowing parts of the image to be fully transparent.</p>
             `
         },
         "how-to-reduce-photo-size": {
             title: "How to Reduce Photo Size Without Losing Quality (The Definitive Guide)",
             excerpt: "Large image files are a major cause of slow-loading websites. This detailed guide walks you through the best techniques for compressing image file sizes cleanly...",
             content: `
-                <p>Whether you are a professional photographer trying to save storage space or a web developer aiming to pass Google's PageSpeed Insights, reducing image file sizes is essential. Large images cause websites to load slowly, which harms your search engine rankings and frustrates mobile users. This comprehensive guide will show you how to shrink your photo sizes while keeping them looking incredibly sharp.</p>
-                
+                <p>Whether you are a professional photographer trying to save storage space or a web developer aiming to pass Google's PageSpeed Insights, reducing image file sizes is essential. Large images cause websites to load slowly, which harms your search engine rankings.</p>
                 <h2>1. Understand Lossy vs. Lossless Compression</h2>
-                <p>To reduce photo size efficiently, you must choose between two compression types. Lossless compression removes metadata and redundant technical data without changing a single pixel. Lossy compression, on the other hand, slightly reduces color variations and minor details that the human eye cannot easily notice. For web use, <strong>lossy compression is highly recommended</strong> because it can reduce file size by up to 80% with almost no visible loss in quality.</p>
-
+                <p>Lossless compression removes metadata and redundant technical data without changing a single pixel. Lossy compression, on the other hand, slightly reduces color variations and details that the human eye cannot easily notice. For web use, lossy compression is highly recommended.</p>
                 <h2>2. Resize the Physical Dimensions</h2>
-                <p>Many users make the mistake of uploading raw 4000x3000px camera photos directly to their blog. If your blog post's maximum display width is only 800px, the browser has to download the massive file and scale it down anyway. By physically resizing your image to the exact dimensions needed (e.g., 1200px width for high-DPI displays), you can immediately save megabytes of bandwidth.</p>
-
-                <h2>3. Use Modern Web Formats (WebP and AVIF)</h2>
-                <p>Traditional formats like JPG and PNG are no longer the most efficient options. Google's WebP and the newer AVIF format offer much better compression ratios. Converting your images to WebP can reduce the size by up to 30% compared to JPG without any change in resolution or clarity.</p>
-
-                <blockquote>With free client-side tools like <strong>ImgCon</strong>, you can resize, compress, and convert your photos right in your browser in seconds. This ensures complete privacy and optimal web performance without the need to upload sensitive assets to remote servers.</blockquote>
+                <p>By physically resizing your image to the exact dimensions needed (e.g., 1200px width for high-DPI displays), you can immediately save megabytes of bandwidth.</p>
             `
         },
         "webp-the-future-of-web-images": {
             title: "Why WebP is the Future of Web Images",
             excerpt: "Developed by Google, WebP is a modern image format that provides superior lossless and lossy compression for images on the web, making websites load instantly...",
             content: `
-                <p>Web performance has never been more critical. Google's Core Web Vitals update has made page speed a direct ranking factor in SEO. Since images account for more than 60% of an average webpage's total payload, optimization is key. This is where <strong>WebP</strong> comes in—a modern image format developed by Google specifically designed to make the web faster.</p>
-                
-                <h2>What is WebP?</h2>
-                <p>WebP is a next-generation image format introduced by Google in 2010. It supports both lossy and lossless compression, transparency (like PNG), and animation (like GIF). Its primary goal is to create smaller, richer images that make the web faster.</p>
-
+                <p>Web performance has never been more critical. Google uses page speed as a direct ranking factor in SEO. Since images account for more than 60% of an average webpage's total payload, optimization is key. This is where WebP comes in—a modern image format developed by Google specifically designed to make the web faster.</p>
                 <h2>How WebP Compares to PNG and JPG</h2>
-                <p>According to Google's official research, WebP offers significant advantages over older formats:</p>
                 <ul>
-                    <li><strong>WebP lossless images</strong> are 26% smaller in size compared to PNGs.</li>
-                    <li><strong>WebP lossy images</strong> are 25% to 34% smaller than comparable JPG images at equivalent quality index.</li>
-                    <li>WebP supports transparency at an additional cost of just 22% more bytes, making it a perfect replacement for heavy transparent PNGs.</li>
+                    <li>WebP lossless images are 26% smaller in size compared to PNGs.</li>
+                    <li>WebP lossy images are 25% to 34% smaller than comparable JPG images.</li>
                 </ul>
-
-                <h2>Browser Compatibility</h2>
-                <p>Initially, WebP adoption was slow due to a lack of support from Safari and Firefox. However, as of today, WebP is supported by all major modern web browsers, including Google Chrome, Apple Safari, Mozilla Firefox, Microsoft Edge, and Opera. There is no longer any reason to avoid using WebP for your web projects.</p>
             `
         },
         "avif-vs-webp-speed-battle": {
             title: "AVIF vs WebP: Which Next-Gen Format Wins the Web Speed Battle?",
             excerpt: "AVIF is the newest image format designed for ultra-small file sizes. Discover how it compares directly to Google's WebP format in speed and clarity...",
             content: `
-                <p>As if WebP wasn't fast enough, a new contender has emerged in the world of image compression: <strong>AVIF (AV1 Image File Format)</strong>. This article compares these two next-generation image formats to help you choose the best one for your website's performance and design.</p>
-                
+                <p>As if WebP wasn't fast enough, a new contender has emerged in the world of image compression: AVIF (AV1 Image File Format). This article compares these two next-generation image formats to help you choose the best one for your website.</p>
                 <h2>What is AVIF?</h2>
-                <p>AVIF is an open-source, royalty-free file format derived from the keyframes of the AV1 video codec. Backed by industry giants like Google, Apple, Microsoft, and Netflix, AVIF offers compression efficiency that far surpasses JPG, PNG, and in many cases, WebP.</p>
-
+                <p>AVIF is an open-source, royalty-free file format derived from the keyframes of the AV1 video codec. AVIF offers compression efficiency that far surpasses JPG, PNG, and in many cases, WebP.</p>
                 <h2>AVIF vs WebP: The Key Differences</h2>
-                <p>While both formats support lossy/lossless compression and transparency, they excel in different areas:</p>
-                <ul>
-                    <li><strong>Compression Efficiency:</strong> AVIF can make files up to 20% smaller than WebP at identical visual quality, especially in highly detailed or complex images.</li>
-                    <li><strong>Color Support:</strong> AVIF supports 10-bit and 12-bit color depth, allowing for stunning High Dynamic Range (HDR) graphics with no color banding, whereas WebP is limited to 8-bit.</li>
-                    <li><strong>Encoding Speed:</strong> WebP encodes much faster than AVIF. Compressing a batch of images to AVIF on older computers can take noticeably longer than WebP.</li>
-                </ul>
-
-                <h2>Recommendation</h2>
-                <p>If your primary goal is maximizing page speed scores, <strong>AVIF</strong> is the absolute winner. However, for general daily use and maximum browser compatibility, <strong>WebP</strong> remains an exceptional and extremely fast choice.</p>
+                <p>AVIF can make files up to 20% smaller than WebP at identical visual quality, especially in highly detailed or complex images. However, WebP encodes much faster than AVIF.</p>
             `
         },
         "image-compression-seo-pagespeed": {
             title: "Why Image Compression is Crucial for SEO and PageSpeed Insights",
             excerpt: "Did you know slow loading images can ruin your organic Google rankings? Explore how optimized images boost your Core Web Vitals and LCP scores...",
             content: `
-                <p>Many website owners spend thousands of dollars on keyword research and backlinks, yet completely ignore a major SEO factor right on their own site: <strong>image optimization</strong>. Slow load times can trigger high bounce rates, destroying your search rankings. Let's look at how image compression directly influences SEO.</p>
-                
+                <p>Many website owners spend thousands of dollars on keyword research, yet completely ignore a major SEO factor right on their own site: image optimization. Let's look at how image compression directly influences SEO.</p>
                 <h2>Google's Core Web Vitals and SEO</h2>
-                <p>Google uses <strong>Core Web Vitals</strong> as ranking signals. Specifically, <strong>LCP (Largest Contentful Paint)</strong> measures how quickly the main content of your webpage loads. Since the largest element above the fold is almost always a hero image, optimizing that image directly lowers your LCP score, boosting your search engine ranking.</p>
-
-                <h2>The Impact on Mobile Users</h2>
-                <p>Over 60% of global web traffic comes from mobile devices, often connected via slower 4G or 3G networks. An uncompressed 4MB homepage image might load in 1 second on a fast office desktop, but take 10 seconds to render on a mobile device, causing users to abandon your site.</p>
-
-                <h2>Best Practices for Image SEO</h2>
-                <ul>
-                    <li>Always compress images before uploading them to your server using client-side tools like <code>ImgCon</code>.</li>
-                    <li>Use descriptive, keyword-rich filenames (e.g., <code>vintage-leather-jacket.jpg</code>).</li>
-                    <li>Always include an <code>alt</code> tag to help search engine crawlers understand what the image represents.</li>
-                </ul>
+                <p>Google uses Core Web Vitals as ranking signals. Specifically, LCP (Largest Contentful Paint) measures how quickly the main content of your webpage loads. Optimizing above-the-fold images directly lowers your LCP score, boosting your search engine ranking.</p>
+            `
+        },
+        // 15 NEW BLOG POSTS ADDED BELOW
+        "what-is-svg-vector-graphics": {
+            title: "What is SVG? Understanding Vector Graphics for Modern Web Design",
+            excerpt: "SVG graphics are scale-independent web assets. Learn why scalable vector graphics are essential for responsive interfaces, icons, and logos...",
+            content: `
+                <p>Unlike raster formats (such as JPEG and PNG) which store images in grids of pixels, <strong>SVG (Scalable Vector Graphics)</strong> is an XML-based vector image format. This means it renders shapes, lines, and paths using mathematical formulas. As a result, SVG images can scale to any size without losing crispness or quality.</p>
+                <h2>Why SVG is Essential for Modern Sites</h2>
+                <p>SVGs are incredibly lightweight because they are essentially text files. They are perfect for logos, system icons, and illustrative diagrams. Additionally, because they are XML elements, you can easily style them with CSS or animate them using JavaScript.</p>
+            `
+        },
+        "best-image-compression-plugins-wordpress": {
+            title: "Best Image Compression Plugins for WordPress in 2026",
+            excerpt: "Looking to speed up your WordPress site? Here is a breakdown of the top image compression plugins that optimize your library automatically...",
+            content: `
+                <p>If you run a WordPress website, your media library can quickly become bloated. While client-side tools like ImgCon are perfect for prep-work, automating compression during uploads can save significant time. Here are the top-performing plugins for automated image optimization:</p>
+                <h2>1. Smush Image Compression</h2>
+                <p>Smush is one of the most popular plugins. It offers lossless compression and can scan and compress your entire media library in bulk.</p>
+                <h2>2. Imagify</h2>
+                <p>Developed by the creators of WP Rocket, Imagify integrates WebP conversion seamlessly and offers three levels of compression quality.</p>
+            `
+        },
+        "how-to-fix-lazy-loading-images": {
+            title: "How to Correctly Implement Lazy Loading for Web Images",
+            excerpt: "Lazy loading deferrals keep your page loading speeds high. Learn how to implement native HTML lazy loading without creating layout shifts...",
+            content: `
+                <p>Lazy loading is a strategy to defer the loading of non-critical resources (like off-screen images) at page load time. Instead, these images are loaded only when the user scrolls near them. This drastically improves the initial loading performance of your webpages.</p>
+                <h2>Native HTML Lazy Loading</h2>
+                <p>Modern browsers now support native lazy loading with a simple attribute: <code>loading="lazy"</code>. Adding this to your image elements ensures fast delivery without heavy JS libraries.</p>
+            `
+        },
+        "understanding-exif-data": {
+            title: "Understanding EXIF Data: What Metadata is Hidden in Your Photos?",
+            excerpt: "Every digital photo contains EXIF metadata revealing camera settings, locations, and dates. Find out how this affects your privacy...",
+            content: `
+                <p>When you snap a photo with your phone or camera, the file saves more than just pixels. It embeds technical metadata called <strong>EXIF (Exchangeable Image File Format)</strong> data. This information is highly valuable for photographers but can raise privacy concerns.</p>
+                <h2>What is stored in EXIF?</h2>
+                <p>EXIF data typically includes camera model, aperture, shutter speed, ISO, capture date/time, and sometimes exact GPS coordinates. When uploading images to public portals, stripping this metadata using compression tools is a recommended security measure.</p>
+            `
+        },
+        "how-to-convert-heic-to-jpg": {
+            title: "How to Convert HEIC to JPG: A Guide for Apple iPhone Users",
+            excerpt: "Apple devices save photos in the efficient HEIC format, but compatibility is limited. Learn how to convert your HEIC images to widely supported JPEGs...",
+            content: `
+                <p>If you take photos on an iPhone, they are likely saved as <strong>HEIC (High Efficiency Image Container)</strong> files. While HEIC offers excellent compression and quality preservation, it is not widely compatible with older Windows machines, Android devices, or online forms.</p>
+                <h2>The Simple Conversion Process</h2>
+                <p>To convert HEIC to JPEG, you can use specialized web converters that parse the file container right in your browser. This transforms the raw HEIC data into highly compatible, compressed JPEGs instantly.</p>
+            `
+        },
+        "impact-of-image-format-on-mobile-ux": {
+            title: "The Impact of Image Formats on Mobile User Experience",
+            excerpt: "Mobile networks are unpredictable. Discover why serving optimized image payloads is the foundation of modern responsive mobile design...",
+            content: `
+                <p>Responsive design is about more than making layouts fit smaller screens; it's about optimizing resource delivery. Mobile devices often operate on slower cellular networks, where loading oversized PNG or JPG graphics can degrade user retention rates.</p>
+                <h2>Why Weight Matters on Mobile</h2>
+                <p>Unoptimized graphics increase data usage, drain battery life, and cause visible layout stuttering on budget mobile phones. Serving modern WebP or AVIF variants is crucial for seamless responsive performance.</p>
+            `
+        },
+        "the-importance-of-image-alt-text": {
+            title: "Image Alt Text: The Guide to Accessibility and Image SEO",
+            excerpt: "Learn how to write descriptive alt text that helps search engine crawlers index your photos while keeping your site accessible for visually impaired users...",
+            content: `
+                <p>Alt text (alternative text) is a descriptive HTML attribute applied to image elements. It serves two primary functions: providing accessibility context for screen readers and helping search engines understand image contents.</p>
+                <h2>Best Practices for Writing Alt Text</h2>
+                <p>Avoid stuffing alt attributes with keywords. Instead, write clear, contextually relevant descriptions of what is visually depicted in the photo. Keep it under 125 characters for optimal screen-reader compatibility.</p>
+            `
+        },
+        "how-to-compress-animated-gifs": {
+            title: "How to Compress Animated GIFs Without Ruining the Framerate",
+            excerpt: "Animated GIFs are notoriously heavy. Explore tips for optimizing GIF sizes or replacing them with modern HTML5 video elements...",
+            content: `
+                <p>Animated GIFs are incredibly popular for quick visual guides, but they are highly inefficient. Because a GIF stores every frame as an individual indexed color image, a short 5-second animation can easily exceed 10 megabytes in size.</p>
+                <h2>GIF Optimization Tips</h2>
+                <p>To shrink GIFs, reduce the global color palette size, discard redundant intermediate frames, or use web tools to lossily compress the file. Alternatively, converting heavy GIFs to loopable MP4 or WebM video containers is the cleanest solution.</p>
+            `
+        },
+        "retina-display-images-guide": {
+            title: "Retina Display Images: How to Keep Web Assets Crisp on High-DPI Screens",
+            excerpt: "Retina displays use double the pixel density of standard monitors. Learn how to serve high-resolution imagery without bloating page weight...",
+            content: `
+                <p>High-DPI screens, commonly marketed as Retina displays, feature a dense pixel layout that makes standard images appear blurry. To resolve this, web developers must serve double-resolution assets (2x) to render crisp details.</p>
+                <h2>Using HTML Srcset for Dynamic Delivery</h2>
+                <p>Instead of forcing all users to download heavy high-resolution files, use the HTML <code>srcset</code> attribute. This allows the browser to automatically request the standard resolution image for regular monitors, and the 2x image for high-density screens.</p>
+            `
+        },
+        "common-image-optimization-mistakes": {
+            title: "5 Common Image Optimization Mistakes That Slow Down Websites",
+            excerpt: "Are you making these basic errors? Avoid these critical image delivery mistakes to preserve your PageSpeed score...",
+            content: `
+                <p>Optimizing web images seems simple, but minor missteps can render your optimization efforts useless. Let's look at the most common errors made by content publishers:</p>
+                <h2>1. Not Resizing Before Compressing</h2>
+                <p>Compressing an image without reducing its native dimensions is inefficient. Always crop or scale the image to its maximum display size first.</p>
+                <h2>2. Relying Entirely on CSS Scaling</h2>
+                <p>Using CSS to shrink a massive 4000px image down to 400px still forces the user's browser to download the full, heavy file.</p>
+            `
+        },
+        "color-spaces-rgb-cmyk-srgb": {
+            title: "Color Spaces Explained: RGB vs. CMYK vs. sRGB",
+            excerpt: "Choosing the correct color space is vital for design accuracy. Learn why sRGB is the standard for the web, while CMYK rules print...",
+            content: `
+                <p>Have you ever uploaded a vibrant photo to your website only to see the colors look dull? This happens because of a color space mismatch. Color spaces define the range of colors a file can display.</p>
+                <h2>RGB and sRGB: Built for Screens</h2>
+                <p>RGB uses red, green, and blue light to create colors on monitors. sRGB is the universal standard for web images. Uploading images in the printing-focused CMYK color space will result in incorrect rendering online.</p>
+            `
+        },
+        "how-to-optimize-e-commerce-product-images": {
+            title: "How to Optimize E-Commerce Product Images for Fast Sales",
+            excerpt: "Fast loading times translate directly to high conversion rates. Discover the standard guide for optimizing online store product images...",
+            content: `
+                <p>In online retail, your product images do the selling. However, if your catalog pages take more than three seconds to render, shoppers will leave. Optimizing product imagery is vital for conversion rates.</p>
+                <h2>The Ideal Setup for E-Commerce</h2>
+                <p>Use a consistent white background to keep file sizes small, crop empty borders, and compress all product photos to the WebP format. Additionally, offer zoomable high-resolution images only on demand.</p>
+            `
+        },
+        "what-is-lossless-compression": {
+            title: "Deep Dive: What is Lossless Compression and How Does It Work?",
+            excerpt: "Explore the internal mechanics of lossless compression algorithms that shrink files without losing a single pixel of data...",
+            content: `
+                <p>Lossless compression algorithms (used in PNG and GIF) shrink files by reorganizing internal data structures rather than discarding details. It works similarly to a ZIP archive, ensuring perfect data restoration upon expansion.</p>
+                <h2>How It Reduces File Size</h2>
+                <p>Algorithms like LZW or DEFLATE find patterns and repetitive structures in the image data. For example, instead of writing 'blue pixel' 500 times, it writes a short reference code, saving valuable storage space.</p>
+            `
+        },
+        "how-to-use-images-in-newsletters": {
+            title: "How to Use and Optimize Images in Email Newsletters",
+            excerpt: "Email clients handle assets differently than web browsers. Learn the rules for optimizing newsletter images to avoid spam filters...",
+            content: `
+                <p>Images in email newsletters can boost engagement, but they present unique rendering challenges. Email clients (like Outlook or Gmail) have strict, sometimes outdated rendering engines that require carefully structured HTML.</p>
+                <h2>Best Practices for Email Images</h2>
+                <p>Keep your total email file size low to prevent spam filters from blocking it. Host your images on an external server, use clear fallback inline dimensions, and always include alt text, as many clients block images by default.</p>
+            `
+        },
+        "cumulative-layout-shift-images": {
+            title: "Cumulative Layout Shift: How Images Affect CLS and How to Fix It",
+            excerpt: "Do your pages jump around as images load? Fix layout shifting issues by defining correct dimension bounds...",
+            content: `
+                <p><strong>CLS (Cumulative Layout Shift)</strong> measures how much your page's elements shift position during loading. It is an important Core Web Vitals metric. Images loading without defined dimensions are a primary cause of high CLS scores.</p>
+                <h2>The Easy Fix: Explicit Width and Height</h2>
+                <p>Always specify <code>width</code> and <code>height</code> attributes directly on your HTML image tags. This reserves an aspect-ratio placeholder box, preventing content shifts as the image loads.</p>
             `
         }
     };
 
     /**
      * 3. DOM Recovery Mechanism
+     * Appends containers immediately into DOM to prevent timing mismatches.
      */
     function ensureBlogElements() {
         const container = document.querySelector('.app-container') || document.querySelector('main') || document.body;
@@ -249,6 +345,7 @@
 
     /**
      * 4. Dynamic Template Sync
+     * Direct fragment sync to avoid element nesting issues in template.content query.
      */
     function syncBlogTemplates() {
         let template = document.getElementById('blogPostsTemplate');
@@ -358,6 +455,10 @@
             if (!container) return;
             container.innerHTML = `
                 <div class="text-center mb-10">
+                    <!-- Dynamic logo.png with safety onerror fallback -->
+                    <div class="blog-logo-container mb-4">
+                        <img src="logo.png" alt="ImgCon Logo" onerror="this.style.display='none'">
+                    </div>
                     <h2 class="text-3xl font-extrabold tracking-tight" style="color: var(--text-dark);">ImgCon Blog</h2>
                     <p class="text-sm mt-2" style="color: var(--text-light);">Image optimization, speed, and standard web guidelines compiled in a clean database.</p>
                 </div>
