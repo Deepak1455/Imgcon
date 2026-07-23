@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Main Pages -->
+  <!-- Main Pages & Tools -->
   <url>
     <loc>https://imgcon.life/</loc>
     <lastmod>2026-07-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://imgcon.life/image-converter</loc>
@@ -43,11 +49,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://imgcon.life/blog</loc>
-    <lastmod>2026-07-23</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://imgcon.life/privacy-policy</loc>
     <lastmod>2026-07-23</lastmod>
     <priority>0.4</priority>
@@ -58,30 +59,125 @@
     <priority>0.4</priority>
   </url>
 
-  <!-- Blog Articles (Crucial for AdSense Approval) -->
+  <!-- ALL 20 BLOG ARTICLES -->
   <url>
     <loc>https://imgcon.life/blog/png-vs-jpg-difference</loc>
     <lastmod>2026-07-23</lastmod>
-    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://imgcon.life/blog/how-to-reduce-photo-size</loc>
     <lastmod>2026-07-23</lastmod>
-    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://imgcon.life/blog/webp-the-future-of-web-images</loc>
     <lastmod>2026-07-23</lastmod>
-    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://imgcon.life/blog/avif-vs-webp-speed-battle</loc>
     <lastmod>2026-07-23</lastmod>
-    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://imgcon.life/blog/image-compression-seo-pagespeed</loc>
     <lastmod>2026-07-23</lastmod>
-    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/best-image-compression-plugins-wordpress</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/what-is-svg-vector-graphics</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/understanding-exif-data</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/how-to-fix-lazy-loading-images</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/impact-of-image-format-on-mobile-ux</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/how-to-convert-heic-to-jpg</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/retina-display-images-guide</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/the-importance-of-image-alt-text</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/how-to-watermark-photos-safely</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/lossy-vs-lossless-compression-explained</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/ico-favicon-generator-guide</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/image-seo-best-practices</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/optimizing-e-commerce-product-photos</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/how-to-batch-resize-images-fast</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://imgcon.life/blog/future-of-ai-image-optimization</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
