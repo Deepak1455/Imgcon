@@ -18,10 +18,10 @@
   <meta name="google-site-verification" content="ABC123XYZ" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ImgCon - Private & Fast Image Converter, Compressor, Resizer & EXIF Cleaner</title>
+  <title>ImgCon - Free Online Image Converter, Compressor & Resizer</title>
 
   <!-- Advanced Meta Tags for Rankings -->
-  <meta name="description" content="ImgCon: The ultimate free online tool to convert, compress, resize, watermark, and clean EXIF metadata from images without uploading. 100% private, incredibly fast, supports batch processing, and works offline.">
+  <meta name="description" content="ImgCon: Free online tool to convert, compress, resize, watermark, and clean EXIF metadata from images. 100% private client-side browser processing.">
   <meta name="keywords" content="image converter, image compressor, image resizer, watermark tool, exif cleaner, exif viewer, photo resizer, image optimizer online, jpg to png, png to pdf, webp converter, avif converter, reduce image size, bulk image resizer, private image converter, imgcon, free image tools, pwa image tool, offline image converter">
   <meta name="author" content="ImgCon">
   <meta name="robots" content="index, follow">
@@ -35,21 +35,21 @@
 
   <!-- Open Graph / Facebook SEO -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="ImgCon - Private, Offline-Ready Image Converter, Compressor, Resizer, Watermark & EXIF Cleaner">
-  <meta property="og:description" content="Instantly convert, compress, resize, watermark, and remove hidden EXIF tracking data from your images directly in your browser. 100% private and free.">
+  <meta property="og:title" content="ImgCon - Free Online Image Converter, Compressor & Resizer">
+  <meta property="og:description" content="Instantly convert, compress, resize, watermark, and strip EXIF tracking data from your images directly in your browser. 100% private and free.">
   <meta property="og:image" content="https://imgcon.life/og-image.png">
   <meta property="og:url" content="https://imgcon.life">
 
   <!-- Twitter Card SEO -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ImgCon - Private, Offline-Ready Image Converter, Compressor, Resizer & EXIF Cleaner">
-  <meta name="twitter:description" content="Instantly convert, compress, resize, watermark, and remove hidden EXIF tracking data from your images directly in your browser. 100% private and free.">
+  <meta name="twitter:title" content="ImgCon - Free Online Image Converter, Compressor & Resizer">
+  <meta name="twitter:description" content="Instantly convert, compress, resize, watermark, and strip EXIF tracking data from your images directly in your browser. 100% private and free.">
   <meta name="twitter:image" content="https://imgcon.life/og-image.png">
 
   <!-- CRITICAL ASSETS PRELOADING -->
   <link rel="preload" href="logo.png" as="image">
 
-  <!-- GOOGLE SEARCH FAVICON FIX -->
+  <!-- FAVICON FIX -->
   <link rel="shortcut icon" href="logo.png" type="image/png">
   <link rel="icon" href="logo.png" type="image/png" sizes="192x192">
 
@@ -199,7 +199,7 @@
                         <p class="text-sm leading-relaxed" style="color: var(--text-light);">Add a custom text or logo watermark to your images. Control position, size, and transparency.</p>
                     </a>
 
-                    <!-- NEW FEATURE CARD: EXIF DATA CLEANER -->
+                    <!-- EXIF DATA CLEANER -->
                     <a href="/exif-cleaner" class="tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group border-indigo-300 dark:border-indigo-800">
                         <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-red-50 dark:bg-red-900/30 text-red-500 mb-4 group-hover:scale-110 transition-transform duration-300">
                             <i class="fas fa-user-shield text-2xl"></i>
@@ -259,10 +259,15 @@
                 </div>
             </div>
 
-            <!-- Blog Section -->
+            <!-- Blog Section Preview -->
             <div class="mt-16 max-w-5xl mx-auto">
-                 <h3 class="text-2xl sm:text-3xl font-bold mb-2" style="color: var(--text-dark);">From Our Blog</h3>
-                 <p class="text-sm mb-8" style="color: var(--text-light);">Learn more about image optimization and best practices.</p>
+                 <div class="flex justify-between items-end mb-8 text-left">
+                     <div>
+                         <h3 class="text-2xl sm:text-3xl font-bold mb-2" style="color: var(--text-dark);">From Our Blog</h3>
+                         <p class="text-sm" style="color: var(--text-light);">Learn more about image optimization, privacy, and web performance.</p>
+                     </div>
+                     <a href="/blog" class="text-xs font-bold text-indigo-500 hover:underline">View All Articles &rarr;</a>
+                 </div>
                  <div class="grid md:grid-cols-3 gap-6 text-left">
                      <a href="/blog/png-vs-jpg-difference" class="blog-card-link">
                          <div class="p-6 rounded-2xl border tool-choice-card">
@@ -286,15 +291,15 @@
             </div>
         </section>
 
-        <!-- Tool Screen -->
+        <!-- Tool Screen Container -->
         <section id="toolScreen" class="screen hidden"></section>
 
-        <!-- NEW SCREEN: EXIF CLEANER SCREEN CONTAINER -->
+        <!-- EXIF CLEANER SCREEN CONTAINER -->
         <section id="exifScreen" class="screen hidden">
             <div id="exifToolApp"></div>
         </section>
 
-        <!-- Blog Screen -->
+        <!-- Blog Screen Container -->
         <section id="blogScreen" class="screen hidden">
             <div id="blog-listing" class="max-w-4xl mx-auto space-y-6"></div>
             <div id="blog-post" class="hidden max-w-4xl mx-auto text-left">
@@ -323,7 +328,7 @@
         <!-- Privacy Policy Screen -->
         <section id="privacyScreen" class="screen hidden content-page">
             <h2>Privacy Policy</h2>
-            <p><strong>Last Updated:</strong> July 19, 2026</p>
+            <p><strong>Last Updated:</strong> July 23, 2026</p>
             <p>At ImgCon, your privacy is our highest priority. This policy outlines our commitment to protecting your data. It's very simple.</p>
             <h3>The Core Principle: Your Files Never Leave Your Device</h3>
             <p>ImgCon is designed to be a "client-side" application. This means that all the functionality happens directly within your web browser on your own computer or mobile device.</p>
@@ -340,7 +345,7 @@
         <!-- Terms & Conditions Screen -->
         <section id="termsScreen" class="screen hidden content-page">
             <h2>Terms and Conditions</h2>
-            <p><strong>Last Updated:</strong> July 19, 2026</p>
+            <p><strong>Last Updated:</strong> July 23, 2026</p>
             <p>Welcome to ImgCon. By accessing and using our website, you agree to comply with and be bound by the following terms and conditions of use.</p>
             <h3>1. Use of the Site</h3>
             <p>ImgCon provides free client-side image processing tools (Conversion, Compression, Resizing, Watermarking, EXIF Cleaning). These services are provided on an "as-is" basis for personal and professional use.</p>
@@ -635,32 +640,112 @@
                      <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="center-right" aria-label="Center Right"><i class="fas fa-arrow-right text-xs"></i></button>
                      <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="bottom-left" aria-label="Bottom Left"><i class="fas fa-arrow-down text-xs"></i><i class="fas fa-arrow-left text-xs ml-0.5"></i></button>
                      <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="bottom-center" aria-label="Bottom Center"><i class="fas fa-arrow-down text-xs"></i></button>
-                     <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="bottom-right" aria-label="Bottom Right"><i class="fas fa-arrow-down text-xs"></i></button>
+                     <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="bottom-right" aria-label="Bottom Right"><i class="fas fa-arrow-down text-xs"></i><i class="fas fa-arrow-right text-xs ml-0.5"></i></button>
                  </div>
             </div>
         </div>
     </template>
     
+    <!-- ALL 20 BLOG POST TEMPLATES FOR SEO -->
     <template id="blogPostsTemplate">
         <div data-slug="png-vs-jpg-difference" class="space-y-4">
             <h2 class="text-2xl font-black mb-3">PNG vs JPG: What's the Difference and Which One Should You Use?</h2>
-            <p>When it comes to saving images, two of the most popular file formats you'll encounter are PNG and JPG. While they may seem similar, they are fundamentally different and are best suited for different tasks.</p>
-            <h3 class="text-lg font-bold">JPG (Joint Photographic Experts Group)</h3>
-            <p>JPGs are the most common file format for digital photos. They use lossy compression to make file sizes very small, which is great for loading websites quickly.</p>
-            <h3 class="text-lg font-bold">PNG (Portable Network Graphics)</h3>
-            <p>PNGs use lossless compression. Quality remains perfect, and it supports transparent backgrounds—ideal for logos and web design.</p>
+            <p>When saving images, PNG and JPG are the most popular formats. JPG uses lossy compression for photo storage, while PNG uses lossless compression for transparent graphics and logos.</p>
         </div>
 
         <div data-slug="how-to-reduce-photo-size" class="space-y-4">
-            <h2 class="text-2xl font-black mb-3">How to Reduce Photo Size Without Losing Quality (The Definitive Guide)</h2>
-            <p>Large image files cause websites to load slowly. This guide will walk you through the best techniques for compressing image sizes cleanly.</p>
-            <h3 class="text-lg font-bold">Using the Right Tools</h3>
-            <p>ImgCon's Image Compressor allows you to find the sweet spot between size and quality. For web images, a quality setting of 75-85% is ideal.</p>
+            <h2 class="text-2xl font-black mb-3">How to Reduce Photo Size Without Losing Quality</h2>
+            <p>Large photo files slow down websites. Use ImgCon compressor to shrink image sizes while retaining crisp visual quality and boosting site speed.</p>
         </div>
 
         <div data-slug="webp-the-future-of-web-images" class="space-y-4">
             <h2 class="text-2xl font-black mb-3">Why WebP is the Future of Web Images</h2>
-            <p>Developed by Google, WebP provides superior lossless and lossy compression. On average, WebP images are 26% smaller compared to PNGs, and 25-34% smaller than JPGs, making websites load instantly.</p>
+            <p>Developed by Google, WebP provides 30% superior compression over JPG and PNG, making web pages load faster while saving server bandwidth.</p>
+        </div>
+
+        <div data-slug="avif-vs-webp-speed-battle" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">AVIF vs WebP Speed Battle: Which Next-Gen Format Wins?</h2>
+            <p>AVIF offers higher compression ratios than WebP, making it ideal for modern high-speed websites with demanding visual content.</p>
+        </div>
+
+        <div data-slug="image-compression-seo-pagespeed" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">How Image Compression Boosts SEO & Google PageSpeed Scores</h2>
+            <p>Google prioritizes fast loading sites in rankings. Optimizing image file sizes directly lowers Largest Contentful Paint (LCP) and Core Web Vitals scores.</p>
+        </div>
+
+        <div data-slug="best-image-compression-plugins-wordpress" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">Best Image Compression Plugins for WordPress</h2>
+            <p>Discover top plugins to automatically optimize images uploaded to your WordPress media library for faster performance.</p>
+        </div>
+
+        <div data-slug="what-is-svg-vector-graphics" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">What is SVG Vector Graphics? Complete Guide</h2>
+            <p>SVG images scale infinitely without pixelation, making them perfect for logos and UI icons on high-resolution displays.</p>
+        </div>
+
+        <div data-slug="understanding-exif-data" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">Understanding EXIF Data & Photo Location Privacy</h2>
+            <p>EXIF metadata contains hidden camera details, dates, and GPS location coordinates. Always strip EXIF metadata before sharing photos publicly.</p>
+        </div>
+
+        <div data-slug="how-to-fix-lazy-loading-images" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">How to Fix Lazy Loading Image Issues on Websites</h2>
+            <p>Implement native browser lazy loading attributes correctly to prevent page layout shifts and initial render delays.</p>
+        </div>
+
+        <div data-slug="impact-of-image-format-on-mobile-ux" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">Impact of Image Formats on Mobile UX and Load Times</h2>
+            <p>Mobile users on cellular networks require lightweight images. Serving WEBP or AVIF reduces bounce rates drastically on smartphones.</p>
+        </div>
+
+        <div data-slug="how-to-convert-heic-to-jpg" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">How to Convert iPhone HEIC Photos to JPG Easily</h2>
+            <p>iPhone photos saved in HEIC format can easily be converted to standard JPG for seamless compatibility on Windows, Android, and Web.</p>
+        </div>
+
+        <div data-slug="retina-display-images-guide" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">Retina Display Images Optimization Guide</h2>
+            <p>Serve 2x pixel density images using responsive srcset attributes to ensure crisp rendering on Apple Retina and High-DPI screens.</p>
+        </div>
+
+        <div data-slug="the-importance-of-image-alt-text" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">The Importance of Image Alt Text for SEO & Accessibility</h2>
+            <p>Alt text describes images to screen readers and helps search engine crawlers understand image content for Google Images ranking.</p>
+        </div>
+
+        <div data-slug="how-to-watermark-photos-safely" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">How to Watermark Photos Safely Without Losing Quality</h2>
+            <p>Protect your photography work from unauthorized theft by adding semi-transparent text or logo watermarks before publishing online.</p>
+        </div>
+
+        <div data-slug="lossy-vs-lossless-compression-explained" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">Lossy vs Lossless Image Compression Explained</h2>
+            <p>Lossless compression keeps every original pixel intact, while lossy compression removes imperceptible visual data for massive file size savings.</p>
+        </div>
+
+        <div data-slug="ico-favicon-generator-guide" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">Complete Guide to Creating ICO Favicons for Websites</h2>
+            <p>Favicons give your website instant brand identity in browser tabs, bookmarks, and Google Search result snippets.</p>
+        </div>
+
+        <div data-slug="image-seo-best-practices" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">Top 10 Image SEO Best Practices to Rank on Google Images</h2>
+            <p>Optimize image file names, alt attributes, sitemaps, and responsive dimensions to drive target organic traffic from Google Search.</p>
+        </div>
+
+        <div data-slug="optimizing-e-commerce-product-photos" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">How to Optimize E-Commerce Product Photos for Sales</h2>
+            <p>Fast-loading product photos reduce shopping cart abandonment rates and boost customer conversion rates for online stores.</p>
+        </div>
+
+        <div data-slug="how-to-batch-resize-images-fast" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">How to Batch Resize Dozens of Images Fast</h2>
+            <p>Resize multiple photos simultaneously in your browser without downloading or paying for heavy editing desktop software.</p>
+        </div>
+
+        <div data-slug="future-of-ai-image-optimization" class="space-y-4">
+            <h2 class="text-2xl font-black mb-3">The Future of AI Image Optimization & Upscaling</h2>
+            <p>Artificial intelligence algorithms can now upscale low-resolution images and compress photos intelligently with zero quality drop.</p>
         </div>
     </template>
 
