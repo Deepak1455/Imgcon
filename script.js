@@ -40,25 +40,43 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// --- Router (Auto-Reset & Hash Routing for 100% 404 Prevention on Refresh) ---
+// --- Router Maps with Custom Meta Descriptions & Titles for 20 Articles ---
 const routes = {
-    '/': { screen: 'homeScreen', title: 'ImgCon - Free Online Image Converter & Compressor' },
-    '/image-converter': { screen: 'toolScreen', tool: 'converter', title: 'Image Converter - Convert JPG, PNG, WebP' },
-    '/image-compressor': { screen: 'toolScreen', tool: 'compressor', title: 'Image Compressor - Reduce Image Size' },
-    '/image-resizer': { screen: 'toolScreen', tool: 'resizer', title: 'Image Resizer - Resize Images Online' },
-    '/image-watermark': { screen: 'toolScreen', tool: 'watermark', title: 'Watermark Tool - Protect Your Images' },
-    '/exif-cleaner': { screen: 'exifScreen', title: 'EXIF Data Cleaner & Inspector - ImgCon' },
-    '/about-us': { screen: 'aboutScreen', title: 'About Us - ImgCon Team Story' },
-    '/blog': { screen: 'blogScreen', title: 'ImgCon Blog - Image Optimization Tips' },
-    '/privacy-policy': { screen: 'privacyScreen', title: 'Privacy Policy - ImgCon' },
-    '/terms-conditions': { screen: 'termsScreen', title: 'Terms and Conditions - ImgCon' },
-    '/blog/png-vs-jpg-difference': { screen: 'blogScreen', title: 'PNG vs JPG Differences | ImgCon Blog', isPost: true },
-    '/blog/how-to-reduce-photo-size': { screen: 'blogScreen', title: 'How to Reduce Photo Size | ImgCon Blog', isPost: true },
-    '/blog/webp-the-future-of-web-images': { screen: 'blogScreen', title: 'Why WebP is the Future | ImgCon Blog', isPost: true },
-    '/blog/avif-vs-webp-speed-battle': { screen: 'blogScreen', title: 'AVIF vs WebP Speed Battle | ImgCon Blog', isPost: true },
-    '/blog/image-compression-seo-pagespeed': { screen: 'blogScreen', title: 'Image Compression for SEO & PageSpeed | ImgCon Blog', isPost: true }
+    '/': { screen: 'homeScreen', title: 'ImgCon - Free Online Image Converter, Compressor & Resizer', desc: 'ImgCon is a free online tool to convert, compress, resize, watermark, and clean EXIF metadata from images.' },
+    '/blog': { screen: 'blogScreen', title: 'ImgCon Blog - Image Optimization, Web Performance & Photography Guides', desc: 'Welcome to ImgCon Blog! Read tutorials, guides, and tips about image compression, WebP, AVIF, and web speed.' },
+    '/image-converter': { screen: 'toolScreen', tool: 'converter', title: 'Image Converter - Convert JPG, PNG, WebP, AVIF, PDF Online | ImgCon', desc: 'Convert image formats instantly in your browser. Supports batch PNG, JPG, WebP, AVIF, PDF.' },
+    '/image-compressor': { screen: 'toolScreen', tool: 'compressor', title: 'Image Compressor - Reduce Image File Size Online | ImgCon', desc: 'Compress JPG and WebP images without losing quality using target size settings.' },
+    '/image-resizer': { screen: 'toolScreen', tool: 'resizer', title: 'Image Resizer - Resize Photo Pixels & Percentage | ImgCon', desc: 'Resize photos by pixels or ratio for Instagram, Facebook, Twitter, and web.' },
+    '/image-watermark': { screen: 'toolScreen', tool: 'watermark', title: 'Watermark Tool - Protect Images with Custom Text & Logo | ImgCon', desc: 'Add text or logo watermarks to your photos safely without uploading.' },
+    '/exif-cleaner': { screen: 'exifScreen', title: 'EXIF Data Cleaner & GPS Location Remover | ImgCon', desc: 'Inspect camera model, timestamp, and remove GPS location tracking data from JPEG photos.' },
+    '/about-us': { screen: 'aboutScreen', title: 'About Us - ImgCon Team Story', desc: 'Learn about ImgCon and our mission to provide 100% private client-side image processing.' },
+    '/privacy-policy': { screen: 'privacyScreen', title: 'Privacy Policy - ImgCon', desc: 'Our zero-upload privacy policy guarantees your files never leave your device.' },
+    '/terms-conditions': { screen: 'termsScreen', title: 'Terms and Conditions - ImgCon', desc: 'Terms and conditions for using ImgCon online tools.' },
+
+    // ALL 20 BLOG POSTS MAPPING
+    '/blog/png-vs-jpg-difference': { screen: 'blogScreen', title: 'PNG vs JPG: What is the Difference and Which One to Use? | ImgCon Blog', isPost: true, desc: 'Learn differences between PNG and JPG image formats.' },
+    '/blog/how-to-reduce-photo-size': { screen: 'blogScreen', title: 'How to Reduce Photo Size Without Losing Quality | ImgCon Blog', isPost: true, desc: 'Step by step guide to shrinking image sizes for faster website speeds.' },
+    '/blog/webp-the-future-of-web-images': { screen: 'blogScreen', title: 'Why WebP is the Future of Web Images | ImgCon Blog', isPost: true, desc: 'Discover why Google created WebP and how it speeds up websites.' },
+    '/blog/avif-vs-webp-speed-battle': { screen: 'blogScreen', title: 'AVIF vs WebP Speed Battle: Which Format is Better? | ImgCon Blog', isPost: true, desc: 'Detailed comparison between AVIF and WebP next-gen image formats.' },
+    '/blog/image-compression-seo-pagespeed': { screen: 'blogScreen', title: 'How Image Compression Boosts SEO & PageSpeed Scores | ImgCon Blog', isPost: true, desc: 'Optimize image file sizes to improve Google Core Web Vitals.' },
+    '/blog/best-image-compression-plugins-wordpress': { screen: 'blogScreen', title: 'Best Image Compression Plugins for WordPress | ImgCon Blog', isPost: true, desc: 'Top plugins to optimize WordPress image media libraries.' },
+    '/blog/what-is-svg-vector-graphics': { screen: 'blogScreen', title: 'What is SVG Vector Graphics? Complete Guide | ImgCon Blog', isPost: true, desc: 'Learn vector SVG graphics advantages for logos and web design.' },
+    '/blog/understanding-exif-data': { screen: 'blogScreen', title: 'Understanding EXIF Data & Photo Location Privacy | ImgCon Blog', isPost: true, desc: 'How EXIF data stores camera settings and GPS locations in photos.' },
+    '/blog/how-to-fix-lazy-loading-images': { screen: 'blogScreen', title: 'How to Fix Lazy Loading Image Issues on Websites | ImgCon Blog', isPost: true, desc: 'Fix image lazy loading bugs for smooth web user experience.' },
+    '/blog/impact-of-image-format-on-mobile-ux': { screen: 'blogScreen', title: 'Impact of Image Formats on Mobile UX and Load Times | ImgCon Blog', isPost: true, desc: 'How optimized image formats improve mobile browsing experiences.' },
+    '/blog/how-to-convert-heic-to-jpg': { screen: 'blogScreen', title: 'How to Convert iPhone HEIC Photos to JPG Easily | ImgCon Blog', isPost: true, desc: 'Convert Apple HEIC images to standard JPG format.' },
+    '/blog/retina-display-images-guide': { screen: 'blogScreen', title: 'Retina Display Images Optimization Guide | ImgCon Blog', isPost: true, desc: 'How to serve crisp high-DPI images for modern screens.' },
+    '/blog/the-importance-of-image-alt-text': { screen: 'blogScreen', title: 'The Importance of Image Alt Text for SEO & Accessibility | ImgCon Blog', isPost: true, desc: 'Write descriptive Alt Text for image SEO rankings.' },
+    '/blog/how-to-watermark-photos-safely': { screen: 'blogScreen', title: 'How to Watermark Photos Safely Without Losing Quality | ImgCon Blog', isPost: true, desc: 'Protect photography copyright with custom logo watermarks.' },
+    '/blog/lossy-vs-lossless-compression-explained': { screen: 'blogScreen', title: 'Lossy vs Lossless Image Compression Explained | ImgCon Blog', isPost: true, desc: 'Understand the core technical difference between lossy and lossless algorithms.' },
+    '/blog/ico-favicon-generator-guide': { screen: 'blogScreen', title: 'Complete Guide to Creating ICO Favicons for Websites | ImgCon Blog', isPost: true, desc: 'Generate multi-resolution ICO favicons for browsers.' },
+    '/blog/image-seo-best-practices': { screen: 'blogScreen', title: 'Top 10 Image SEO Best Practices to Rank on Google Images | ImgCon Blog', isPost: true, desc: 'Rank higher on Google Image search with image SEO tactics.' },
+    '/blog/optimizing-e-commerce-product-photos': { screen: 'blogScreen', title: 'How to Optimize E-Commerce Product Photos for Sales | ImgCon Blog', isPost: true, desc: 'Fast product photo loading strategies for online stores.' },
+    '/blog/how-to-batch-resize-images-fast': { screen: 'blogScreen', title: 'How to Batch Resize Dozens of Images Fast | ImgCon Blog', isPost: true, desc: 'Resize multiple images at once without software.' },
+    '/blog/future-of-ai-image-optimization': { screen: 'blogScreen', title: 'The Future of AI Image Optimization & Upscaling | ImgCon Blog', isPost: true, desc: 'How AI neural networks are transforming web image compression.' }
 };
 
+// Router Engine with Dynamic Meta Tag Updating
 const router = async () => {
     if (!window.location.hash || window.location.hash === '#') {
         window.history.replaceState(null, '', '#/');
@@ -67,6 +85,12 @@ const router = async () => {
     const path = window.location.hash.slice(1) || '/';
     const route = routes[path] || routes['/'];
     document.title = route.title;
+
+    // Dynamically update Meta Description tag for Google Search bots
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc && route.desc) {
+        metaDesc.setAttribute("content", route.desc);
+    }
 
     if (route.screen === 'blogScreen') {
         if (activeTool) resetTool();
@@ -134,7 +158,7 @@ function initializeWorkerPool() {
     for (let i = 0; i < numWorkers; i++) workerPool.push({ worker: new Worker(workerUrl), busy: false });
 }
 
-// --- UI Navigation with clientHeight Reflow fix ---
+// --- UI Navigation ---
 function showPage(pageId) {
     allScreens.forEach(s => s.classList.add('hidden'));
     const activeScreen = document.getElementById(pageId);
@@ -1047,7 +1071,7 @@ function showToast(message) {
     toast.classList.add('show'); 
     setTimeout(() => toast.classList.remove('show'), 3000); 
 }
-window.showToast = showToast; // Expose globally for ExifData.js module use
+window.showToast = showToast; // Global exposure for ExifData.js module
 
 function formatBytes(bytes) { 
     if (!+bytes) return '0 Bytes'; 
