@@ -13,7 +13,7 @@ const mainContainer = document.querySelector('main.app-container');
 const mainFooter = document.getElementById('main-footer');
 const cardFooter = document.getElementById('card-footer');
 
-// --- Dynamic External Library Loader (Removes TBT & FCP penalty) ---
+// --- Dynamic External Library Loader ---
 const loadedLibraries = {};
 function loadExternalLibrary(src) {
     if (loadedLibraries[src]) return loadedLibraries[src];
@@ -47,6 +47,7 @@ const routes = {
     '/image-compressor': { screen: 'toolScreen', tool: 'compressor', title: 'Image Compressor - Reduce Image Size' },
     '/image-resizer': { screen: 'toolScreen', tool: 'resizer', title: 'Image Resizer - Resize Images Online' },
     '/image-watermark': { screen: 'toolScreen', tool: 'watermark', title: 'Watermark Tool - Protect Your Images' },
+    '/exif-cleaner': { screen: 'exifScreen', title: 'EXIF Data Cleaner & Inspector - ImgCon' },
     '/about-us': { screen: 'aboutScreen', title: 'About Us - ImgCon Team Story' },
     '/blog': { screen: 'blogScreen', title: 'ImgCon Blog - Image Optimization Tips' },
     '/privacy-policy': { screen: 'privacyScreen', title: 'Privacy Policy - ImgCon' },
@@ -59,12 +60,10 @@ const routes = {
 };
 
 const router = async () => {
-    // यदि यूआरएल में हैश नहीं है, तो डिफ़ॉल्ट रूप से '#/' सेट करें
     if (!window.location.hash || window.location.hash === '#') {
         window.history.replaceState(null, '', '#/');
     }
     
-    // हैश के बाद का पैथ पढ़ें (जैसे '#/image-compressor' से '/image-compressor')
     const path = window.location.hash.slice(1) || '/';
     const route = routes[path] || routes['/'];
     document.title = route.title;
@@ -92,6 +91,12 @@ const router = async () => {
             blogListing.classList.remove('hidden');
             blogPost.classList.add('hidden');
         }
+    } else if (route.screen === 'exifScreen') {
+        if (activeTool) resetTool();
+        showPage('exifScreen');
+        if (window.ExifModule && typeof window.ExifModule.renderUI === 'function') {
+            window.ExifModule.renderUI('exifToolApp');
+        }
     } else if (route.tool) {
         if (activeTool !== route.tool) {
             if (activeTool) resetTool();
@@ -111,7 +116,6 @@ const navigateTo = (e) => {
         }
         e.preventDefault();
         
-        // गिटहब पेजेस के लिए सामान्य पाथ को सुरक्षित हैश पाथ में बदलें
         const targetHash = '#' + link.pathname;
         if (window.location.hash !== targetHash) {
             history.pushState(null, '', targetHash);
@@ -403,7 +407,7 @@ function runSingleCompressionPromise(workerItem, file, quality, targetWidth, tar
     });
 }
 
-// --- Dynamic PDF Compilation Handler (On-demand library load) ---
+// --- Dynamic PDF Compilation Handler ---
 async function compilePDF(results) {
     await loadExternalLibrary('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
     const { jsPDF } = window.jspdf;
@@ -679,7 +683,6 @@ async function handleCompletion(results) {
     downloadBtn.className = 'download-btn upload-button w-full justify-center py-3.5 text-sm mt-4 shadow-md';
     downloadBtn.innerHTML = `<i class="fas fa-file-archive mr-3"></i><span>Download All (ZIP)</span>`;
     
-    // Dynamic JSZip and FileSaver loading inside trigger to optimize performance
     downloadBtn.onclick = async () => {
         if (processedResults.length > 1) {
             downloadBtn.innerHTML = `<i class="fas fa-spinner fa-spin mr-3"></i><span>Creating ZIP...</span>`;
@@ -1039,8 +1042,20 @@ themeToggleBtn.addEventListener('click', () => {
 });
 
 // --- Helper Utilities ---
-function showToast(message) { toastMessage.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
-function formatBytes(bytes) { if (!+bytes) return '0 Bytes'; const k = 1024; const sizes = ['Bytes', 'KB', 'MB']; const i = Math.floor(Math.log(bytes) / Math.log(k)); return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`; }
+function showToast(message) { 
+    toastMessage.textContent = message; 
+    toast.classList.add('show'); 
+    setTimeout(() => toast.classList.remove('show'), 3000); 
+}
+window.showToast = showToast; // Expose globally for ExifData.js module use
+
+function formatBytes(bytes) { 
+    if (!+bytes) return '0 Bytes'; 
+    const k = 1024; 
+    const sizes = ['Bytes', 'KB', 'MB']; 
+    const i = Math.floor(Math.log(bytes) / Math.log(k)); 
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`; 
+}
 
 document.getElementById('copyLinkBtn')?.addEventListener('click', () => {
     navigator.clipboard.writeText(window.location.href);
@@ -1056,6 +1071,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     document.body.addEventListener('click', navigateTo);
     window.addEventListener('popstate', router);
-    window.addEventListener('hashchange', router); // Listen to hash changes for perfect refresh support
+    window.addEventListener('hashchange', router);
     router();
 });
