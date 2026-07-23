@@ -18,11 +18,11 @@
   <meta name="google-site-verification" content="ABC123XYZ" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ImgCon - Private & Fast Image Converter, Compressor & Resizer</title>
+  <title>ImgCon - Private & Fast Image Converter, Compressor, Resizer & EXIF Cleaner</title>
 
   <!-- Advanced Meta Tags for Rankings -->
-  <meta name="description" content="ImgCon: The ultimate free online tool to convert, compress, resize, and watermark images without uploading. 100% private, incredibly fast, supports batch processing, and works offline.">
-  <meta name="keywords" content="image converter, image compressor, image resizer, watermark tool, photo resizer, image optimizer online, jpg to png, png to pdf, webp converter, avif converter, reduce image size, bulk image resizer, private image converter, imgcon, free image tools, pwa image tool, offline image converter, target size compression, before after slider, photo resize online, image convert to jpg, file size reducer">
+  <meta name="description" content="ImgCon: The ultimate free online tool to convert, compress, resize, watermark, and clean EXIF metadata from images without uploading. 100% private, incredibly fast, supports batch processing, and works offline.">
+  <meta name="keywords" content="image converter, image compressor, image resizer, watermark tool, exif cleaner, exif viewer, photo resizer, image optimizer online, jpg to png, png to pdf, webp converter, avif converter, reduce image size, bulk image resizer, private image converter, imgcon, free image tools, pwa image tool, offline image converter">
   <meta name="author" content="ImgCon">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://imgcon.life">
@@ -35,21 +35,21 @@
 
   <!-- Open Graph / Facebook SEO -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="ImgCon - Private, Offline-Ready Image Converter, Compressor, Resizer & Watermark Tool">
-  <meta property="og:description" content="Instantly convert, compress, resize, and watermark your images right in your browser. No uploads required. 100% private, free, and works offline.">
+  <meta property="og:title" content="ImgCon - Private, Offline-Ready Image Converter, Compressor, Resizer, Watermark & EXIF Cleaner">
+  <meta property="og:description" content="Instantly convert, compress, resize, watermark, and remove hidden EXIF tracking data from your images directly in your browser. 100% private and free.">
   <meta property="og:image" content="https://imgcon.life/og-image.png">
   <meta property="og:url" content="https://imgcon.life">
 
   <!-- Twitter Card SEO -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ImgCon - Private, Offline-Ready Image Converter, Compressor, Resizer & Watermark Tool">
-  <meta name="twitter:description" content="Instantly convert, compress, resize, and watermark your images right in your browser. No uploads required. 100% private, free, and works offline.">
+  <meta name="twitter:title" content="ImgCon - Private, Offline-Ready Image Converter, Compressor, Resizer & EXIF Cleaner">
+  <meta name="twitter:description" content="Instantly convert, compress, resize, watermark, and remove hidden EXIF tracking data from your images directly in your browser. 100% private and free.">
   <meta name="twitter:image" content="https://imgcon.life/og-image.png">
 
   <!-- CRITICAL ASSETS PRELOADING -->
   <link rel="preload" href="logo.png" as="image">
 
-  <!-- GOOGLE SEARCH FAVICON FIX (logo.png added here) -->
+  <!-- GOOGLE SEARCH FAVICON FIX -->
   <link rel="shortcut icon" href="logo.png" type="image/png">
   <link rel="icon" href="logo.png" type="image/png" sizes="192x192">
 
@@ -59,7 +59,7 @@
     "@context": "https://schema.org", 
     "@type": "SoftwareApplication", 
     "name": "ImgCon", 
-    "description": "A free online tool to convert, compress, resize, and watermark images directly in the browser. It supports batch processing, works offline, and handles formats like JPG, PNG, WebP, AVIF, and PDF.", 
+    "description": "A free online tool to convert, compress, resize, watermark, and clean EXIF metadata from images directly in the browser. Supports batch processing, works offline, and handles JPG, PNG, WebP, AVIF, and PDF.", 
     "url": "https://imgcon.life", 
     "applicationCategory": "MultimediaApplication", 
     "operatingSystem": "All", 
@@ -85,7 +85,7 @@
   }
   </script>
 
-  <!-- CRITICAL PATH INLINE CSS (Instant Layout Render) -->
+  <!-- CRITICAL PATH INLINE CSS -->
   <style>
     :root {
       --primary-color: #6366f1;
@@ -167,9 +167,9 @@
                      <span style="color: var(--text-dark);">100% Local & Secure Processing</span>
                 </div>
                 <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight mb-4" style="color: var(--text-dark);">Your All-in-One Image Toolkit</h2>
-                <p class="text-base sm:text-lg mb-10 max-w-2xl mx-auto leading-relaxed" style="color: var(--text-light);">Convert, compress, resize, and watermark images instantly. All processing is done in your browser for 100% privacy and blazing speed.</p>
+                <p class="text-base sm:text-lg mb-10 max-w-2xl mx-auto leading-relaxed" style="color: var(--text-light);">Convert, compress, resize, watermark, and clean EXIF data instantly. All processing is done in your browser for 100% privacy and blazing speed.</p>
                 
-                <div class="grid sm:grid-cols-2 gap-6">
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <a href="/image-converter" class="tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group">
                         <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-500 mb-4 group-hover:scale-110 transition-transform duration-300">
                             <i class="fas fa-sync-alt text-2xl icon-sync"></i>
@@ -198,6 +198,17 @@
                         <h3 class="text-2xl font-bold mb-2" style="color: var(--text-dark);">Watermark Tool</h3>
                         <p class="text-sm leading-relaxed" style="color: var(--text-light);">Add a custom text or logo watermark to your images. Control position, size, and transparency.</p>
                     </a>
+
+                    <!-- NEW FEATURE CARD: EXIF DATA CLEANER -->
+                    <a href="/exif-cleaner" class="tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group border-indigo-300 dark:border-indigo-800">
+                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-red-50 dark:bg-red-900/30 text-red-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-user-shield text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2 flex items-center justify-between" style="color: var(--text-dark);">
+                            EXIF Cleaner <span class="text-xxs px-2 py-0.5 rounded-full bg-red-500 text-white font-extrabold uppercase tracking-wider">New</span>
+                        </h3>
+                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">Inspect camera model, timestamp & GPS location data. Remove hidden tracking metadata with 1-click.</p>
+                    </a>
                 </div>
             </div>
 
@@ -207,9 +218,9 @@
                 <div class="grid md:grid-cols-2 gap-8 text-sm leading-relaxed" style="color: var(--text-light);">
                     <div>
                         <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Privacy First: 100% Client-Side Processing</h3>
-                        <p class="mb-4">Unlike other online image converters, <strong>ImgCon processes everything directly in your browser</strong>. This means your personal photos never leave your device. It is the most secure way to convert and compress images online, guaranteeing zero data breaches.</p>
+                        <p class="mb-4">Unlike other online image converters, <strong>ImgCon processes everything directly in your browser</strong>. This means your personal photos never leave your device. It is the most secure way to convert, compress, and strip EXIF data online.</p>
                         <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Blazing Fast Performance</h3>
-                        <p>By utilizing advanced WebAssembly technology, ImgCon delivers desktop-class performance in a web app. Batch process hundreds of images in seconds without waiting for slow uploads.</p>
+                        <p>By utilizing advanced WebAssembly and Web Worker technology, ImgCon delivers desktop-class performance in a web app. Batch process hundreds of images in seconds.</p>
                     </div>
                     <div>
                         <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Works Offline (PWA)</h3>
@@ -236,14 +247,14 @@
                             <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Mike R." loading="lazy">
                             <div><p class="font-bold text-sm" style="color: var(--text-dark);">Mike R.</p><p class="text-xs" style="color: var(--text-light);">Photographer</p></div>
                         </div>
-                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">"I needed a quick way to convert raw photos to JPG for previews without uploading. ImgCon is incredibly fast and respects my privacy."</p>
+                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">"The EXIF cleaner feature gives me total peace of mind before sharing photos online. Highly recommended for privacy!"</p>
                     </div>
                     <div class="testimonial-card p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-md" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
                          <div class="flex items-center mb-4">
                             <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Jessica T." loading="lazy">
                             <div><p class="font-bold text-sm" style="color: var(--text-dark);">Jessica T.</p><p class="text-xs" style="color: var(--text-light);">Digital Marketer</p></div>
                         </div>
-                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">"The batch processing feature is a game-changer. I can resize and compress dozens of images in seconds. Highly recommended!"</p>
+                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">"The batch processing feature is a game-changer. I can resize and compress dozens of images in seconds!"</p>
                     </div>
                 </div>
             </div>
@@ -278,7 +289,12 @@
         <!-- Tool Screen -->
         <section id="toolScreen" class="screen hidden"></section>
 
-        <!-- Blog Screen (Pre-rendered for Perfect SEO and Load Stability) -->
+        <!-- NEW SCREEN: EXIF CLEANER SCREEN CONTAINER -->
+        <section id="exifScreen" class="screen hidden">
+            <div id="exifToolApp"></div>
+        </section>
+
+        <!-- Blog Screen -->
         <section id="blogScreen" class="screen hidden">
             <div id="blog-listing" class="max-w-4xl mx-auto space-y-6"></div>
             <div id="blog-post" class="hidden max-w-4xl mx-auto text-left">
@@ -316,7 +332,7 @@
                 <li><strong>We DO NOT store your images.</strong></li>
                 <li><strong>We DO NOT have any access to your files or data.</strong></li>
             </ul>
-            <p>Our tool's code (JavaScript) then processes it locally. Once you download the converted file, it is saved directly from your browser to your device. The original file remains untouched.</p>
+            <p>Our tool's code (JavaScript) processes it locally. Once you download the converted file, it is saved directly from your browser to your device. The original file remains untouched.</p>
             <h3>Contact Us</h3>
             <p>If you have any questions about this Privacy Policy, please feel free to <a href="mailto:privacy@imgcon.life" class="underline" style="color: var(--primary-color);">contact us at privacy@imgcon.life</a>.</p>
         </section>
@@ -327,7 +343,7 @@
             <p><strong>Last Updated:</strong> July 19, 2026</p>
             <p>Welcome to ImgCon. By accessing and using our website, you agree to comply with and be bound by the following terms and conditions of use.</p>
             <h3>1. Use of the Site</h3>
-            <p>ImgCon provides free client-side image processing tools (Conversion, Compression, Resizing, and Watermarking). These services are provided on an "as-is" basis for personal and professional use.</p>
+            <p>ImgCon provides free client-side image processing tools (Conversion, Compression, Resizing, Watermarking, EXIF Cleaning). These services are provided on an "as-is" basis for personal and professional use.</p>
             <h3>2. User Privacy and Files</h3>
             <p>Because ImgCon operates entirely within your browser (client-side), we do not upload, store, or monitor any of the files you process. You retain full ownership and responsibility for any content you upload and process.</p>
             <h3>3. Limitation of Liability</h3>
@@ -356,6 +372,7 @@
                      <li><a href="/image-compressor" class="hover:underline transition-all">Image Compressor</a></li>
                      <li><a href="/image-resizer" class="hover:underline transition-all">Image Resizer</a></li>
                      <li><a href="/image-watermark" class="hover:underline transition-all">Watermark Tool</a></li>
+                     <li><a href="/exif-cleaner" class="hover:underline transition-all font-semibold text-indigo-500">EXIF Data Cleaner</a></li>
                  </ul>
             </div>
              <div>
@@ -494,7 +511,6 @@
 
     <template id="compressorOptionsTemplate">
         <h3 class="text-lg font-black uppercase tracking-wider mb-2" style="color: var(--text-dark);">Compressor Options</h3>
-        
         <div class="flex items-center justify-between p-4 rounded-xl border mb-3" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
             <label for="metadata-toggle" class="font-bold text-sm" style="color: var(--text-dark);">Strip Exif Metadata (Saves extra space)</label>
             <div class="relative inline-block w-10 mr-2 align-middle select-none">
@@ -619,7 +635,7 @@
                      <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="center-right" aria-label="Center Right"><i class="fas fa-arrow-right text-xs"></i></button>
                      <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="bottom-left" aria-label="Bottom Left"><i class="fas fa-arrow-down text-xs"></i><i class="fas fa-arrow-left text-xs ml-0.5"></i></button>
                      <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="bottom-center" aria-label="Bottom Center"><i class="fas fa-arrow-down text-xs"></i></button>
-                     <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="bottom-right" aria-label="Bottom Right"><i class="fas fa-arrow-down text-xs"></i><i class="fas fa-arrow-right text-xs ml-0.5"></i></button>
+                     <button class="position-btn p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-position="bottom-right" aria-label="Bottom Right"><i class="fas fa-arrow-down text-xs"></i></button>
                  </div>
             </div>
         </div>
@@ -648,8 +664,9 @@
         </div>
     </template>
 
+    <!-- SCRIPT FILES -->
     <script src="script.js" defer></script>
-  
+    <script src="ExifData.js" defer></script>
     <script src="imgconblog.js" defer></script>
 </body>
 </html>
