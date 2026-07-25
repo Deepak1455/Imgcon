@@ -159,137 +159,291 @@
     </header>
 
     <main class="app-container p-5 sm:p-8 animate__animated animate__fadeInUp relative max-w-7xl mx-auto transition-all duration-500">
-        <!-- Home Screen -->
-        <section id="homeScreen" class="screen text-center">
-            <div class="max-w-4xl mx-auto mb-12">
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold mb-4 border" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
-                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                     <span style="color: var(--text-dark);">100% Local & Secure Processing</span>
-                </div>
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight mb-4" style="color: var(--text-dark);">Your All-in-One Image Toolkit</h2>
-                <p class="text-base sm:text-lg mb-10 max-w-2xl mx-auto leading-relaxed" style="color: var(--text-light);">Convert, compress, resize, watermark, and clean EXIF data instantly. All processing is done in your browser for 100% privacy and blazing speed.</p>
-                
-                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <a href="/image-converter" class="tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group">
-                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-500 mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fas fa-sync-alt text-2xl icon-sync"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2" style="color: var(--text-dark);">Image Converter</h3>
-                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">Change image formats with ease. Convert to PNG, JPG, WEBP, AVIF, PDF, and more. Batch conversion supported.</p>
-                    </a>
-                    <a href="/image-compressor" class="tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group">
-                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-green-50 dark:bg-green-900/30 text-green-500 mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fas fa-compress-arrows-alt text-2xl icon-compress"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2" style="color: var(--text-dark);">Image Compressor</h3>
-                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">Drastically reduce JPG & WEBP file sizes with a live before/after preview and a target size feature.</p>
-                    </a>
-                    <a href="/image-resizer" class="tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group">
-                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-500 mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fas fa-expand-arrows-alt text-2xl icon-expand"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2" style="color: var(--text-dark);">Image Resizer</h3>
-                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">Resize images by pixels or percentage. Maintain aspect ratio and use presets for social media.</p>
-                    </a>
-                    <a href="/image-watermark" class="tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group">
-                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-yellow-50 dark:bg-yellow-900/30 text-yellow-500 mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fas fa-copyright text-2xl icon-copyright"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2" style="color: var(--text-dark);">Watermark Tool</h3>
-                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">Add a custom text or logo watermark to your images. Control position, size, and transparency.</p>
-                    </a>
+<!-- Home Screen -->
+<section id="homeScreen" class="screen text-center">
+    <div class="max-w-4xl mx-auto mb-12">
+        <!-- Hero Badge -->
+        <div class="reveal-on-scroll inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold mb-5 border shadow-sm" style="background-color: var(--bg-subtle); border-color: var(--card-border); --reveal-delay: 0ms;">
+             <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+             <span style="color: var(--text-dark);">100% Local & Secure Processing Engine</span>
+        </div>
 
-                    <!-- EXIF DATA CLEANER -->
-                    <a href="/exif-cleaner" class="tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group border-indigo-300 dark:border-indigo-800">
-                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-red-50 dark:bg-red-900/30 text-red-500 mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fas fa-user-shield text-2xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2 flex items-center justify-between" style="color: var(--text-dark);">
-                            EXIF Cleaner <span class="text-xxs px-2 py-0.5 rounded-full bg-red-500 text-white font-extrabold uppercase tracking-wider">New</span>
-                        </h3>
-                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">Inspect camera model, timestamp & GPS location data. Remove hidden tracking metadata with 1-click.</p>
-                    </a>
-                </div>
+<!-- Hero Title with Animated Mesh Gradient -->
+<h2 class="reveal-on-scroll hero-gradient-text text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight mb-4" style="--reveal-delay: 80ms;">
+    Your All-in-One Image Toolkit
+</h2>
+
+        <!-- Dynamic Rotating Subtitle (Vertical Slide + Color Badges) -->
+        <div class="reveal-on-scroll text-base sm:text-xl font-medium mb-10 max-w-3xl mx-auto flex flex-wrap items-center justify-center gap-1.5 leading-relaxed" style="color: var(--text-light); --reveal-delay: 150ms;">
+            <span>Easily</span>
+            
+            <div id="rotatingSubtitleContainer" class="subtitle-rotator-wrapper">
+                <!-- Phrase 1: PNG to WebP -->
+                <span class="rotating-phrase active">
+                    Convert 
+                    <span class="accent-pill bg-indigo-100 text-indigo-600 dark:bg-indigo-950/80 dark:text-indigo-400">PNG</span> 
+                    to 
+                    <span class="accent-pill bg-teal-100 text-teal-600 dark:bg-teal-950/80 dark:text-teal-400">WebP / AVIF</span>
+                </span>
+
+                <!-- Phrase 2: Compress 90% -->
+                <span class="rotating-phrase">
+                    Compress photos up to 
+                    <span class="accent-pill bg-green-100 text-green-600 dark:bg-green-950/80 dark:text-green-400">90% Size</span>
+                </span>
+
+                <!-- Phrase 3: Clean EXIF -->
+                <span class="rotating-phrase">
+                    Remove hidden 
+                    <span class="accent-pill bg-red-100 text-red-600 dark:bg-red-950/80 dark:text-red-400">EXIF GPS Location</span>
+                </span>
+
+                <!-- Phrase 4: Resizer -->
+                <span class="rotating-phrase">
+                    Resize photos for 
+                    <span class="accent-pill bg-blue-100 text-blue-600 dark:bg-blue-950/80 dark:text-blue-400">Social Media</span>
+                </span>
+
+                <!-- Phrase 5: Watermark -->
+                <span class="rotating-phrase">
+                    Add custom 
+                    <span class="accent-pill bg-amber-100 text-amber-600 dark:bg-amber-950/80 dark:text-amber-400">Text & Logo Watermarks</span>
+                </span>
             </div>
 
-            <!-- SEO Content Section -->
-            <div class="seo-section max-w-5xl mx-auto text-left border-t pt-12" style="border-color: var(--card-border);">
-                <h2 class="text-2xl font-bold mb-6 text-center" style="color: var(--text-dark);">Why ImgCon is the Best Free Online Image Tool</h2>
-                <div class="grid md:grid-cols-2 gap-8 text-sm leading-relaxed" style="color: var(--text-light);">
-                    <div>
-                        <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Privacy First: 100% Client-Side Processing</h3>
-                        <p class="mb-4">Unlike other online image converters, <strong>ImgCon processes everything directly in your browser</strong>. This means your personal photos never leave your device. It is the most secure way to convert, compress, and strip EXIF data online.</p>
-                        <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Blazing Fast Performance</h3>
-                        <p>By utilizing advanced WebAssembly and Web Worker technology, ImgCon delivers desktop-class performance in a web app. Batch process hundreds of images in seconds.</p>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Works Offline (PWA)</h3>
-                        <p class="mb-4">ImgCon is a Progressive Web App (PWA). You can install it on your device and use it without an internet connection, entirely local and secure.</p>
-                        <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Comprehensive Format Support</h3>
-                        <p>We support all modern formats. Convert your images to <strong>WebP</strong> and <strong>AVIF</strong> for superior compression, or stick to classic formats like <strong>JPG</strong> and <strong>PNG</strong>.</p>
-                    </div>
-                </div>
+            <span>&mdash; 100% private in your browser.</span>
+        </div>
+        <!-- PWA Offline Install Banner Card -->
+<div id="pwaInstallBanner" class="reveal-on-scroll hidden max-w-4xl mx-auto mb-10 p-5 rounded-2xl border shadow-lg relative overflow-hidden transition-all duration-500" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(168, 85, 247, 0.08)); border-color: var(--primary-color); --reveal-delay: 100ms;">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        
+        <!-- App Details & Offline Badge -->
+        <div class="flex items-center gap-4 text-left">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 dark:bg-indigo-400/20 text-indigo-500 flex items-center justify-center text-2xl flex-shrink-0 shadow-inner">
+                <i class="fas fa-laptop-house text-indigo-500"></i>
             </div>
-
-            <!-- Testimonials -->
-            <div class="mt-16 max-w-5xl mx-auto">
-                <h3 class="text-2xl sm:text-3xl font-bold mb-8" style="color: var(--text-dark);">Trusted by Creatives and Developers</h3>
-                <div class="grid md:grid-cols-3 gap-6">
-                    <div class="testimonial-card p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-md" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
-                        <div class="flex items-center mb-4">
-                            <img src="https://randomuser.me/api/portraits/women/65.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Sarah L." loading="lazy">
-                            <div><p class="font-bold text-sm" style="color: var(--text-dark);">Sarah L.</p><p class="text-xs" style="color: var(--text-light);">Web Developer</p></div>
-                        </div>
-                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">"ImgCon is a lifesaver. I use it daily to optimize images for client websites. The fact that it's private and works offline is a huge plus."</p>
-                    </div>
-                    <div class="testimonial-card p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-md" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
-                         <div class="flex items-center mb-4">
-                            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Mike R." loading="lazy">
-                            <div><p class="font-bold text-sm" style="color: var(--text-dark);">Mike R.</p><p class="text-xs" style="color: var(--text-light);">Photographer</p></div>
-                        </div>
-                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">"The EXIF cleaner feature gives me total peace of mind before sharing photos online. Highly recommended for privacy!"</p>
-                    </div>
-                    <div class="testimonial-card p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-md" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
-                         <div class="flex items-center mb-4">
-                            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Jessica T." loading="lazy">
-                            <div><p class="font-bold text-sm" style="color: var(--text-dark);">Jessica T.</p><p class="text-xs" style="color: var(--text-light);">Digital Marketer</p></div>
-                        </div>
-                        <p class="text-sm leading-relaxed" style="color: var(--text-light);">"The batch processing feature is a game-changer. I can resize and compress dozens of images in seconds!"</p>
-                    </div>
+            <div>
+                <div class="flex items-center gap-2 mb-0.5">
+                    <h3 class="font-black text-base" style="color: var(--text-dark);">Install ImgCon App</h3>
+                    <span class="text-xxs px-2 py-0.5 rounded-full bg-green-500 text-white font-extrabold uppercase tracking-wider">Offline Ready</span>
                 </div>
+                <p class="text-xs font-medium" style="color: var(--text-light);">Use all tools offline without an internet connection. Faster, private & 100% free.</p>
             </div>
+        </div>
 
-            <!-- Blog Section Preview -->
-            <div class="mt-16 max-w-5xl mx-auto">
-                 <div class="flex justify-between items-end mb-8 text-left">
-                     <div>
-                         <h3 class="text-2xl sm:text-3xl font-bold mb-2" style="color: var(--text-dark);">From Our Blog</h3>
-                         <p class="text-sm" style="color: var(--text-light);">Learn more about image optimization, privacy, and web performance.</p>
-                     </div>
-                     <a href="/blog" class="text-xs font-bold text-indigo-500 hover:underline">View All Articles &rarr;</a>
+        <!-- Action Buttons -->
+        <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+            <button id="pwaInstallBtn" class="upload-button text-xs py-2.5 px-5 shadow-md flex-shrink-0 w-full sm:w-auto justify-center">
+                <i class="fas fa-download mr-1.5"></i> Install Now
+            </button>
+            <button id="pwaCloseBtn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-400 hover:text-gray-600 transition-colors" aria-label="Dismiss Banner">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+    </div>
+</div>
+        <!-- Tool Choice Cards with Cascade Wave Effect & Micro-Interactions -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 cascade-group">
+            <a href="/image-converter" class="reveal-on-scroll tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group relative overflow-hidden">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-500 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                        <i class="fas fa-sync-alt text-2xl icon-sync"></i>
+                    </div>
+                    <span class="text-xxs px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-wider">Batch Support</span>
+                </div>
+                <h3 class="text-2xl font-bold mb-2 group-hover:text-indigo-500 transition-colors" style="color: var(--text-dark);">Image Converter</h3>
+                <p class="text-sm leading-relaxed mb-4" style="color: var(--text-light);">Change image formats with ease. Convert to PNG, JPG, WEBP, AVIF, PDF, and ICO.</p>
+                <div class="inline-flex items-center text-xs font-bold text-indigo-500 group-hover:translate-x-1.5 transition-transform duration-300">
+                    Try Converter <i class="fas fa-arrow-right ml-1.5 text-xxs"></i>
+                </div>
+            </a>
+
+            <a href="/image-compressor" class="reveal-on-scroll tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group relative overflow-hidden">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-green-50 dark:bg-green-900/30 text-green-500 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-300">
+                        <i class="fas fa-compress-arrows-alt text-2xl icon-compress"></i>
+                    </div>
+                    <span class="text-xxs px-2.5 py-1 rounded-full bg-green-50 dark:bg-green-950/50 text-green-600 dark:text-green-400 font-bold uppercase tracking-wider">Target Size</span>
+                </div>
+                <h3 class="text-2xl font-bold mb-2 group-hover:text-green-500 transition-colors" style="color: var(--text-dark);">Image Compressor</h3>
+                <p class="text-sm leading-relaxed mb-4" style="color: var(--text-light);">Drastically reduce JPG & WEBP file sizes with live preview and custom target size settings.</p>
+                <div class="inline-flex items-center text-xs font-bold text-green-500 group-hover:translate-x-1.5 transition-transform duration-300">
+                    Compress Images <i class="fas fa-arrow-right ml-1.5 text-xxs"></i>
+                </div>
+            </a>
+
+            <a href="/image-resizer" class="reveal-on-scroll tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group relative overflow-hidden">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-500 group-hover:scale-110 transition-all duration-300">
+                        <i class="fas fa-expand-arrows-alt text-2xl icon-expand"></i>
+                    </div>
+                    <span class="text-xxs px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">Presets</span>
+                </div>
+                <h3 class="text-2xl font-bold mb-2 group-hover:text-blue-500 transition-colors" style="color: var(--text-dark);">Image Resizer</h3>
+                <p class="text-sm leading-relaxed mb-4" style="color: var(--text-light);">Resize images by pixels or percentage. Aspect ratio lock and social media presets included.</p>
+                <div class="inline-flex items-center text-xs font-bold text-blue-500 group-hover:translate-x-1.5 transition-transform duration-300">
+                    Resize Photos <i class="fas fa-arrow-right ml-1.5 text-xxs"></i>
+                </div>
+            </a>
+
+            <a href="/image-watermark" class="reveal-on-scroll tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group relative overflow-hidden">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-900/30 text-amber-500 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">
+                        <i class="fas fa-copyright text-2xl icon-copyright"></i>
+                    </div>
+                    <span class="text-xxs px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider">Custom Logo</span>
+                </div>
+                <h3 class="text-2xl font-bold mb-2 group-hover:text-amber-500 transition-colors" style="color: var(--text-dark);">Watermark Tool</h3>
+                <p class="text-sm leading-relaxed mb-4" style="color: var(--text-light);">Add custom text or logo watermarks to your photos. Full position, size & opacity control.</p>
+                <div class="inline-flex items-center text-xs font-bold text-amber-500 group-hover:translate-x-1.5 transition-transform duration-300">
+                    Add Watermark <i class="fas fa-arrow-right ml-1.5 text-xxs"></i>
+                </div>
+            </a>
+
+            <a href="/exif-cleaner" class="reveal-on-scroll tool-choice-card p-6 sm:p-8 rounded-2xl cursor-pointer text-left group border-indigo-300 dark:border-indigo-800 relative overflow-hidden">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-red-50 dark:bg-red-900/30 text-red-500 group-hover:scale-110 transition-all duration-300">
+                        <i class="fas fa-user-shield text-2xl"></i>
+                    </div>
+                    <span class="text-xxs px-2 py-0.5 rounded-full bg-red-500 text-white font-extrabold uppercase tracking-wider">New</span>
+                </div>
+                <h3 class="text-2xl font-bold mb-2 group-hover:text-red-500 transition-colors" style="color: var(--text-dark);">
+                    EXIF Cleaner
+                </h3>
+                <p class="text-sm leading-relaxed mb-4" style="color: var(--text-light);">Inspect camera model, timestamp & GPS location data. Remove hidden tracking metadata instantly.</p>
+                <div class="inline-flex items-center text-xs font-bold text-red-500 group-hover:translate-x-1.5 transition-transform duration-300">
+                    Clean Privacy Data <i class="fas fa-arrow-right ml-1.5 text-xxs"></i>
+                </div>
+            </a>
+        </div>
+    </div>
+<!-- Live Interactive Compression Demo Widget -->
+<div class="reveal-on-scroll max-w-4xl mx-auto mb-14 p-4 sm:p-6 rounded-3xl border shadow-lg relative overflow-hidden text-left" style="background-color: var(--card-bg); border-color: var(--card-border); --reveal-delay: 180ms;">
+    
+    <!-- Widget Header & Format Tabs -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-5 border-b pb-4" style="border-color: var(--card-border);">
+        <div>
+            <span class="text-xxs font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-950/80 dark:text-indigo-400">Live Interactive Demo</span>
+            <h3 class="text-xl font-bold mt-1" style="color: var(--text-dark);">See Compression Savings in Action</h3>
+            <p class="text-xs" style="color: var(--text-light);">Drag the slider to compare visual quality vs file size savings in real-time</p>
+        </div>
+
+        <!-- Interactive Format Switcher -->
+        <div class="flex items-center gap-1 p-1 rounded-xl border text-xs font-bold self-stretch sm:self-auto justify-center" style="background-color: var(--bg-subtle); border-color: var(--card-border);" id="demoFormatSelector">
+            <button class="demo-format-btn active px-3 py-1.5 rounded-lg transition-all" data-format="WebP" data-size="480 KB" data-savings="80%">WebP (-80%)</button>
+            <button class="demo-format-btn px-3 py-1.5 rounded-lg transition-all" data-format="AVIF" data-size="310 KB" data-savings="87%">AVIF (-87%)</button>
+            <button class="demo-format-btn px-3 py-1.5 rounded-lg transition-all" data-format="JPG" data-size="920 KB" data-savings="62%">JPG (-62%)</button>
+        </div>
+    </div>
+
+    <!-- Comparison Slider Box -->
+    <div class="demo-comparison-container relative w-full h-64 sm:h-80 rounded-2xl overflow-hidden shadow-inner border" id="demoComparisonWidget" style="border-color: var(--card-border);">
+        
+        <!-- Before Layer (Original Photo) -->
+        <div class="demo-before-layer absolute inset-0 w-full h-full">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=95" class="w-full h-full object-cover" alt="Original JPG Preview" loading="lazy">
+            <div class="absolute top-3 left-3 bg-slate-900/85 backdrop-blur-md text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/10 shadow-lg">
+                <span>Original JPG</span>
+                <span class="block text-xxs font-semibold text-slate-300">2.4 MB &bull; 100% Quality</span>
+            </div>
+        </div>
+
+        <!-- After Layer (Compressed Photo Clipper) -->
+        <div class="demo-after-clipper absolute inset-0 w-full h-full overflow-hidden" id="demoClipper" style="clip-path: inset(0 0 0 50%);">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=70" class="w-full h-full object-cover" alt="Compressed Preview" loading="lazy">
+            <div class="absolute top-3 right-3 bg-indigo-950/90 backdrop-blur-md text-white text-xs font-bold px-3 py-2 rounded-xl border border-indigo-400/20 shadow-lg text-right">
+                <span id="demoFormatBadge">Compressed WebP</span>
+                <span class="block text-xxs font-bold text-green-400" id="demoSizeBadge">480 KB &bull; Saved 80%</span>
+            </div>
+        </div>
+
+        <!-- Center Divider & Handle -->
+        <div class="demo-slider-handle absolute top-0 bottom-0 w-1 bg-white shadow-2xl z-20" id="demoHandle" style="left: 50%;">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-slate-900/90 text-white border-2 border-white flex items-center justify-center shadow-xl text-xs hover:scale-110 transition-transform">
+                <i class="fas fa-arrows-alt-h"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- SEO Content Section -->
+    <div class="reveal-on-scroll seo-section max-w-5xl mx-auto text-left border-t pt-12" style="border-color: var(--card-border);">
+        <h2 class="text-2xl font-bold mb-6 text-center" style="color: var(--text-dark);">Why ImgCon is the Best Free Online Image Tool</h2>
+        <div class="grid md:grid-cols-2 gap-8 text-sm leading-relaxed" style="color: var(--text-light);">
+            <div>
+                <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Privacy First: 100% Client-Side Processing</h3>
+                <p class="mb-4">Unlike other online image converters, <strong>ImgCon processes everything directly in your browser</strong>. This means your personal photos never leave your device.</p>
+                <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Blazing Fast Performance</h3>
+                <p>By utilizing advanced WebAssembly and Web Worker technology, ImgCon delivers desktop-class performance in a web app.</p>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Works Offline (PWA)</h3>
+                <p class="mb-4">ImgCon is a Progressive Web App (PWA). You can install it on your device and use it without an internet connection.</p>
+                <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">Comprehensive Format Support</h3>
+                <p>We support all modern formats including WebP, AVIF, JPG, PNG, and PDF.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials with Wave Animation -->
+    <div class="reveal-on-scroll mt-16 max-w-5xl mx-auto">
+        <h3 class="text-2xl sm:text-3xl font-bold mb-8" style="color: var(--text-dark);">Trusted by Creatives and Developers</h3>
+        <div class="grid md:grid-cols-3 gap-6 cascade-group">
+            <div class="reveal-on-scroll testimonial-card p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-md" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
+                <div class="flex items-center mb-4">
+                    <img src="https://randomuser.me/api/portraits/women/65.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Sarah L." loading="lazy">
+                    <div><p class="font-bold text-sm" style="color: var(--text-dark);">Sarah L.</p><p class="text-xs" style="color: var(--text-light);">Web Developer</p></div>
+                </div>
+                <p class="text-sm leading-relaxed" style="color: var(--text-light);">"ImgCon is a lifesaver. I use it daily to optimize images for client websites."</p>
+            </div>
+            <div class="reveal-on-scroll testimonial-card p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-md" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
+                 <div class="flex items-center mb-4">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Mike R." loading="lazy">
+                    <div><p class="font-bold text-sm" style="color: var(--text-dark);">Mike R.</p><p class="text-xs" style="color: var(--text-light);">Photographer</p></div>
+                </div>
+                <p class="text-sm leading-relaxed" style="color: var(--text-light);">"The EXIF cleaner feature gives me total peace of mind before sharing photos online."</p>
+            </div>
+            <div class="reveal-on-scroll testimonial-card p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-md" style="border-color: var(--card-border); background-color: var(--card-bg); text-align: left;">
+                 <div class="flex items-center mb-4">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-11 h-11 rounded-full mr-4 border" style="border-color: var(--card-border);" alt="Jessica T." loading="lazy">
+                    <div><p class="font-bold text-sm" style="color: var(--text-dark);">Jessica T.</p><p class="text-xs" style="color: var(--text-light);">Digital Marketer</p></div>
+                </div>
+                <p class="text-sm leading-relaxed" style="color: var(--text-light);">"The batch processing feature is a game-changer. Resize and compress dozens in seconds!"</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Section Preview -->
+    <div class="reveal-on-scroll mt-16 max-w-5xl mx-auto">
+         <div class="flex justify-between items-end mb-8 text-left">
+             <div>
+                 <h3 class="text-2xl sm:text-3xl font-bold mb-2" style="color: var(--text-dark);">From Our Blog</h3>
+                 <p class="text-sm" style="color: var(--text-light);">Learn more about image optimization, privacy, and web performance.</p>
+             </div>
+             <a href="/blog" class="text-xs font-bold text-indigo-500 hover:underline">View All Articles &rarr;</a>
+         </div>
+         <div class="grid md:grid-cols-3 gap-6 text-left cascade-group">
+             <a href="/blog/png-vs-jpg-difference" class="reveal-on-scroll blog-card-link">
+                 <div class="p-6 rounded-2xl border tool-choice-card">
+                     <h4 class="font-bold text-lg mb-2" style="color: var(--text-dark);">PNG vs JPG: What's the Difference?</h4>
+                     <p class="text-sm leading-relaxed" style="color: var(--text-light);">Discover which format is best for your needs and how to choose wisely for web and print...</p>
                  </div>
-                 <div class="grid md:grid-cols-3 gap-6 text-left">
-                     <a href="/blog/png-vs-jpg-difference" class="blog-card-link">
-                         <div class="p-6 rounded-2xl border tool-choice-card">
-                             <h4 class="font-bold text-lg mb-2" style="color: var(--text-dark);">PNG vs JPG: What's the Difference?</h4>
-                             <p class="text-sm leading-relaxed" style="color: var(--text-light);">Discover which format is best for your needs and how to choose wisely for web and print...</p>
-                         </div>
-                     </a>
-                     <a href="/blog/how-to-reduce-photo-size" class="blog-card-link">
-                         <div class="p-6 rounded-2xl border tool-choice-card">
-                             <h4 class="font-bold text-lg mb-2" style="color: var(--text-dark);">How to Reduce Photo Size Without Losing Quality</h4>
-                             <p class="text-sm leading-relaxed" style="color: var(--text-light);">A practical guide to shrinking image file sizes to speed up your website and save space...</p>
-                         </div>
-                     </a>
-                     <a href="/blog/webp-the-future-of-web-images" class="blog-card-link">
-                         <div class="p-6 rounded-2xl border tool-choice-card">
-                            <h4 class="font-bold text-lg mb-2" style="color: var(--text-dark);">Why WebP is the Future of Web Images</h4>
-                             <p class="text-sm leading-relaxed" style="color: var(--text-light);">Learn about the next-gen image format from Google that offers superior compression and quality...</p>
-                         </div>
-                     </a>
+             </a>
+             <a href="/blog/how-to-reduce-photo-size" class="reveal-on-scroll blog-card-link">
+                 <div class="p-6 rounded-2xl border tool-choice-card">
+                     <h4 class="font-bold text-lg mb-2" style="color: var(--text-dark);">How to Reduce Photo Size Without Losing Quality</h4>
+                     <p class="text-sm leading-relaxed" style="color: var(--text-light);">A practical guide to shrinking image file sizes to speed up your website and save space...</p>
                  </div>
-            </div>
-        </section>
+             </a>
+             <a href="/blog/webp-the-future-of-web-images" class="reveal-on-scroll blog-card-link">
+                 <div class="p-6 rounded-2xl border tool-choice-card">
+                    <h4 class="font-bold text-lg mb-2" style="color: var(--text-dark);">Why WebP is the Future of Web Images</h4>
+                     <p class="text-sm leading-relaxed" style="color: var(--text-light);">Learn about the next-gen image format from Google that offers superior compression...</p>
+                 </div>
+             </a>
+         </div>
+    </div>
+</section>
 
         <!-- Tool Screen Container -->
         <section id="toolScreen" class="screen hidden"></section>
