@@ -1052,18 +1052,82 @@ function attachToolEventListeners(container) {
     }
 }
 
-// --- Theme Switcher ---
+// --- Theme Switcher (With Radial Ripple Wave Animation) ---
 function initTheme() {
     const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', savedTheme);
 }
 
-themeToggleBtn.addEventListener('click', () => {
+function toggleThemeWithRipple(e) {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-});
+
+    // Calculate click coordinates for radial ripple origin
+    let x, y;
+    if (e && e.clientX && e.clientY) {
+        x = e.clientX;
+        y = e.clientY;
+    } else if (themeToggleBtn) {
+        const rect = themeToggleBtn.getBoundingClientRect();
+        x = rect.left + rect.width / 2;
+        y = rect.top + rect.height / 2;
+    } else {
+        x = window.innerWidth / 2;
+        y = window.innerHeight / 2;
+    }
+
+    // 1. Modern View Transitions API (Chrome, Edge, Brave, Safari)
+    if (document.startViewTransition) {
+        const endRadius = Math.hypot(
+            Math.max(x, window.innerWidth - x),
+            Math.max(y, window.innerHeight - y)
+        );
+
+        const transition = document.startViewTransition(() => {
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        transition.ready.then(() => {
+            document.documentElement.animate(
+                {
+                    clipPath: [
+                        `circle(0px at ${x}px ${y}px)`,
+                        `circle(${endRadius}px at ${x}px ${y}px)`
+                    ]
+                },
+                {
+                    duration: 650,
+                    easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                    pseudoElement: '::view-transition-new(root)'
+                }
+            );
+        });
+    } else {
+        // 2. Smooth Cross-Browser Fallback for Older Browsers
+        const ripple = document.createElement('div');
+        ripple.className = 'theme-ripple-fallback';
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        ripple.style.backgroundColor = newTheme === 'dark' ? '#0f172a' : '#f8fafc';
+        document.body.appendChild(ripple);
+
+        requestAnimationFrame(() => {
+            ripple.classList.add('active');
+        });
+
+        setTimeout(() => {
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            ripple.remove();
+        }, 550);
+    }
+}
+
+// Attach Event Listener to Theme Toggle Button
+if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', toggleThemeWithRipple);
+}
 
 // --- Helper Utilities ---
 function showToast(message) { 
@@ -1097,4 +1161,250 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('popstate', router);
     window.addEventListener('hashchange', router);
     router();
+});
+// --- Scroll Reveal Observer System ---
+let scrollObserver = null;
+
+function initScrollReveal() {
+    // Purge old observer if re-navigating
+    if (scrollObserver) {
+        scrollObserver.disconnect();
+    }
+
+    const revealElements = document.querySelectorAll('.reveal-on-scroll');
+    if (!revealElements.length) return;
+
+    scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                // Once revealed, stop observing so animation happens once smoothly
+                scrollObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        root: null,
+        rootMargin: '0px 0px -50px 0px', // Starts revealing slightly before reaching viewport bottom
+        threshold: 0.1
+    });
+
+    revealElements.forEach(el => {
+        // Reset state if coming back via SPA route
+        el.classList.remove('revealed');
+        scrollObserver.observe(el);
+    });
+}
+
+// Ensure initScrollReveal runs in the existing router() function when showing 'homeScreen'
+const originalShowPage = showPage;
+showPage = function(pageId) {
+    originalShowPage(pageId);
+    if (pageId === 'homeScreen') {
+        requestAnimationFrame(() => {
+            initScrollReveal();
+        });
+    }
+};
+
+// Initial trigger on load
+document.addEventListener('DOMContentLoaded', () => {
+    initScrollReveal();
+});
+// --- Dynamic Subtitle Text Rotator Engine ---
+let subtitleRotationTimer = null;
+
+function initSubtitleRotator() {
+    // Clear existing interval if re-navigating
+    if (subtitleRotationTimer) {
+        clearInterval(subtitleRotationTimer);
+        subtitleRotationTimer = null;
+    }
+
+    const container = document.getElementById('rotatingSubtitleContainer');
+    if (!container) return;
+
+    const phrases = container.querySelectorAll('.rotating-phrase');
+    if (phrases.length <= 1) return;
+
+    let currentIndex = 0;
+
+    subtitleRotationTimer = setInterval(() => {
+        const currentPhrase = phrases[currentIndex];
+        
+        // Calculate next index
+        currentIndex = (currentIndex + 1) % phrases.length;
+        const nextPhrase = phrases[currentIndex];
+
+        // 1. Current phrase slides UP and exits
+        currentPhrase.classList.remove('active');
+        currentPhrase.classList.add('exit');
+
+        // 2. Next phrase enters from BOTTOM
+        nextPhrase.classList.remove('exit');
+        nextPhrase.classList.add('active');
+
+        // Clean up 'exit' class after animation finishes
+        setTimeout(() => {
+            currentPhrase.classList.remove('exit');
+        }, 600);
+    }, 3200); // Rotates every 3.2 seconds
+}
+
+// Ensure rotator starts when homeScreen loads or via SPA Router
+document.addEventListener('DOMContentLoaded', () => {
+    initSubtitleRotator();
+});
+
+// Attach to Router page change event
+const prevShowPageFunc = showPage;
+showPage = function(pageId) {
+    if (typeof prevShowPageFunc === 'function') prevShowPageFunc(pageId);
+    if (pageId === 'homeScreen') {
+        requestAnimationFrame(() => {
+            initSubtitleRotator();
+        });
+    }
+};
+// --- Live Interactive Demo Comparison Widget Engine ---
+function initDemoComparisonWidget() {
+    const container = document.getElementById('demoComparisonWidget');
+    const clipper = document.getElementById('demoClipper');
+    const handle = document.getElementById('demoHandle');
+    if (!container || !clipper || !handle) return;
+
+    let isDragging = false;
+
+    // Update slider position based on mouse/touch X coordinates
+    const updatePosition = (clientX) => {
+        const rect = container.getBoundingClientRect();
+        let x = clientX - rect.left;
+        if (x < 0) x = 0;
+        if (x > rect.width) x = rect.width;
+        
+        const percentage = (x / rect.width) * 100;
+        clipper.style.clipPath = `inset(0 0 0 ${percentage}%)`;
+        handle.style.left = `${percentage}%`;
+    };
+
+    const onStart = (e) => {
+        isDragging = true;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        updatePosition(clientX);
+    };
+
+    const onMove = (e) => {
+        if (!isDragging) return;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        updatePosition(clientX);
+    };
+
+    const onEnd = () => {
+        isDragging = false;
+    };
+
+    // Touch & Mouse Event Listeners
+    container.addEventListener('mousedown', onStart);
+    container.addEventListener('touchstart', onStart, { passive: true });
+    
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onMove, { passive: true });
+    
+    window.addEventListener('mouseup', onEnd);
+    window.addEventListener('touchend', onEnd);
+
+    // Format Tab Switcher Logic
+    const formatBtns = document.querySelectorAll('.demo-format-btn');
+    const formatBadge = document.getElementById('demoFormatBadge');
+    const sizeBadge = document.getElementById('demoSizeBadge');
+
+    formatBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            formatBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const fmt = btn.dataset.format;
+            const size = btn.dataset.size;
+            const savings = btn.dataset.savings;
+
+            if (formatBadge) formatBadge.textContent = `Compressed ${fmt}`;
+            if (sizeBadge) sizeBadge.textContent = `${size} • Saved ${savings}`;
+        });
+    });
+}
+
+// Ensure demo widget initializes on load & page change
+document.addEventListener('DOMContentLoaded', () => {
+    initDemoComparisonWidget();
+});
+
+// Re-initialize if navigating back to Home Screen
+const existingPageShowFunc = showPage;
+showPage = function(pageId) {
+    if (typeof existingPageShowFunc === 'function') existingPageShowFunc(pageId);
+    if (pageId === 'homeScreen') {
+        requestAnimationFrame(() => {
+            initDemoComparisonWidget();
+        });
+    }
+};
+// --- PWA Service Worker & Install Banner Manager (Bug Fixed Update) ---
+function initPWAInstallBanner() {
+    const banner = document.getElementById('pwaInstallBanner');
+    const installBtn = document.getElementById('pwaInstallBtn');
+    const closeBtn = document.getElementById('pwaCloseBtn');
+
+    if (!banner || !installBtn || !closeBtn) return;
+
+    // Check if user previously dismissed banner in current session
+    if (sessionStorage.getItem('pwa_banner_dismissed') === 'true') {
+        banner.classList.add('hidden');
+    }
+
+    // Capture Native Browser PWA install prompt event using globally declared variable
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredInstallPrompt = e; // Uses existing global variable (No duplicate 'let')
+
+        // Reveal Banner if not dismissed
+        if (sessionStorage.getItem('pwa_banner_dismissed') !== 'true') {
+            banner.classList.remove('hidden');
+        }
+    });
+
+    // Handle 'Install Now' Button Click
+    installBtn.addEventListener('click', async () => {
+        if (!deferredInstallPrompt) {
+            // Fallback instruction for iOS / Safari or non-automated prompts
+            showToast('To install: tap Share/Menu in your browser and select "Add to Home Screen".');
+            return;
+        }
+
+        deferredInstallPrompt.prompt();
+        const { outcome } = await deferredInstallPrompt.userChoice;
+        
+        if (outcome === 'accepted') {
+            showToast('Thank you for installing ImgCon!');
+        }
+        
+        deferredInstallPrompt = null;
+        banner.classList.add('hidden');
+    });
+
+    // Handle Close/Dismiss Button Click
+    closeBtn.addEventListener('click', () => {
+        banner.classList.add('hidden');
+        sessionStorage.setItem('pwa_banner_dismissed', 'true');
+    });
+
+    // Handle Successful App Installation
+    window.addEventListener('appinstalled', () => {
+        deferredInstallPrompt = null;
+        banner.classList.add('hidden');
+        showToast('ImgCon installed successfully! Now works 100% offline.');
+    });
+}
+
+// Initialize PWA Manager on DOM Ready
+document.addEventListener('DOMContentLoaded', () => {
+    initPWAInstallBanner();
 });
