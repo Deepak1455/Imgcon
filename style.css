@@ -508,3 +508,212 @@ body:not([data-theme="dark"]) .fa-moon { display: none; }
 .content-page p { margin-bottom: 1rem; color: var(--text-light); }
 
 #card-footer { display: none; text-align: center; padding: 1.5rem; margin-top: 2rem; border-top: 1px solid var(--card-border); }
+/* ==========================================================================
+   SCROLL-TRIGGERED FLUID REVEAL & CASCADE WAVE ANIMATION
+   ========================================================================== */
+
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0) scale(0.98);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+    transition-delay: var(--reveal-delay, 0ms);
+    backface-visibility: hidden;
+}
+
+/* Revealed Active State */
+.reveal-on-scroll.revealed {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* Stagger Wave Delays for Grid Elements */
+.cascade-group > *:nth-child(1) { --reveal-delay: 50ms; }
+.cascade-group > *:nth-child(2) { --reveal-delay: 130ms; }
+.cascade-group > *:nth-child(3) { --reveal-delay: 210ms; }
+.cascade-group > *:nth-child(4) { --reveal-delay: 290ms; }
+.cascade-group > *:nth-child(5) { --reveal-delay: 370ms; }
+.cascade-group > *:nth-child(6) { --reveal-delay: 450ms; }
+/* ==========================================================================
+   DYNAMIC ROTATING SUBTITLE (VERTICAL SLIDE + FADE)
+   ========================================================================== */
+
+.subtitle-rotator-wrapper {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 2.2rem;
+    min-width: 280px;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+.rotating-phrase {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    position: absolute;
+    left: 50%;
+    transform: translate3d(-50%, 30px, 0);
+    opacity: 0;
+    white-space: nowrap;
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+}
+
+/* Active State - Visible in Viewport */
+.rotating-phrase.active {
+    transform: translate3d(-50%, 0, 0);
+    opacity: 1;
+}
+
+/* Exit State - Slides Up & Fades Out */
+.rotating-phrase.exit {
+    transform: translate3d(-50%, -30px, 0);
+    opacity: 0;
+}
+
+/* Accent Highlight Pills */
+.accent-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.55rem;
+    border-radius: 9999px;
+    font-weight: 800;
+    font-size: 0.85em;
+    letter-spacing: 0.02em;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+}
+
+/* ==========================================================================
+   LIVE INTERACTIVE DEMO COMPARISON WIDGET
+   ========================================================================== */
+
+.demo-format-btn {
+    color: var(--text-light);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.demo-format-btn.active {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.demo-comparison-container {
+    touch-action: none;
+    user-select: none;
+    cursor: ew-resize;
+}
+
+.demo-slider-handle {
+    transition: left 0.05s ease-out;
+}
+
+.demo-after-clipper {
+    transition: clip-path 0.05s ease-out;
+}
+/* ==========================================================================
+   ANIMATED SHIMMER MESH GRADIENT TEXT (INDIGO -> VIOLET -> TEAL)
+   ========================================================================== */
+
+.hero-gradient-text {
+    background: linear-gradient(
+        135deg,
+        #4f46e5 0%,
+        #9333ea 25%,
+        #0d9488 50%,
+        #9333ea 75%,
+        #4f46e5 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    animation: textGradientFlow 6s linear infinite;
+    display: inline-block;
+}
+
+/* Dark Mode Vibrant Gradient Enhancement */
+[data-theme="dark"] .hero-gradient-text {
+    background: linear-gradient(
+        135deg,
+        #818cf8 0%,
+        #c084fc 25%,
+        #2dd4bf 50%,
+        #c084fc 75%,
+        #818cf8 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 2px 12px rgba(129, 140, 248, 0.25));
+}
+
+/* Smooth Gradient Flow Animation Keyframes */
+@keyframes textGradientFlow {
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+/* ==========================================================================
+   RADIAL RIPPLE THEME SWITCH ANIMATION (VIEW TRANSITIONS & FALLBACK)
+   ========================================================================== */
+
+/* Modern View Transitions API Overrides */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+    display: block;
+}
+
+::view-transition-old(root) {
+    z-index: 1;
+}
+
+::view-transition-new(root) {
+    z-index: 9999;
+}
+
+/* Cross-Browser Fallback Ripple Element */
+.theme-ripple-fallback {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+    z-index: 99999;
+    transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+}
+
+.theme-ripple-fallback.active {
+    transform: translate(-50%, -50%) scale(300);
+}
+
+/* ==========================================================================
+   PWA OFFLINE INSTALL BANNER STYLING
+   ========================================================================== */
+
+#pwaInstallBanner {
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px -10px var(--shadow-color);
+}
+
+#pwaInstallBanner.hidden {
+    display: none !important;
+}
