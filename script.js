@@ -2,7 +2,7 @@
 let files = [], originalFileDetails = [], processedResults = [], currentImageIdx = 0, selectedFormat = null, workerPool = [], activeTool = null, debouncedPreview, lazyLoadObserver, deferredInstallPrompt = null, watermarkImage = null;
 const SESSION_STORAGE_KEY = 'imgcon_session_v3';
 
-// --- DOM Elements ---
+// --- DOM Elements --- 
 const allScreens = document.querySelectorAll('.screen');
 const homeBtn = document.getElementById('homeBtn');
 const themeToggleBtn = document.getElementById('themeToggleBtn');
