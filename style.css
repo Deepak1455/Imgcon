@@ -1,3 +1,7 @@
+/* ==========================================================================
+   IMGCON - ULTRA-MODERN, ADVANCED & FAST APP STYLING
+   ========================================================================== */
+
 :root {
     --primary-color: #6366f1; 
     --primary-hover: #4f46e5; 
@@ -28,7 +32,7 @@
 }
 
 /* SMART GPU HARDWARE ACCELERATION & COMPOSITING RULES */
-.app-container, .screen, .tool-container, .before-after-container, .toast, .modal-content {
+.app-container, .screen, .tool-container, .before-after-container, .toast, .modal-content, .tool-choice-card, .format-card-modern {
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     perspective: 1000px;
@@ -36,11 +40,10 @@
 }
 
 /* --- HARDWARE ACCELERATED KEYFRAMES --- */
-/* Optimized to animate transform/rotate instead of background-position to achieve 0% repaint costs */
 @keyframes hardwareGradientFlow {
     0% { transform: translate3d(0, 0, 0) rotate(0deg); }
     50% { transform: translate3d(-3%, -3%, 0) rotate(1.5deg); }
-    100% { transform: translate3d(3%, 3%, 0) rotate(-1.5deg);Perspectives }
+    100% { transform: translate3d(3%, 3%, 0) rotate(-1.5deg); }
 }
 
 @keyframes shine {
@@ -55,7 +58,7 @@
 @keyframes fadeInUpCustom {
     from {
         opacity: 0;
-        transform: translate3d(0, 10px, 0) scale(0.995);
+        transform: translate3d(0, 12px, 0) scale(0.995);
     }
     to {
         opacity: 1;
@@ -63,19 +66,18 @@
     }
 }
 
-@keyframes popSelect {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.03); }
-    100% { transform: scale(1); }
-}
-
 @keyframes heartbeat {
-    0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.3); }
-    70% { box-shadow: 0 0 0 8px rgba(99, 102, 241, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.35); }
+    70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
     100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
 }
 
-/* Ultra-Smooth Hardware Accelerated Gradient Layer */
+@keyframes textGradientFlow {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+/* Ultra-Smooth Ambient Gradient Layer */
 body::before {
     content: ''; 
     position: fixed; 
@@ -119,7 +121,7 @@ body {
 }
 
 .screen:not(.hidden) {
-    animation: fadeInUpCustom 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: fadeInUpCustom 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .screen.hidden { 
@@ -132,7 +134,10 @@ body {
     transform: translate3d(0, 10px, 0) scale(0.995); 
 }
 
-/* Action Buttons */
+/* ==========================================================================
+   BUTTONS & ACTION ELEMENTS
+   ========================================================================== */
+
 .upload-button { 
     position: relative;
     background: linear-gradient(135deg, var(--primary-color), var(--primary-hover)); 
@@ -210,27 +215,6 @@ header a:hover .logo-image {
     transition: transform 0.1s ease;
 }
 
-/* Tool Cards */
-.tool-choice-card { 
-    border: 1px solid var(--card-border); 
-    border-radius: 1.25rem;
-    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.25s, box-shadow 0.25s; 
-    background-color: var(--card-bg); 
-    display: block; 
-    transform: translate3d(0, 0, 0);
-}
-
-.tool-choice-card:hover { 
-    transform: translate3d(0, -4px, 0); 
-    border-color: var(--primary-color); 
-    box-shadow: 0 15px 25px -10px var(--shadow-lg-color); 
-}
-
-.icon-sync, .icon-compress, .icon-expand, .icon-copyright {
-    display: inline-block;
-    transition: var(--transition-smooth);
-}
-
 .drop-zone {
     transition: var(--transition-smooth);
 }
@@ -239,60 +223,257 @@ header a:hover .logo-image {
     background-color: rgba(99, 102, 241, 0.02) !important;
 }
 
-/* 3D Flip Card */
-.format-selector {
-    perspective: 1000px;
-}
+/* ==========================================================================
+   ADVANCED TOOL CHOICE CARDS UI (HOME SCREEN)
+   ========================================================================== */
 
-.format-card-container {
-    perspective: 1000px;
-    height: 110px;
-}
-
-.format-card {
+.tool-choice-card { 
     position: relative;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 1rem;
+    background-color: var(--card-bg); 
+    border: 1px solid var(--card-border); 
+    border-radius: 1.5rem; 
+    display: block; 
+    overflow: hidden;
+    z-index: 1;
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1); 
+    will-change: transform, box-shadow, border-color;
+    box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
 }
 
-.format-card.selected {
-    animation: popSelect 0.3s ease;
-    transform: rotateY(180deg);
-}
-
-.card-face {
+/* 1. Ambient Glassmorphic Background Glow on Hover */
+.tool-choice-card::before {
+    content: '';
     position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 1rem;
+    inset: 0;
+    background: radial-gradient(
+        500px circle at var(--mouse-x, 50%) var(--mouse-y, 0%), 
+        rgba(99, 102, 241, 0.08), 
+        transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* 2. Dynamic Top Active Accent Line (3D Reveal) */
+.tool-choice-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), #a855f7, #06b6d4);
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+/* Card Hover States */
+.tool-choice-card:hover { 
+    transform: translate3d(0, -6px, 0); 
+    border-color: rgba(99, 102, 241, 0.4); 
+    box-shadow: 0 20px 35px -10px var(--shadow-lg-color),
+                0 0 15px -3px rgba(99, 102, 241, 0.15); 
+}
+
+.tool-choice-card:hover::before {
+    opacity: 1;
+}
+
+.tool-choice-card:hover::after {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+/* Icon Container Spring Animation */
+.tool-icon-box {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                background-color 0.3s ease,
+                box-shadow 0.3s ease;
+    will-change: transform;
+}
+
+.tool-choice-card:hover .tool-icon-box {
+    transform: scale(1.12) rotate(6deg);
+    box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.25);
+}
+
+/* Badge Glow Micro Interaction */
+.tool-badge {
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.tool-choice-card:hover .tool-badge {
+    transform: scale(1.05);
+}
+
+/* Arrow Slide Animation */
+.tool-action-link i {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tool-choice-card:hover .tool-action-link i {
+    transform: translate3d(4px, 0, 0);
+}
+
+/* ==========================================================================
+   ADVANCED IMAGE CONVERTER SCREEN STYLING
+   ========================================================================== */
+
+.converter-header {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.format-selector-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+}
+
+@media (min-width: 640px) {
+    .format-selector-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.format-card-modern {
+    position: relative;
+    background-color: var(--card-bg);
+    border: 2px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1rem 0.85rem;
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                border-color 0.3s ease,
+                box-shadow 0.3s ease,
+                background-color 0.3s ease;
+    will-change: transform, box-shadow;
+    user-select: none;
+}
+
+.format-card-modern:hover {
+    transform: translate3d(0, -3px, 0);
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 10px 20px -5px var(--shadow-color);
+}
+
+.format-card-modern.selected {
+    border-color: var(--primary-color) !important;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(168, 85, 247, 0.08));
+    box-shadow: 0 0 25px -3px rgba(99, 102, 241, 0.25),
+                inset 0 0 0 1px var(--primary-color);
+    transform: scale(1.02);
+}
+
+.format-card-modern .selected-check {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: #ffffff;
+    display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid var(--card-border);
-    background-color: var(--card-bg);
+    font-size: 0.65rem;
+    opacity: 0;
+    transform: scale(0.5) rotate(-45deg);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
 }
 
-.card-front {
-    color: var(--text-dark);
+.format-card-modern.selected .selected-check {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
 }
 
-.card-back {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-    color: white !important;
-    transform: rotateY(180deg);
+.format-card-modern i {
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.format-card-modern:hover i,
+.format-card-modern.selected i {
+    transform: scale(1.15);
+}
+
+/* Preset Buttons */
+.preset-btn {
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border: 1px solid var(--card-border);
+    background-color: var(--bg-main);
+    color: var(--text-light);
+    transition: var(--transition-smooth);
+    cursor: pointer;
+}
+
+.preset-btn:hover,
+.preset-btn.active {
+    background-color: var(--primary-color);
+    color: #ffffff;
     border-color: var(--primary-color);
+    box-shadow: 0 4px 12px var(--shadow-color);
 }
 
-.card-back i {
-    color: white !important;
+/* Format Intelligence Box */
+.format-intel-box {
+    background: linear-gradient(135deg, var(--bg-subtle), var(--card-bg));
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    transition: var(--transition-smooth);
 }
 
-/* Toast Popup */
+/* Custom Modern Range Slider Track & Thumb */
+input[type="range"].quality-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--bg-main);
+    outline: none;
+}
+
+input[type="range"].quality-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    border: 3px solid #ffffff;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="range"].quality-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 6px 16px var(--shadow-lg-color);
+}
+
+/* ==========================================================================
+   TOAST POPUP & PROGRESS BAR
+   ========================================================================== */
+
 .toast { 
     position: fixed; 
     bottom: 2rem; 
@@ -314,7 +495,6 @@ header a:hover .logo-image {
     opacity: 1; 
 }
 
-/* Progress Bar */
 .progress-bar-container { 
     width: 100%; 
     height: 10px; 
@@ -343,7 +523,10 @@ header a:hover .logo-image {
 [data-theme="dark"] .fa-sun { display: none; }
 body:not([data-theme="dark"]) .fa-moon { display: none; }
 
-/* Comparison Elements */
+/* ==========================================================================
+   BEFORE-AFTER COMPARISON MODAL & SLIDER SYSTEM
+   ========================================================================== */
+
 .before-after-container { 
     position: relative; 
     width: 100%; 
@@ -454,39 +637,7 @@ body:not([data-theme="dark"]) .fa-moon { display: none; }
     box-shadow: 0 12px 25px -5px var(--shadow-lg-color); transform: translate3d(0, -2px, 0); 
 }
 
-.card-thumbnail { 
-    width: 64px; height: 64px; object-fit: cover; border-radius: 0.5rem; background-color: var(--bg-subtle); 
-    transition: transform 0.3s ease;
-}
-.result-card:hover .card-thumbnail {
-    transform: scale(1.03);
-}
-
-.format-badge { 
-    display: inline-block; padding: 2px 8px; font-size: 0.7rem; font-weight: 600; border-radius: 999px; 
-    background-color: var(--bg-subtle); color: var(--text-light); 
-}
-
-.saved-bar-container { 
-    height: 6px; background-color: var(--bg-subtle); border-radius: 999px; overflow: hidden; flex-grow: 1; 
-}
-
-.saved-bar-fill { 
-    height: 100%; background-color: var(--success); border-radius: 999px; 
-}
-
-.action-btn-card { 
-    background-color: var(--bg-subtle); color: var(--text-dark); border: 1px solid var(--card-border); 
-    padding: 0.5rem 0.75rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 500; 
-    display: inline-flex; align-items: center; gap: 0.3rem; transition: var(--transition-smooth); 
-}
-
-.action-btn-card:hover { 
-    background-color: var(--primary-color); color: white; border-color: var(--primary-color); 
-    transform: translate3d(0, -1px, 0);
-}
-
-/* Modals */
+/* Modals & Content Pages */
 .preview-modal { 
     position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.6); 
     backdrop-filter: blur(8px); z-index: 1001; display: flex; align-items: center; justify-content: center; 
@@ -508,8 +659,9 @@ body:not([data-theme="dark"]) .fa-moon { display: none; }
 .content-page p { margin-bottom: 1rem; color: var(--text-light); }
 
 #card-footer { display: none; text-align: center; padding: 1.5rem; margin-top: 2rem; border-top: 1px solid var(--card-border); }
+
 /* ==========================================================================
-   SCROLL-TRIGGERED FLUID REVEAL & CASCADE WAVE ANIMATION
+   SCROLL-TRIGGERED REVEAL & CASCADE WAVE ANIMATION
    ========================================================================== */
 
 .reveal-on-scroll {
@@ -522,21 +674,19 @@ body:not([data-theme="dark"]) .fa-moon { display: none; }
     backface-visibility: hidden;
 }
 
-/* Revealed Active State */
 .reveal-on-scroll.revealed {
     opacity: 1;
     transform: translate3d(0, 0, 0) scale(1);
 }
 
-/* Stagger Wave Delays for Grid Elements */
 .cascade-group > *:nth-child(1) { --reveal-delay: 50ms; }
 .cascade-group > *:nth-child(2) { --reveal-delay: 130ms; }
 .cascade-group > *:nth-child(3) { --reveal-delay: 210ms; }
 .cascade-group > *:nth-child(4) { --reveal-delay: 290ms; }
 .cascade-group > *:nth-child(5) { --reveal-delay: 370ms; }
-.cascade-group > *:nth-child(6) { --reveal-delay: 450ms; }
+
 /* ==========================================================================
-   DYNAMIC ROTATING SUBTITLE (VERTICAL SLIDE + FADE)
+   DYNAMIC ROTATING SUBTITLE & HERO TEXT
    ========================================================================== */
 
 .subtitle-rotator-wrapper {
@@ -565,19 +715,16 @@ body:not([data-theme="dark"]) .fa-moon { display: none; }
     will-change: transform, opacity;
 }
 
-/* Active State - Visible in Viewport */
 .rotating-phrase.active {
     transform: translate3d(-50%, 0, 0);
     opacity: 1;
 }
 
-/* Exit State - Slides Up & Fades Out */
 .rotating-phrase.exit {
     transform: translate3d(-50%, -30px, 0);
     opacity: 0;
 }
 
-/* Accent Highlight Pills */
 .accent-pill {
     display: inline-flex;
     align-items: center;
@@ -589,8 +736,41 @@ body:not([data-theme="dark"]) .fa-moon { display: none; }
     box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
 }
 
+.hero-gradient-text {
+    background: linear-gradient(
+        135deg,
+        #4f46e5 0%,
+        #9333ea 25%,
+        #0d9488 50%,
+        #9333ea 75%,
+        #4f46e5 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: textGradientFlow 6s linear infinite;
+    display: inline-block;
+}
+
+[data-theme="dark"] .hero-gradient-text {
+    background: linear-gradient(
+        135deg,
+        #818cf8 0%,
+        #c084fc 25%,
+        #2dd4bf 50%,
+        #c084fc 75%,
+        #818cf8 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 2px 12px rgba(129, 140, 248, 0.25));
+}
+
 /* ==========================================================================
-   LIVE INTERACTIVE DEMO COMPARISON WIDGET
+   DEMO WIDGET & PWA INSTALL BANNER
    ========================================================================== */
 
 .demo-format-btn {
@@ -612,103 +792,6 @@ body:not([data-theme="dark"]) .fa-moon { display: none; }
     cursor: ew-resize;
 }
 
-.demo-slider-handle {
-    transition: left 0.05s ease-out;
-}
-
-.demo-after-clipper {
-    transition: clip-path 0.05s ease-out;
-}
-/* ==========================================================================
-   ANIMATED SHIMMER MESH GRADIENT TEXT (INDIGO -> VIOLET -> TEAL)
-   ========================================================================== */
-
-.hero-gradient-text {
-    background: linear-gradient(
-        135deg,
-        #4f46e5 0%,
-        #9333ea 25%,
-        #0d9488 50%,
-        #9333ea 75%,
-        #4f46e5 100%
-    );
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
-    animation: textGradientFlow 6s linear infinite;
-    display: inline-block;
-}
-
-/* Dark Mode Vibrant Gradient Enhancement */
-[data-theme="dark"] .hero-gradient-text {
-    background: linear-gradient(
-        135deg,
-        #818cf8 0%,
-        #c084fc 25%,
-        #2dd4bf 50%,
-        #c084fc 75%,
-        #818cf8 100%
-    );
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 2px 12px rgba(129, 140, 248, 0.25));
-}
-
-/* Smooth Gradient Flow Animation Keyframes */
-@keyframes textGradientFlow {
-    0% {
-        background-position: 0% center;
-    }
-    100% {
-        background-position: 200% center;
-    }
-}
-
-/* ==========================================================================
-   RADIAL RIPPLE THEME SWITCH ANIMATION (VIEW TRANSITIONS & FALLBACK)
-   ========================================================================== */
-
-/* Modern View Transitions API Overrides */
-::view-transition-old(root),
-::view-transition-new(root) {
-    animation: none;
-    mix-blend-mode: normal;
-    display: block;
-}
-
-::view-transition-old(root) {
-    z-index: 1;
-}
-
-::view-transition-new(root) {
-    z-index: 9999;
-}
-
-/* Cross-Browser Fallback Ripple Element */
-.theme-ripple-fallback {
-    position: fixed;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    pointer-events: none;
-    z-index: 99999;
-    transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform;
-}
-
-.theme-ripple-fallback.active {
-    transform: translate(-50%, -50%) scale(300);
-}
-
-/* ==========================================================================
-   PWA OFFLINE INSTALL BANNER STYLING
-   ========================================================================== */
-
 #pwaInstallBanner {
     backdrop-filter: blur(12px);
     box-shadow: 0 10px 30px -10px var(--shadow-color);
@@ -716,4 +799,100 @@ body:not([data-theme="dark"]) .fa-moon { display: none; }
 
 #pwaInstallBanner.hidden {
     display: none !important;
+}
+/* ==========================================================================
+   BLUE COLOR FOR ALL TOOL TITLES & LINKS
+   ========================================================================== */
+
+/* Home Screen Tool Cards Titles */
+.tool-choice-card h3 {
+    color: #2563eb !important; /* Vibrant Blue for Light Mode */
+}
+
+/* Dark Mode Adjustment for Card Titles */
+[data-theme="dark"] .tool-choice-card h3 {
+    color: #60a5fa !important; /* Soft Bright Blue for Dark Mode */
+}
+
+/* Footer Tool Links Blue Color */
+#main-footer ul li a[href*="image-"],
+#main-footer ul li a[href*="exif-"] {
+    color: #2563eb !important;
+    font-weight: 600;
+}
+
+[data-theme="dark"] #main-footer ul li a[href*="image-"],
+[data-theme="dark"] #main-footer ul li a[href*="exif-"] {
+    color: #60a5fa !important;
+}
+/* ==========================================================================
+   ADVANCED DROP ZONE & STAGING AREA STYLING
+   ========================================================================== */
+
+.drop-zone-modern {
+    position: relative;
+    background-color: var(--bg-subtle);
+    border: 2px dashed var(--card-border);
+    border-radius: 2rem;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.35s ease,
+                box-shadow 0.35s ease,
+                background-color 0.35s ease;
+    will-change: transform, border-color, box-shadow;
+    transform: translate3d(0, 0, 0);
+}
+
+/* Hover & Drag Over Glow Effect */
+.drop-zone-modern:hover,
+.drop-zone-modern.drag-over {
+    border-color: var(--primary-color) !important;
+    background-color: rgba(99, 102, 241, 0.04) !important;
+    transform: translate3d(0, -4px, 0) scale(1.005);
+    box-shadow: 0 20px 40px -15px var(--shadow-color),
+                0 0 25px -5px rgba(99, 102, 241, 0.2);
+}
+
+/* Ambient Radial Glow */
+.drop-zone-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        400px circle at 50% 50%,
+        rgba(99, 102, 241, 0.08),
+        transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.drop-zone-modern:hover .drop-zone-glow,
+.drop-zone-modern.drag-over .drop-zone-glow {
+    opacity: 1;
+}
+
+/* Format Pills Strip */
+.format-pill {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-light);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.drop-zone-modern:hover .format-pill {
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Drop Icon Spring Animation */
+.drop-icon-wrapper i {
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.drop-zone-modern:hover .drop-icon-wrapper i {
+    transform: scale(1.15) translateY(-3px);
 }
