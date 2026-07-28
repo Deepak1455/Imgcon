@@ -405,7 +405,8 @@
 
     /**
 /**
-     * 7. Clean HTML5 Path Routing Handler (Auto-Fit Height & Clean URLs Fix)
+/**
+     * 7. Clean HTML5 Path Routing Handler (UI/UX Glitch & Layout Sync Fixed)
      */
     function handleRouteChanges() {
         ensureBlogElements();
@@ -418,7 +419,6 @@
         const blogPostContent = document.getElementById('blog-post-content');
         const mainContainer = document.querySelector('main.app-container');
 
-        // 🔥 Helper function: सफेद बॉक्स (Card Container) की ऊँचाई ब्लॉग के हिसाब से ऑटो-फिट करेगा
         const fitContainerHeight = () => {
             if (mainContainer && blogScreen) {
                 mainContainer.style.minHeight = 'auto';
@@ -431,73 +431,55 @@
             }
         };
 
-        if (path === '/blog' || path === '/blog/') {
-            document.title = "ImgCon Blog - Image Optimization & Speed Guides";
-            
-            let metaDesc = document.querySelector('meta[name="description"]');
-            if (metaDesc) metaDesc.setAttribute("content", "Explore articles and tutorials on image optimization, WebP, AVIF, and web performance.");
-
-            let canonicalTag = document.querySelector('link[rel="canonical"]');
-            if (canonicalTag) canonicalTag.setAttribute("href", "https://imgcon.life/blog");
-
-            if (blogListing) {
-                window.ImgConBlog.renderList(blogListing);
-                blogListing.classList.remove('hidden');
+        if (path === '/blog' || path === '/blog/' || path.startsWith('/blog/')) {
+            // 🔥 ALWAYS CALL showPage so Header, Home Button, Footers & UI/UX stay 100% consistent!
+            if (typeof showPage === 'function') {
+                showPage('blogScreen');
             }
-            if (blogPost) {
-                blogPost.classList.add('hidden');
-            }
-            if (blogScreen) {
-                blogScreen.classList.remove('hidden');
-            }
-            
-            document.querySelectorAll('.screen').forEach(screen => {
-                if (screen.id !== 'blogScreen') {
-                    screen.classList.add('hidden');
-                }
-            });
-            
-            // ऑटो-फिट हाइट ट्रिगर (ब्लॉग लिस्टिंग पेज के लिए)
-            fitContainerHeight();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        } else if (path.startsWith('/blog/')) {
-            const slug = path.split('/').pop();
-            const post = posts[slug];
-            if (post) {
-                // Synchronize Page Title & Meta Tags dynamically
-                document.title = post.title + ' | ImgCon Blog';
-
+            if (path === '/blog' || path === '/blog/') {
+                document.title = "ImgCon Blog - Image Optimization & Speed Guides";
+                
                 let metaDesc = document.querySelector('meta[name="description"]');
-                if (metaDesc) metaDesc.setAttribute("content", post.excerpt);
+                if (metaDesc) metaDesc.setAttribute("content", "Explore articles and tutorials on image optimization, WebP, AVIF, and web performance.");
 
                 let canonicalTag = document.querySelector('link[rel="canonical"]');
-                if (canonicalTag) canonicalTag.setAttribute("href", "https://imgcon.life/blog/" + slug);
+                if (canonicalTag) canonicalTag.setAttribute("href", "https://imgcon.life/blog");
 
                 if (blogListing) {
-                    blogListing.classList.add('hidden');
+                    window.ImgConBlog.renderList(blogListing);
+                    blogListing.classList.remove('hidden');
                 }
-                if (blogPost && blogPostContent) {
-                    blogPostContent.innerHTML = post.content;
-                    blogPost.classList.remove('hidden');
+                if (blogPost) {
+                    blogPost.classList.add('hidden');
                 }
-                if (blogScreen) {
-                    blogScreen.classList.remove('hidden');
-                }
-                
-                document.querySelectorAll('.screen').forEach(screen => {
-                    if (screen.id !== 'blogScreen') {
-                        screen.classList.add('hidden');
-                    }
-                });
-                
-                // 🔥 ऑटो-फिट हाइट ट्रिगर (छोटे या बड़े ब्लॉग आर्टिकल के लिए)
-                fitContainerHeight();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                history.pushState(null, '', '/blog');
-                handleRouteChanges();
+                const slug = path.split('/').pop();
+                const post = posts[slug];
+                if (post) {
+                    document.title = post.title + ' | ImgCon Blog';
+
+                    let metaDesc = document.querySelector('meta[name="description"]');
+                    if (metaDesc) metaDesc.setAttribute("content", post.excerpt);
+
+                    let canonicalTag = document.querySelector('link[rel="canonical"]');
+                    if (canonicalTag) canonicalTag.setAttribute("href", "https://imgcon.life/blog/" + slug);
+
+                    if (blogListing) {
+                        blogListing.classList.add('hidden');
+                    }
+                    if (blogPost && blogPostContent) {
+                        blogPostContent.innerHTML = post.content;
+                        blogPost.classList.remove('hidden');
+                    }
+                } else {
+                    history.pushState(null, '', '/blog');
+                    handleRouteChanges();
+                }
             }
+            
+            fitContainerHeight();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             if (blogScreen) {
                 blogScreen.classList.add('hidden');
