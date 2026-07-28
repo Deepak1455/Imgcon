@@ -76,21 +76,44 @@ const routes = {
     '/blog/future-of-ai-image-optimization': { screen: 'blogScreen', title: 'The Future of AI Image Optimization & Upscaling | ImgCon Blog', isPost: true, desc: 'How AI neural networks are transforming web image compression.' }
 };
 
-// --- Clean URLs HTML5 Router Engine ---
+// --- Smart Clean URLs HTML5 Router Engine (No Home Screen Fallback Bug) ---
 const router = async () => {
-    const path = window.location.pathname || '/';
-    const route = routes[path] || routes['/'];
-    
+    // 1. यूआरएल को साफ़ करें (Trailing Slash हटाएं)
+    let path = window.location.pathname || '/';
+    if (path.length > 1 && path.endsWith('/')) {
+        path = path.slice(0, -1);
+    }
+
+    // 2. राउट चेक करें
+    let route = routes[path];
+
+    // 🔥 Dynamic Wildcard: अगर लिंक /blog/ से शुरू होता है तो जबरदस्ती blogScreen खोलें
+    if (!route && path.startsWith('/blog/')) {
+        const slug = path.split('/').filter(Boolean).pop();
+        route = {
+            screen: 'blogScreen',
+            title: 'ImgCon Blog',
+            isPost: true,
+            desc: 'Read image optimization guides and tutorials on ImgCon.'
+        };
+    }
+
+    // 3. अगर कोई भी राउट न मिले तभी होम स्क्रीन पर जाएं
+    if (!route) {
+        route = routes['/'];
+        path = '/';
+    }
+
     // Document Title Update
     document.title = route.title;
 
-    // Dynamically update Meta Description tag for Google Search bots
+    // Dynamically update Meta Description
     let metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc && route.desc) {
         metaDesc.setAttribute("content", route.desc);
     }
 
-    // Dynamically update Canonical URL for Google Indexing
+    // Dynamically update Canonical Link
     let canonicalTag = document.querySelector('link[rel="canonical"]');
     if (canonicalTag) {
         canonicalTag.setAttribute("href", "https://imgcon.life" + path);
@@ -99,27 +122,32 @@ const router = async () => {
     if (route.screen === 'blogScreen') {
         if (activeTool) resetTool();
         showPage('blogScreen');
-        const blogListing = document.getElementById('blog-listing');
-        const blogPost = document.getElementById('blog-post');
-        const blogPostContent = document.getElementById('blog-post-content');
-
-        if (route.isPost) {
-            const slug = path.split('/').pop();
-            // Source blog content from the SEO-indexable DOM container (blogPostsSource)
-            const blogSource = document.getElementById('blogPostsSource');
-            const postContent = blogSource ? blogSource.querySelector(`[data-slug="${slug}"]`) : null;
-            
-            if (postContent) {
-                blogPostContent.innerHTML = postContent.innerHTML;
-                blogListing.classList.add('hidden');
-                blogPost.classList.remove('hidden');
-            } else {
-                blogListing.classList.remove('hidden');
-                blogPost.classList.add('hidden');
-            }
+        
+        // imgconblog.js के फ़ंक्शन से ब्लॉग कंटेंट रेंडर करें
+        if (typeof handleRouteChanges === 'function') {
+            handleRouteChanges();
         } else {
-            blogListing.classList.remove('hidden');
-            blogPost.classList.add('hidden');
+            const blogListing = document.getElementById('blog-listing');
+            const blogPost = document.getElementById('blog-post');
+            const blogPostContent = document.getElementById('blog-post-content');
+
+            if (route.isPost) {
+                const slug = path.split('/').filter(Boolean).pop();
+                const blogSource = document.getElementById('blogPostsSource');
+                const postContent = blogSource ? blogSource.querySelector(`[data-slug="${slug}"]`) : null;
+                
+                if (postContent && blogPostContent) {
+                    blogPostContent.innerHTML = postContent.innerHTML;
+                    if (blogListing) blogListing.classList.add('hidden');
+                    if (blogPost) blogPost.classList.remove('hidden');
+                } else {
+                    if (blogListing) blogListing.classList.remove('hidden');
+                    if (blogPost) blogPost.classList.add('hidden');
+                }
+            } else {
+                if (blogListing) blogListing.classList.remove('hidden');
+                if (blogPost) blogPost.classList.add('hidden');
+            }
         }
     } else if (route.screen === 'exifScreen') {
         if (activeTool) resetTool();
