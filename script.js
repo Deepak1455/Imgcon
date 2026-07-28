@@ -76,20 +76,24 @@ const routes = {
     '/blog/future-of-ai-image-optimization': { screen: 'blogScreen', title: 'The Future of AI Image Optimization & Upscaling | ImgCon Blog', isPost: true, desc: 'How AI neural networks are transforming web image compression.' }
 };
 
-// Router Engine with Dynamic Meta Tag Updating
+// --- Clean URLs HTML5 Router Engine ---
 const router = async () => {
-    if (!window.location.hash || window.location.hash === '#') {
-        window.history.replaceState(null, '', '#/');
-    }
-    
-    const path = window.location.hash.slice(1) || '/';
+    const path = window.location.pathname || '/';
     const route = routes[path] || routes['/'];
+    
+    // Document Title Update
     document.title = route.title;
 
     // Dynamically update Meta Description tag for Google Search bots
     let metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc && route.desc) {
         metaDesc.setAttribute("content", route.desc);
+    }
+
+    // Dynamically update Canonical URL for Google Indexing
+    let canonicalTag = document.querySelector('link[rel="canonical"]');
+    if (canonicalTag) {
+        canonicalTag.setAttribute("href", "https://imgcon.life" + path);
     }
 
     if (route.screen === 'blogScreen') {
@@ -101,8 +105,10 @@ const router = async () => {
 
         if (route.isPost) {
             const slug = path.split('/').pop();
-            const postTemplate = document.getElementById('blogPostsTemplate');
-            const postContent = postTemplate.content.querySelector(`[data-slug="${slug}"]`);
+            // Source blog content from the SEO-indexable DOM container (blogPostsSource)
+            const blogSource = document.getElementById('blogPostsSource');
+            const postContent = blogSource ? blogSource.querySelector(`[data-slug="${slug}"]`) : null;
+            
             if (postContent) {
                 blogPostContent.innerHTML = postContent.innerHTML;
                 blogListing.classList.add('hidden');
@@ -132,6 +138,7 @@ const router = async () => {
     }
 };
 
+// Clean Navigation Interceptor (Without '#' in URL)
 const navigateTo = (e) => {
     const link = e.target.closest('a');
     if (link) {
@@ -140,9 +147,9 @@ const navigateTo = (e) => {
         }
         e.preventDefault();
         
-        const targetHash = '#' + link.pathname;
-        if (window.location.hash !== targetHash) {
-            history.pushState(null, '', targetHash);
+        const targetPath = link.pathname;
+        if (window.location.pathname !== targetPath) {
+            history.pushState(null, '', targetPath);
             router();
         }
     }
@@ -157,7 +164,6 @@ function initializeWorkerPool() {
     const workerUrl = URL.createObjectURL(blob);
     for (let i = 0; i < numWorkers; i++) workerPool.push({ worker: new Worker(workerUrl), busy: false });
 }
-
 // --- UI Navigation ---
 function showPage(pageId) {
     allScreens.forEach(s => s.classList.add('hidden'));
@@ -194,40 +200,118 @@ function showTool(toolName, preloadedFiles = null) {
     if (preloadedFiles) handleFiles(preloadedFiles);
 }
 
+// ==========================================================================
+// DYNAMIC TOOL HEADER METADATA MAP
+// ==========================================================================
+const toolMetaDetails = {
+    converter: {
+        badge: "⚡ 100% Private Format Converter",
+        title: "Image Converter & Batch Format Switcher",
+        desc: "Convert PNG, JPG, WebP, AVIF, HEIC, PDF & ICO formats instantly in your browser. Batch processing with 100% private zero-server upload.",
+        prompt: "Drag & drop or browse images from your device to start converting"
+    },
+    compressor: {
+        badge: "📉 100% Private File Size Reducer",
+        title: "Image Compressor & Size Optimizer",
+        desc: "Shrink JPG, WebP & PNG file sizes up to 90% without losing visual quality. Set custom target KB/MB sizes with live comparison preview.",
+        prompt: "Drag & drop or browse photos from your device to start compressing"
+    },
+    resizer: {
+        badge: "📐 100% Private Image Resizer",
+        title: "Image Resizer & Dimension Scaler",
+        desc: "Resize photos by exact pixels or percentage. Maintain aspect ratio lock and apply built-in social media presets for Instagram, Facebook & Twitter.",
+        prompt: "Drag & drop or browse photos from your device to start resizing"
+    },
+    watermark: {
+        badge: "🛡️ 100% Private Copyright Protection",
+        title: "Image Watermark & Logo Overlay Tool",
+        desc: "Protect your photography copyright with custom text or transparent logo watermarks. Full opacity, scale, and positioning control.",
+        prompt: "Drag & drop or browse photos from your device to add watermarks"
+    }
+};
+
+// ==========================================================================
+// SETUP TOOL UI ENGINE (SMOOTH & FAST RENDERING)
+// ==========================================================================
 function setupToolUI(toolName) {
+    activeTool = toolName;
+    selectedFormat = null;
+    
     const toolScreen = document.getElementById('toolScreen');
-    const toolLayout = document.getElementById('toolLayoutTemplate').content.cloneNode(true);
+    if (!toolScreen) return;
+
+    const toolTemplate = document.getElementById('toolLayoutTemplate');
+    if (!toolTemplate) return;
+
+    // Clone Tool Base Layout
+    const toolLayout = toolTemplate.content.cloneNode(true);
     toolScreen.innerHTML = '';
     toolScreen.appendChild(toolLayout);
 
-    const optionsContainer = toolScreen.querySelector('.options-container');
-    const optionsTemplateId = `${toolName}OptionsTemplate`;
-    optionsContainer.appendChild(document.getElementById(optionsTemplateId).content.cloneNode(true));
-    
-    const fileInput = toolScreen.querySelector('.file-input');
-    const addMoreInput = toolScreen.querySelector('.add-more-files-input');
-    if (toolName === 'compressor') {
-        fileInput.accept = 'image/jpeg, image/webp';
-        addMoreInput.accept = 'image/jpeg, image/webp';
-    } else {
-        fileInput.accept = 'image/*';
-        addMoreInput.accept = 'image/*';
+    // Populate Dynamic Tool Header Banner Text
+    const meta = toolMetaDetails[toolName];
+    if (meta) {
+        const badgeEl = toolScreen.querySelector('.tool-header-badge');
+        const titleEl = toolScreen.querySelector('.tool-header-title');
+        const descEl = toolScreen.querySelector('.tool-header-desc');
+        const promptEl = toolScreen.querySelector('.tool-header-prompt');
+
+        if (badgeEl) badgeEl.textContent = meta.badge;
+        if (titleEl) titleEl.textContent = meta.title;
+        if (descEl) descEl.textContent = meta.desc;
+        if (promptEl) promptEl.innerHTML = `${meta.prompt} or <span class="text-indigo-500 underline font-bold cursor-pointer">click to browse</span>`;
     }
 
+    // Clone & Append Specific Tool Options
+    const optionsContainer = toolScreen.querySelector('.options-container');
+    const optionsTemplate = document.getElementById(`${toolName}OptionsTemplate`);
+    if (optionsContainer && optionsTemplate) {
+        optionsContainer.appendChild(optionsTemplate.content.cloneNode(true));
+    }
+    
+    // Configure File Input Constraints
+    const fileInput = toolScreen.querySelector('.file-input');
+    const addMoreInput = toolScreen.querySelector('.add-more-files-input');
+    const acceptType = (toolName === 'compressor') ? 'image/jpeg, image/webp' : 'image/*';
+
+    if (fileInput) fileInput.accept = acceptType;
+    if (addMoreInput) addMoreInput.accept = acceptType;
+
+    // Attach Action Event Listeners to New Screen DOM
     attachToolEventListeners(toolScreen);
 }
 
+// ==========================================================================
+// RESET TOOL & MEMORY CLEANUP ENGINE (ZERO MEMORY LEAKS)
+// ==========================================================================
 function resetTool() {
-    files.forEach(f => { 
-        if (f.previewUrl) URL.revokeObjectURL(f.previewUrl); 
-    });
-    
-    if (processedResults && processedResults.length > 0) {
-        processedResults.forEach(r => {
-            if (r.blob) URL.revokeObjectURL(URL.createObjectURL(r.blob));
+    // 1. Revoke Blob Preview URLs
+    if (Array.isArray(files)) {
+        files.forEach(f => { 
+            if (f && f.previewUrl) {
+                try { URL.revokeObjectURL(f.previewUrl); } catch (e) {}
+            } 
         });
     }
     
+    // 2. Revoke Processed Output Blobs
+    if (Array.isArray(processedResults) && processedResults.length > 0) {
+        processedResults.forEach(r => {
+            if (r && r.blob) {
+                try { 
+                    const blobUrl = URL.createObjectURL(r.blob);
+                    URL.revokeObjectURL(blobUrl); 
+                } catch (e) {}
+            }
+        });
+    }
+
+    // 3. Free Watermark Image Bitmap Memory
+    if (watermarkImage && typeof watermarkImage.close === 'function') {
+        try { watermarkImage.close(); } catch (e) {}
+    }
+    
+    // 4. Reset Global Application State
     files = []; 
     originalFileDetails = []; 
     processedResults = []; 
@@ -236,12 +320,12 @@ function resetTool() {
     watermarkImage = null;
     activeTool = null;
     
+    // 5. Clear Tool Screen Container
     const toolScreen = document.getElementById('toolScreen');
     if (toolScreen) {
         toolScreen.innerHTML = ''; 
     }
 }
-
 // --- Core App Functionality ---
 function handleFiles(fileList, isAddingMore = false) {
     let newFiles = Array.from(fileList);
@@ -905,58 +989,140 @@ const triggerRealtimeSizeUpdate = debounce(async () => {
     }
 }, 250);
 
+
 // --- Attach Action Event Listeners ---
 function attachToolEventListeners(container) {
-    const dropZone = container.querySelector('#dropZone'), fileInput = container.querySelector('.file-input');
+    const dropZone = container.querySelector('#dropZone');
+    const fileInput = container.querySelector('.file-input');
     
+    // 1. Drop Zone Event Listeners (with Smooth Drag-Over Glow)
     if (dropZone) {
-        dropZone.addEventListener('dragover', e => e.preventDefault());
-        dropZone.addEventListener('dragenter', () => dropZone.classList.add('border-indigo-500', 'bg-indigo-50/20'));
-        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-indigo-500', 'bg-indigo-50/20'));
-        dropZone.addEventListener('drop', e => { e.preventDefault(); handleFiles(e.dataTransfer.files); });
-        dropZone.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', e => handleFiles(e.target.files));
+        dropZone.addEventListener('dragover', e => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+        dropZone.addEventListener('dragenter', e => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+        dropZone.addEventListener('drop', e => { 
+            e.preventDefault(); 
+            dropZone.classList.remove('drag-over');
+            handleFiles(e.dataTransfer.files); 
+        });
+        dropZone.addEventListener('click', () => fileInput?.click());
+        fileInput?.addEventListener('change', e => handleFiles(e.target.files));
     }
     
+    // Core Buttons
     container.querySelector('.add-more-files-input')?.addEventListener('change', e => handleFiles(e.target.files, true));
     container.querySelector('.prev-image-btn')?.addEventListener('click', () => { showFilePreview(currentImageIdx - 1); triggerRealtimeSizeUpdate(); });
     container.querySelector('.next-image-btn')?.addEventListener('click', () => { showFilePreview(currentImageIdx + 1); triggerRealtimeSizeUpdate(); });
     container.querySelector('.start-btn')?.addEventListener('click', processFiles);
     container.querySelector('.clear-all-btn')?.addEventListener('click', resetTool);
     
+    // Quality Sliders Animation & Live Updates
     container.querySelectorAll('.quality-slider').forEach(slider => {
         slider.addEventListener('input', (e) => {
-            const parent = slider.closest('.options-section') || slider.parentElement;
+            const parent = slider.closest('.options-section') || slider.parentElement || container;
             const valSpan = parent.querySelector('.quality-value');
             if (valSpan) {
                 valSpan.textContent = e.target.value;
                 valSpan.style.transform = 'scale(1.25)';
                 setTimeout(() => valSpan.style.transform = 'scale(1)', 100);
             }
+
+            // Sync preset buttons active status
+            const presetBtns = container.querySelectorAll('.preset-btn');
+            presetBtns.forEach(btn => {
+                if (btn.dataset.quality === e.target.value) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
             triggerRealtimeSizeUpdate();
         });
     });
 
+    // ==========================================================================
+    // 1. CONVERTER TOOL EVENT LISTENERS
+    // ==========================================================================
     if (activeTool === 'converter') {
-        container.querySelectorAll('.format-card').forEach(card => card.addEventListener('click', () => {
-            container.querySelectorAll('.format-card').forEach(c => c.classList.remove('selected'));
+        const formatCards = container.querySelectorAll('.format-card');
+        const intelTitle = container.querySelector('#formatIntelTitle');
+        const intelDesc = container.querySelector('#formatIntelDesc');
+        const intelIcon = container.querySelector('#formatIntelIcon');
+
+        // Dynamic Format Tips Data
+        const formatTips = {
+            png: { title: 'PNG (Lossless Transparency)', desc: 'Best for graphics, logos, and images requiring background transparency.', icon: 'fa-image' },
+            jpg: { title: 'JPG (Universal Compatibility)', desc: 'Ideal for real-world photos. Supported on all browsers & devices.', icon: 'fa-camera-retro' },
+            webp: { title: 'WEBP (30% Smaller for Web)', desc: 'Google next-gen format with superior compression for faster websites.', icon: 'fa-bolt' },
+            avif: { title: 'AVIF (Ultra High Efficiency)', desc: 'Maximum file size reduction with crisp visual quality. Modern web standard.', icon: 'fa-feather-alt' },
+            pdf: { title: 'PDF (Document Archive)', desc: 'Combines your images into a single print-ready PDF document.', icon: 'fa-file-pdf' },
+            ico: { title: 'ICO (Favicon Generator)', desc: 'Converts images to multi-resolution icon file for websites.', icon: 'fa-desktop' }
+        };
+
+        // Format Card Click Event
+        formatCards.forEach(card => card.addEventListener('click', () => {
+            formatCards.forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
             selectedFormat = card.dataset.format;
             
+            // Update Format Intelligence Box dynamically
+            const tip = formatTips[selectedFormat];
+            if (tip && intelTitle && intelDesc) {
+                intelTitle.textContent = tip.title;
+                intelDesc.textContent = tip.desc;
+                if (intelIcon) intelIcon.className = `fas ${tip.icon}`;
+            }
+
+            // Show/Hide PDF Settings Section
             const pdfSection = container.querySelector('#pdfOptionsSection');
             if (pdfSection) pdfSection.classList.toggle('hidden', selectedFormat !== 'pdf');
+            
             triggerRealtimeSizeUpdate();
         }));
+
+        // Quick Quality Presets Event Handler (Max / Balanced / Compact)
+        const presetBtns = container.querySelectorAll('.preset-btn');
+        const qualitySlider = container.querySelector('.quality-slider');
+        const qualityValueSpan = container.querySelector('.quality-value');
+
+        presetBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                presetBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const qVal = btn.dataset.quality;
+                if (qualitySlider) qualitySlider.value = qVal;
+                if (qualityValueSpan) {
+                    qualityValueSpan.textContent = qVal;
+                    qualityValueSpan.style.transform = 'scale(1.25)';
+                    setTimeout(() => qualityValueSpan.style.transform = 'scale(1)', 100);
+                }
+                
+                triggerRealtimeSizeUpdate();
+            });
+        });
     }
 
+    // ==========================================================================
+    // 2. WATERMARK TOOL EVENT LISTENERS
+    // ==========================================================================
     if (activeTool === 'watermark') {
         const typeButtons = container.querySelectorAll('.watermark-type-btn');
         typeButtons.forEach(btn => btn.addEventListener('click', () => {
             typeButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             const type = btn.dataset.type;
-            container.querySelector('#text-watermark-options').classList.toggle('hidden', type !== 'text');
-            container.querySelector('#image-watermark-options').classList.toggle('hidden', type !== 'image');
+            container.querySelector('#text-watermark-options')?.classList.toggle('hidden', type !== 'text');
+            container.querySelector('#image-watermark-options')?.classList.toggle('hidden', type !== 'image');
         }));
 
         const logoInput = container.querySelector('#watermark-image-input');
@@ -965,17 +1131,24 @@ function attachToolEventListeners(container) {
             if (file) {
                 watermarkImage = await createImageBitmap(file);
                 const preview = container.querySelector('#watermark-preview');
-                preview.src = URL.createObjectURL(file);
-                preview.classList.remove('hidden');
+                if (preview) {
+                    preview.src = URL.createObjectURL(file);
+                    preview.classList.remove('hidden');
+                }
             }
         });
 
         container.querySelector('#opacity-slider')?.addEventListener('input', (e) => {
-            container.querySelector('#opacity-value').textContent = e.target.value;
+            const opacityVal = container.querySelector('#opacity-value');
+            if (opacityVal) opacityVal.textContent = e.target.value;
         });
+
         container.querySelector('#scale-slider')?.addEventListener('input', (e) => {
-            container.querySelector('#scale-value').textContent = e.target.value;
+            const scaleVal = container.querySelector('#scale-value');
+            if (scaleVal) scaleVal.textContent = e.target.value;
         });
+
+        container.querySelector('#watermark-text')?.addEventListener('input', triggerRealtimeSizeUpdate);
 
         const posButtons = container.querySelectorAll('.position-btn');
         posButtons.forEach(btn => btn.addEventListener('click', () => {
@@ -984,12 +1157,19 @@ function attachToolEventListeners(container) {
         }));
     }
 
+    // ==========================================================================
+    // 3. COMPRESSOR TOOL EVENT LISTENERS
+    // ==========================================================================
     if (activeTool === 'compressor') {
         const toggle = container.querySelector('#target-size-toggle');
         const unitContainer = container.querySelector('.target-size-input-container');
         toggle?.addEventListener('change', () => {
-            unitContainer.classList.toggle('hidden', !toggle.checked);
+            unitContainer?.classList.toggle('hidden', !toggle.checked);
+            triggerRealtimeSizeUpdate();
         });
+
+        container.querySelector('#target-size-kb-input')?.addEventListener('input', triggerRealtimeSizeUpdate);
+        container.querySelector('#target-size-unit-select')?.addEventListener('change', triggerRealtimeSizeUpdate);
 
         const beforeAfterToggle = container.querySelector('#before-after-toggle');
         const previewInfo = container.querySelector('.realtime-preview-info');
@@ -1003,23 +1183,39 @@ function attachToolEventListeners(container) {
         });
     }
 
+    // ==========================================================================
+    // 4. RESIZER TOOL EVENT LISTENERS
+    // ==========================================================================
     if (activeTool === 'resizer') {
         const modeButtons = container.querySelectorAll('.resize-by-btn');
         const widthInput = container.querySelector('#resize-width');
         const heightInput = container.querySelector('#resize-height');
         const aspectToggle = container.querySelector('#aspect-ratio-toggle');
         const socialPresets = container.querySelector('#social-presets');
+        const percentageSlider = container.querySelector('#percentage-slider');
+        const percentageValue = container.querySelector('#percentage-value');
+        const percentageDims = container.querySelector('#percentage-dims');
 
         modeButtons.forEach(btn => btn.addEventListener('click', () => {
             modeButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             const isPixels = btn.dataset.mode === 'pixels';
-            container.querySelector('#pixels-mode-container').classList.toggle('hidden', !isPixels);
-            container.querySelector('#percentage-mode-container').classList.toggle('hidden', isPixels);
+            container.querySelector('#pixels-mode-container')?.classList.toggle('hidden', !isPixels);
+            container.querySelector('#percentage-mode-container')?.classList.toggle('hidden', isPixels);
         }));
 
-        container.querySelector('#percentage-slider')?.addEventListener('input', (e) => {
-            container.querySelector('#percentage-value').textContent = e.target.value;
+        // Percentage Slider Live Dimension Calculation
+        percentageSlider?.addEventListener('input', (e) => {
+            const scalePct = parseInt(e.target.value, 10);
+            if (percentageValue) percentageValue.textContent = scalePct;
+
+            if (percentageDims && originalFileDetails[currentImageIdx]) {
+                const origW = originalFileDetails[currentImageIdx].width || 0;
+                const origH = originalFileDetails[currentImageIdx].height || 0;
+                const newW = Math.round(origW * (scalePct / 100));
+                const newH = Math.round(origH * (scalePct / 100));
+                percentageDims.textContent = `${newW} x ${newH} px`;
+            }
         });
 
         socialPresets?.addEventListener('change', () => {
@@ -1033,7 +1229,7 @@ function attachToolEventListeners(container) {
         });
 
         widthInput?.addEventListener('input', () => {
-            if (aspectToggle?.checked && files.length > 0) {
+            if (aspectToggle?.checked && files.length > 0 && originalFileDetails[currentImageIdx]) {
                 const ratio = originalFileDetails[currentImageIdx].ratio;
                 if (ratio && heightInput) {
                     heightInput.value = Math.round(parseInt(widthInput.value, 10) / ratio) || '';
@@ -1042,7 +1238,7 @@ function attachToolEventListeners(container) {
         });
 
         heightInput?.addEventListener('input', () => {
-            if (aspectToggle?.checked && files.length > 0) {
+            if (aspectToggle?.checked && files.length > 0 && originalFileDetails[currentImageIdx]) {
                 const ratio = originalFileDetails[currentImageIdx].ratio;
                 if (ratio && widthInput) {
                     widthInput.value = Math.round(parseInt(heightInput.value, 10) * ratio) || '';
@@ -1051,7 +1247,6 @@ function attachToolEventListeners(container) {
         });
     }
 }
-
 // --- Theme Switcher (With Radial Ripple Wave Animation) ---
 function initTheme() {
     const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -1154,14 +1349,6 @@ document.getElementById('modalCloseBtn')?.addEventListener('click', () => {
     previewModal.classList.remove('show');
 });
 
-// --- Initialization ---
-document.addEventListener('DOMContentLoaded', () => {
-    initTheme();
-    document.body.addEventListener('click', navigateTo);
-    window.addEventListener('popstate', router);
-    window.addEventListener('hashchange', router);
-    router();
-});
 // --- Scroll Reveal Observer System ---
 let scrollObserver = null;
 
@@ -1195,21 +1382,6 @@ function initScrollReveal() {
     });
 }
 
-// Ensure initScrollReveal runs in the existing router() function when showing 'homeScreen'
-const originalShowPage = showPage;
-showPage = function(pageId) {
-    originalShowPage(pageId);
-    if (pageId === 'homeScreen') {
-        requestAnimationFrame(() => {
-            initScrollReveal();
-        });
-    }
-};
-
-// Initial trigger on load
-document.addEventListener('DOMContentLoaded', () => {
-    initScrollReveal();
-});
 // --- Dynamic Subtitle Text Rotator Engine ---
 let subtitleRotationTimer = null;
 
@@ -1250,21 +1422,30 @@ function initSubtitleRotator() {
     }, 3200); // Rotates every 3.2 seconds
 }
 
-// Ensure rotator starts when homeScreen loads or via SPA Router
-document.addEventListener('DOMContentLoaded', () => {
-    initSubtitleRotator();
-});
-
-// Attach to Router page change event
-const prevShowPageFunc = showPage;
+// --- Unified Page Navigation Override ---
+const originalShowPage = showPage;
 showPage = function(pageId) {
-    if (typeof prevShowPageFunc === 'function') prevShowPageFunc(pageId);
+    if (typeof originalShowPage === 'function') originalShowPage(pageId);
     if (pageId === 'homeScreen') {
         requestAnimationFrame(() => {
+            initScrollReveal();
             initSubtitleRotator();
         });
     }
 };
+
+// --- Clean App Initialization ---
+document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+    document.body.addEventListener('click', navigateTo);
+    window.addEventListener('popstate', router); // Clean URLs listener
+    
+    // Initial triggers on load
+    initScrollReveal();
+    initSubtitleRotator();
+    
+    router();
+});
 // --- Live Interactive Demo Comparison Widget Engine ---
 function initDemoComparisonWidget() {
     const container = document.getElementById('demoComparisonWidget');
@@ -1407,4 +1588,14 @@ function initPWAInstallBanner() {
 // Initialize PWA Manager on DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
     initPWAInstallBanner();
+});
+// Smart Mouse Spotlight Follower for Tool Cards
+document.addEventListener('mousemove', (e) => {
+    document.querySelectorAll('.tool-choice-card').forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+    });
 });
