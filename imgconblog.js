@@ -1,6 +1,6 @@
 /**
  * ImgCon Blog Content & UI Manager
- * Smart, Smooth & Fast on-demand blog rendering engine
+ * Smart, Smooth & Fast on-demand blog rendering engine (Clean URLs Updated)
  */
 (function () {
     // 1. Dynamic CSS Injection (keeps style.css lightweight and clean)
@@ -289,7 +289,6 @@
 
     /**
      * 3. Dynamic Route Injector
-     * Safely registers all 20 posts into script.js's global routes object on load.
      */
     function injectRoutesIntoGlobalRouter() {
         try {
@@ -367,20 +366,16 @@
 
     /**
      * 5. Dynamic Template Sync
-     * Safe, cross-browser manual node manipulation of DocumentFragment
      */
     function syncBlogTemplates() {
         const template = document.getElementById('blogPostsTemplate');
         if (!template) return;
         
         const content = template.content;
-        
-        // Safe removal of existing elements on mobile browsers
         while (content.firstChild) {
             content.removeChild(content.firstChild);
         }
         
-        // Rebuild and append each post node safely
         Object.keys(posts).forEach(slug => {
             const post = posts[slug];
             const postDiv = document.createElement('div');
@@ -409,20 +404,42 @@
     }
 
     /**
-     * 7. Bulletproof SPA Hash Routing Guard
-     * Time-delayed sync ensures mobile-rendering triggers load on exact requested post.
+/**
+     * 7. Clean HTML5 Path Routing Handler (Auto-Fit Height & Clean URLs Fix)
      */
     function handleRouteChanges() {
         ensureBlogElements();
         injectRoutesIntoGlobalRouter();
         
-        const path = window.location.hash.slice(1) || '/';
+        const path = window.location.pathname || '/';
         const blogScreen = document.getElementById('blogScreen');
         const blogListing = document.getElementById('blog-listing');
         const blogPost = document.getElementById('blog-post');
         const blogPostContent = document.getElementById('blog-post-content');
+        const mainContainer = document.querySelector('main.app-container');
+
+        // 🔥 Helper function: सफेद बॉक्स (Card Container) की ऊँचाई ब्लॉग के हिसाब से ऑटो-फिट करेगा
+        const fitContainerHeight = () => {
+            if (mainContainer && blogScreen) {
+                mainContainer.style.minHeight = 'auto';
+                requestAnimationFrame(() => {
+                    const h = blogScreen.offsetHeight;
+                    if (h > 0) {
+                        mainContainer.style.minHeight = h + 'px';
+                    }
+                });
+            }
+        };
 
         if (path === '/blog' || path === '/blog/') {
+            document.title = "ImgCon Blog - Image Optimization & Speed Guides";
+            
+            let metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc) metaDesc.setAttribute("content", "Explore articles and tutorials on image optimization, WebP, AVIF, and web performance.");
+
+            let canonicalTag = document.querySelector('link[rel="canonical"]');
+            if (canonicalTag) canonicalTag.setAttribute("href", "https://imgcon.life/blog");
+
             if (blogListing) {
                 window.ImgConBlog.renderList(blogListing);
                 blogListing.classList.remove('hidden');
@@ -439,12 +456,24 @@
                     screen.classList.add('hidden');
                 }
             });
+            
+            // ऑटो-फिट हाइट ट्रिगर (ब्लॉग लिस्टिंग पेज के लिए)
+            fitContainerHeight();
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
         } else if (path.startsWith('/blog/')) {
             const slug = path.split('/').pop();
             const post = posts[slug];
             if (post) {
+                // Synchronize Page Title & Meta Tags dynamically
+                document.title = post.title + ' | ImgCon Blog';
+
+                let metaDesc = document.querySelector('meta[name="description"]');
+                if (metaDesc) metaDesc.setAttribute("content", post.excerpt);
+
+                let canonicalTag = document.querySelector('link[rel="canonical"]');
+                if (canonicalTag) canonicalTag.setAttribute("href", "https://imgcon.life/blog/" + slug);
+
                 if (blogListing) {
                     blogListing.classList.add('hidden');
                 }
@@ -461,10 +490,13 @@
                         screen.classList.add('hidden');
                     }
                 });
+                
+                // 🔥 ऑटो-फिट हाइट ट्रिगर (छोटे या बड़े ब्लॉग आर्टिकल के लिए)
+                fitContainerHeight();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                // Fail-safe redirect if lag in execution on mobile
-                window.location.hash = '#/blog';
+                history.pushState(null, '', '/blog');
+                handleRouteChanges();
             }
         } else {
             if (blogScreen) {
@@ -472,7 +504,6 @@
             }
         }
     }
-
     // 8. Global API Export
     window.ImgConBlog = {
         renderList: function (container) {
@@ -481,21 +512,18 @@
             
             container.innerHTML = `
                 <div class="text-center mb-10">
-                    <!-- Dynamic logo.png with safety onerror fallback -->
                     <div class="blog-logo-container mb-4">
                         <img src="logo.png" alt="ImgCon Logo" onerror="this.style.display='none'">
                     </div>
                     <h2 class="text-3xl font-extrabold tracking-tight" style="color: var(--text-dark);">ImgCon Blog</h2>
                     <p class="text-sm mt-2 mb-4" style="color: var(--text-light);">Image optimization, speed, and standard web guidelines compiled in a clean database.</p>
                     
-                    <!-- Smart Blog Counter Badge -->
                     <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
                          <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
                          <span style="color: var(--text-dark);">${totalCount} Premium Articles Published</span>
                     </div>
                 </div>
                 
-                <!-- Live Search Bar -->
                 <div class="mb-8 p-4 rounded-2xl border" style="background-color: var(--card-bg); border-color: var(--card-border);">
                     <div class="relative">
                         <input type="text" id="blog-search-input" placeholder="Search articles..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border text-sm outline-none focus:border-indigo-500 transition-all duration-300" style="border-color: var(--card-border); background-color: var(--bg-subtle); color: var(--text-dark);">
@@ -548,7 +576,7 @@
     };
 
     /**
-     * 9. Navigation Click Interceptor (SPA Hijacker)
+     * 9. Navigation Click Interceptor (Clean URLs Compatible)
      */
     document.addEventListener('click', function (e) {
         const link = e.target.closest('a');
@@ -558,42 +586,27 @@
         if (!href) return;
 
         const isBlogLink = href.startsWith('/blog') || 
-                           href.startsWith('#/blog') || 
-                           link.pathname.startsWith('/blog') || 
-                           (link.hash && link.hash.startsWith('#/blog'));
+                           link.pathname.startsWith('/blog');
 
         if (isBlogLink) {
             e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
+            
+            let targetPath = href.startsWith('/') ? href : '/' + href;
 
-            let targetHash = '#/blog';
-            if (href.startsWith('/blog/')) {
-                targetHash = '#/blog/' + href.slice(6);
-            } else if (href.startsWith('#/blog/')) {
-                targetHash = href;
-            } else if (link.pathname.startsWith('/blog/')) {
-                targetHash = '#/blog/' + link.pathname.slice(6);
-            } else if (link.hash && link.hash.startsWith('#/blog/')) {
-                targetHash = link.hash;
-            }
-
-            if (window.location.hash !== targetHash) {
-                history.pushState(null, '', targetHash);
-                window.dispatchEvent(new Event('hashchange'));
+            if (window.location.pathname !== targetPath) {
+                history.pushState(null, '', targetPath);
+                handleRouteChanges();
             }
         }
     }, true);
 
-    // 10. Synchronous Initial Run (with a tiny deferred safe timeout)
+    // 10. Synchronous Initial Run
     ensureBlogElements();
     syncBlogTemplates();
     injectRoutesIntoGlobalRouter();
     handleRouteChanges();
-    setTimeout(handleRouteChanges, 30);
 
-    // 11. Event Observers
-    window.addEventListener('hashchange', handleRouteChanges);
+    // 11. Clean Navigation Observers
     window.addEventListener('popstate', handleRouteChanges);
     window.addEventListener('scroll', updateReadingProgress);
 
@@ -602,6 +615,5 @@
         syncBlogTemplates();
         injectRoutesIntoGlobalRouter();
         handleRouteChanges();
-        setTimeout(handleRouteChanges, 50);
     });
 })();
