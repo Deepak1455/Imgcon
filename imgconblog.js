@@ -408,84 +408,99 @@
 /**
      * 7. Clean HTML5 Path Routing Handler (UI/UX Glitch & Layout Sync Fixed)
      */
-    function handleRouteChanges() {
-        ensureBlogElements();
+function handleRouteChanges() {
+    ensureBlogElements();
+    if (typeof injectRoutesIntoGlobalRouter === 'function') {
         injectRoutesIntoGlobalRouter();
-        
-        const path = window.location.pathname || '/';
-        const blogScreen = document.getElementById('blogScreen');
-        const blogListing = document.getElementById('blog-listing');
-        const blogPost = document.getElementById('blog-post');
-        const blogPostContent = document.getElementById('blog-post-content');
-        const mainContainer = document.querySelector('main.app-container');
+    }
+    
+    // 1. Path Normalization (Trailing Slash हटाना)
+    let path = window.location.pathname || '/';
+    if (path.length > 1 && path.endsWith('/')) {
+        path = path.slice(0, -1);
+    }
 
-        const fitContainerHeight = () => {
-            if (mainContainer && blogScreen) {
-                mainContainer.style.minHeight = 'auto';
-                requestAnimationFrame(() => {
-                    const h = blogScreen.offsetHeight;
-                    if (h > 0) {
-                        mainContainer.style.minHeight = h + 'px';
-                    }
-                });
+    const blogScreen = document.getElementById('blogScreen');
+    const blogListing = document.getElementById('blog-listing');
+    const blogPost = document.getElementById('blog-post');
+    const blogPostContent = document.getElementById('blog-post-content');
+    const mainContainer = document.querySelector('main.app-container');
+
+    const fitContainerHeight = () => {
+        if (mainContainer && blogScreen) {
+            mainContainer.style.minHeight = 'auto';
+            requestAnimationFrame(() => {
+                const h = blogScreen.offsetHeight;
+                if (h > 0) {
+                    mainContainer.style.minHeight = h + 'px';
+                }
+            });
+        }
+    };
+
+    if (path === '/blog' || path.startsWith('/blog/')) {
+        // 🔥 Header, Home Button, Footers सिंक के लिए showPage कॉल करें
+        if (typeof showPage === 'function') {
+            showPage('blogScreen');
+        }
+
+        if (path === '/blog') {
+            document.title = "ImgCon Blog - Image Optimization & Speed Guides";
+            
+            let metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc) metaDesc.setAttribute("content", "Explore articles and tutorials on image optimization, WebP, AVIF, and web performance.");
+
+            let canonicalTag = document.querySelector('link[rel="canonical"]');
+            if (canonicalTag) canonicalTag.setAttribute("href", "https://imgcon.life/blog");
+
+            if (blogListing) {
+                if (window.ImgConBlog && typeof window.ImgConBlog.renderList === 'function') {
+                    window.ImgConBlog.renderList(blogListing);
+                }
+                blogListing.classList.remove('hidden');
             }
-        };
-
-        if (path === '/blog' || path === '/blog/' || path.startsWith('/blog/')) {
-            // 🔥 ALWAYS CALL showPage so Header, Home Button, Footers & UI/UX stay 100% consistent!
-            if (typeof showPage === 'function') {
-                showPage('blogScreen');
+            if (blogPost) {
+                blogPost.classList.add('hidden');
             }
+        } else {
+            // 🔥 Safe Slug Extraction (Trailing Slash सपोर्ट के साथ)
+            const slug = path.split('/').filter(Boolean).pop();
+            const post = posts[slug];
+            
+            if (post) {
+                document.title = post.title + ' | ImgCon Blog';
 
-            if (path === '/blog' || path === '/blog/') {
-                document.title = "ImgCon Blog - Image Optimization & Speed Guides";
-                
                 let metaDesc = document.querySelector('meta[name="description"]');
-                if (metaDesc) metaDesc.setAttribute("content", "Explore articles and tutorials on image optimization, WebP, AVIF, and web performance.");
+                if (metaDesc) metaDesc.setAttribute("content", post.excerpt);
 
                 let canonicalTag = document.querySelector('link[rel="canonical"]');
-                if (canonicalTag) canonicalTag.setAttribute("href", "https://imgcon.life/blog");
+                if (canonicalTag) canonicalTag.setAttribute("href", "https://imgcon.life/blog/" + slug);
 
                 if (blogListing) {
-                    window.ImgConBlog.renderList(blogListing);
-                    blogListing.classList.remove('hidden');
+                    blogListing.classList.add('hidden');
                 }
-                if (blogPost) {
-                    blogPost.classList.add('hidden');
+                if (blogPost && blogPostContent) {
+                    // 🔥 Title + Content दोनों को साफ़-सुथरे H1 टैग के साथ रेंडर करें
+                    blogPostContent.innerHTML = `
+                        <h1 class="text-2xl sm:text-3xl font-black mb-4" style="color: var(--text-dark);">${post.title}</h1>
+                        <div class="blog-prose mt-6">${post.content}</div>
+                    `;
+                    blogPost.classList.remove('hidden');
                 }
             } else {
-                const slug = path.split('/').pop();
-                const post = posts[slug];
-                if (post) {
-                    document.title = post.title + ' | ImgCon Blog';
-
-                    let metaDesc = document.querySelector('meta[name="description"]');
-                    if (metaDesc) metaDesc.setAttribute("content", post.excerpt);
-
-                    let canonicalTag = document.querySelector('link[rel="canonical"]');
-                    if (canonicalTag) canonicalTag.setAttribute("href", "https://imgcon.life/blog/" + slug);
-
-                    if (blogListing) {
-                        blogListing.classList.add('hidden');
-                    }
-                    if (blogPost && blogPostContent) {
-                        blogPostContent.innerHTML = post.content;
-                        blogPost.classList.remove('hidden');
-                    }
-                } else {
-                    history.pushState(null, '', '/blog');
-                    handleRouteChanges();
-                }
-            }
-            
-            fitContainerHeight();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-            if (blogScreen) {
-                blogScreen.classList.add('hidden');
+                history.pushState(null, '', '/blog');
+                handleRouteChanges();
             }
         }
+        
+        fitContainerHeight();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        if (blogScreen) {
+            blogScreen.classList.add('hidden');
+        }
     }
+}
     // 8. Global API Export
     window.ImgConBlog = {
         renderList: function (container) {
@@ -582,7 +597,10 @@
         }
     }, true);
 
-    // 10. Synchronous Initial Run
+// 10. Synchronous Initial Run & Global Export
+    window.handleRouteChanges = handleRouteChanges; // 🔥 यह लाइन जोड़ें (script.js को एक्सेस देने के लिए)
+    window.dispatchEvent(new CustomEvent('blogModuleReady')); // 🔥 यह लाइन जोड़ें (ready सिग्नल भेजने के लिए)
+
     ensureBlogElements();
     syncBlogTemplates();
     injectRoutesIntoGlobalRouter();
