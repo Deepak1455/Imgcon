@@ -2,7 +2,7 @@
 let files = [], originalFileDetails = [], processedResults = [], currentImageIdx = 0, selectedFormat = null, workerPool = [], activeTool = null, debouncedPreview, lazyLoadObserver, deferredInstallPrompt = null, watermarkImage = null;
 const SESSION_STORAGE_KEY = 'imgcon_session_v3';
 
-// --- DOM Elements --- 
+// --- DOM Elements ---
 const allScreens = document.querySelectorAll('.screen');
 const homeBtn = document.getElementById('homeBtn');
 const themeToggleBtn = document.getElementById('themeToggleBtn');
@@ -87,9 +87,8 @@ const router = async () => {
     // 2. राउट चेक करें
     let route = routes[path];
 
-    // 🔥 Dynamic Wildcard: अगर लिंक /blog/ से शुरू होता है तो जबरदस्ती blogScreen खोलें
+    // 🔥 Dynamic Wildcard: अगर लिंक /blog/ से शुरू होता है तो blogScreen खोलें
     if (!route && path.startsWith('/blog/')) {
-        const slug = path.split('/').filter(Boolean).pop();
         route = {
             screen: 'blogScreen',
             title: 'ImgCon Blog',
@@ -127,27 +126,10 @@ const router = async () => {
         if (typeof handleRouteChanges === 'function') {
             handleRouteChanges();
         } else {
-            const blogListing = document.getElementById('blog-listing');
-            const blogPost = document.getElementById('blog-post');
-            const blogPostContent = document.getElementById('blog-post-content');
-
-            if (route.isPost) {
-                const slug = path.split('/').filter(Boolean).pop();
-                const blogSource = document.getElementById('blogPostsSource');
-                const postContent = blogSource ? blogSource.querySelector(`[data-slug="${slug}"]`) : null;
-                
-                if (postContent && blogPostContent) {
-                    blogPostContent.innerHTML = postContent.innerHTML;
-                    if (blogListing) blogListing.classList.add('hidden');
-                    if (blogPost) blogPost.classList.remove('hidden');
-                } else {
-                    if (blogListing) blogListing.classList.remove('hidden');
-                    if (blogPost) blogPost.classList.add('hidden');
-                }
-            } else {
-                if (blogListing) blogListing.classList.remove('hidden');
-                if (blogPost) blogPost.classList.add('hidden');
-            }
+            // 🔥 FIX: अगर imgconblog.js लोड होने में समय ले, तो blogModuleReady इवेंट का इंतज़ार करें
+            window.addEventListener('blogModuleReady', () => {
+                if (typeof handleRouteChanges === 'function') handleRouteChanges();
+            }, { once: true });
         }
     } else if (route.screen === 'exifScreen') {
         if (activeTool) resetTool();
@@ -192,6 +174,7 @@ function initializeWorkerPool() {
     const workerUrl = URL.createObjectURL(blob);
     for (let i = 0; i < numWorkers; i++) workerPool.push({ worker: new Worker(workerUrl), busy: false });
 }
+
 // --- UI Navigation ---
 function showPage(pageId) {
     allScreens.forEach(s => s.classList.add('hidden'));
@@ -201,20 +184,20 @@ function showPage(pageId) {
          requestAnimationFrame(() => {
              const h = activeScreen.clientHeight;
              requestAnimationFrame(() => {
-                 mainContainer.style.minHeight = h + 'px';
+                 if (mainContainer) mainContainer.style.minHeight = h + 'px';
              });
          });
     }
 
     const isHomePage = pageId === 'homeScreen';
-    homeBtn.classList.toggle('hidden', isHomePage);
+    if (homeBtn) homeBtn.classList.toggle('hidden', isHomePage);
     
     if (isHomePage) {
-        mainFooter.style.display = 'block';
-        cardFooter.style.display = 'none';
+        if (mainFooter) mainFooter.style.display = 'block';
+        if (cardFooter) cardFooter.style.display = 'none';
     } else {
-        mainFooter.style.display = 'none';
-        cardFooter.style.display = 'block';
+        if (mainFooter) mainFooter.style.display = 'none';
+        if (cardFooter) cardFooter.style.display = 'block';
     }
     
     if (pageId !== 'toolScreen') activeTool = null;
