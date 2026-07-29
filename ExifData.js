@@ -1,6 +1,6 @@
 /**
  * ImgCon - EXIF Data Viewer & Stripper (100% Private Client-Side Engine)
- * Pure Binary ArrayBuffer Parser + Clean Canvas Stripper
+ * Pure Binary ArrayBuffer Parser + Clean Canvas Stripper + SEO Content & FAQs
  */
 
 (function () {
@@ -56,6 +56,94 @@
         .exif-strip-btn:hover {
             transform: translate3d(0, -2px, 0);
             box-shadow: 0 8px 25px -5px rgba(239, 68, 68, 0.6);
+        }
+
+        /* SEO Guide & Accordion FAQ Styling */
+        .exif-seo-guide {
+            margin-top: 3.5rem;
+            padding-top: 2.5rem;
+            border-top: 2px dashed var(--card-border);
+            text-align: left;
+        }
+        .exif-seo-guide h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .exif-seo-guide p, .exif-seo-guide li {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+        .exif-seo-guide ol, .exif-seo-guide ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .exif-seo-guide ol { list-style-type: decimal; }
+        .exif-seo-guide ul { list-style-type: disc; }
+
+        .exif-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        @media (min-width: 640px) {
+            .exif-feature-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        .exif-feature-card {
+            background-color: var(--bg-subtle);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem;
+            padding: 1.25rem;
+        }
+
+        .exif-faq-accordion {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem;
+            margin-bottom: 0.85rem;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+        .exif-faq-accordion summary {
+            padding: 1rem 1.25rem;
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .exif-faq-accordion summary::-webkit-details-marker { display: none; }
+        .exif-faq-accordion summary::after {
+            content: '+';
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+        .exif-faq-accordion[open] summary::after {
+            content: '−';
+            transform: rotate(180deg);
+        }
+        .exif-faq-accordion[open] {
+            border-color: var(--primary-color);
+        }
+        .exif-faq-content {
+            padding: 0 1.25rem 1.25rem 1.25rem;
+            color: var(--text-light);
+            font-size: 0.92rem;
+            line-height: 1.65;
+            border-top: 1px solid var(--bg-subtle);
+            margin-top: 0.25rem;
+            padding-top: 0.85rem;
         }
     `;
 
@@ -133,7 +221,6 @@
 
           // Sub IFDs
           if (tag === 0x8769 || tag === 0x8825) {
-            // Exif IFD or GPS IFD
             const subDirOffset = view.getUint32(valueOffset, little);
             ExifParser.readTags(
               view,
@@ -151,7 +238,6 @@
 
     static readTagValue(view, offset, type, count, tiffOffset, little) {
       if (type === 2) {
-        // ASCII String
         let strOffset = count > 4 ? tiffOffset + view.getUint32(offset, little) : offset;
         let str = "";
         for (let n = 0; n < count - 1; n++) {
@@ -159,15 +245,15 @@
         }
         return str.trim();
       }
-      if (type === 3) return view.getUint16(offset, little); // Short
-      if (type === 4) return view.getUint32(offset, little); // Long
-      if (type === 5) { // Rational
+      if (type === 3) return view.getUint16(offset, little);
+      if (type === 4) return view.getUint32(offset, little);
+      if (type === 5) {
         const realOffset = tiffOffset + view.getUint32(offset, little);
         const num = view.getUint32(realOffset, little);
         const den = view.getUint32(realOffset + 4, little);
         return den !== 0 ? (num / den).toFixed(2) : num;
       }
-      if (type === 10) { // SRational Array / Values
+      if (type === 10) {
         const realOffset = tiffOffset + view.getUint32(offset, little);
         const vals = [];
         for (let i = 0; i < count; i++) {
@@ -298,6 +384,77 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- SEO HELPFUL CONTENT, FEATURES & ACCORDION FAQS -->
+                    <div class="exif-seo-guide">
+                        <h2>How to Inspect and Clean EXIF GPS Metadata (Step-by-Step)</h2>
+                        <ol>
+                            <li><strong>Upload Your JPEG Photo:</strong> Select or drop your photo into the inspector box above. Processing happens 100% locally in your browser.</li>
+                            <li><strong>Inspect Metadata Report:</strong> View camera specs, device firmware, timestamps, and embedded GPS coordinates.</li>
+                            <li><strong>Verify Location on Google Maps:</strong> If GPS coordinates are detected, click the link to verify your embedded location on Google Maps.</li>
+                            <li><strong>Clean Privacy Data:</strong> Click 'Clean & Strip EXIF Data' to download a clean, privacy-sanitized copy with zero hidden device tags.</li>
+                        </ol>
+
+                        <h2>Why Clean EXIF Data Before Sharing Photos Online?</h2>
+                        <div class="exif-feature-grid">
+                            <div class="exif-feature-card">
+                                <div class="flex items-center gap-2.5 mb-2">
+                                    <i class="fas fa-map-marked-alt text-red-500 text-lg"></i>
+                                    <h3 class="font-bold text-sm m-0" style="color: var(--text-dark);">GPS Location Privacy</h3>
+                                </div>
+                                <p class="text-xs m-0" style="color: var(--text-light);">Strips latitude and longitude coordinates embedded by smartphones to prevent strangers from finding your home location.</p>
+                            </div>
+                            <div class="exif-feature-card">
+                                <div class="flex items-center gap-2.5 mb-2">
+                                    <i class="fas fa-camera-retro text-indigo-500 text-lg"></i>
+                                    <h3 class="font-bold text-sm m-0" style="color: var(--text-dark);">Hardware Tag Protection</h3>
+                                </div>
+                                <p class="text-xs m-0" style="color: var(--text-light);">Erases camera serial numbers, phone model, firmware details, and capture timestamps.</p>
+                            </div>
+                            <div class="exif-feature-card">
+                                <div class="flex items-center gap-2.5 mb-2">
+                                    <i class="fas fa-weight text-green-500 text-lg"></i>
+                                    <h3 class="font-bold text-sm m-0" style="color: var(--text-dark);">Extra File Size Savings</h3>
+                                </div>
+                                <p class="text-xs m-0" style="color: var(--text-light);">Stripping heavy EXIF header tables saves 10 to 20 KB per photo without affecting visual quality.</p>
+                            </div>
+                            <div class="exif-feature-card">
+                                <div class="flex items-center gap-2.5 mb-2">
+                                    <i class="fas fa-user-shield text-amber-500 text-lg"></i>
+                                    <h3 class="font-bold text-sm m-0" style="color: var(--text-dark);">100% Client-Side Privacy</h3>
+                                </div>
+                                <p class="text-xs m-0" style="color: var(--text-light);">Inspects and cleans metadata directly in browser memory using HTML5 Canvas. Zero server uploads.</p>
+                            </div>
+                        </div>
+
+                        <h2>Frequently Asked Questions (FAQ)</h2>
+                        <div class="space-y-3 mt-4">
+                            <details class="exif-faq-accordion">
+                                <summary>What is EXIF data in digital photography?</summary>
+                                <div class="exif-faq-content">
+                                    EXIF (Exchangeable Image File Format) is a standard metadata header embedded inside digital photo files. It records camera specifications, exposure settings (ISO, Aperture, Shutter Speed), date/time stamps, and GPS location coordinates.
+                                </div>
+                            </details>
+                            <details class="exif-faq-accordion">
+                                <summary>Why should I strip EXIF metadata before sharing photos online?</summary>
+                                <div class="exif-faq-content">
+                                    Publicly uploading photos with unstripped GPS data allows strangers, classified users, or online scrapers to download the image and extract your exact home or workplace location using map tools.
+                                </div>
+                            </details>
+                            <details class="exif-faq-accordion">
+                                <summary>Does stripping EXIF metadata reduce photo visual quality?</summary>
+                                <div class="exif-faq-content">
+                                    No. EXIF data consists purely of text metadata inside the JPEG container. Stripping EXIF headers leaves visual pixels completely untouched while saving 10-20 KB per photo.
+                                </div>
+                            </details>
+                            <details class="exif-faq-accordion">
+                                <summary>Do messaging apps like WhatsApp or social networks remove EXIF data?</summary>
+                                <div class="exif-faq-content">
+                                    Most major social networks strip EXIF data on upload. However, sharing photos via email attachments, cloud drive links, messaging apps, or online marketplaces preserves full raw EXIF metadata.
+                                </div>
+                            </details>
+                        </div>
+                    </div>
                 </div>
             `;
 
@@ -417,7 +574,6 @@
 
       await new Promise((resolve) => (img.onload = resolve));
 
-      // Draw onto Canvas (Renders pure pixel payload, completely stripping ALL EXIF markers)
       const canvas = document.createElement("canvas");
       canvas.width = img.width;
       canvas.height = img.height;
