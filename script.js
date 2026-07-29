@@ -2,7 +2,7 @@
 let files = [], originalFileDetails = [], processedResults = [], currentImageIdx = 0, selectedFormat = null, workerPool = [], activeTool = null, debouncedPreview, lazyLoadObserver, deferredInstallPrompt = null, watermarkImage = null;
 const SESSION_STORAGE_KEY = 'imgcon_session_v3';
 
-// --- DOM Elements --- 
+// --- DOM Elements ---
 const allScreens = document.querySelectorAll('.screen');
 const homeBtn = document.getElementById('homeBtn');
 const themeToggleBtn = document.getElementById('themeToggleBtn');
@@ -43,6 +43,7 @@ if ('serviceWorker' in navigator) {
 // --- Router Maps with Custom Meta Descriptions & Titles for 20 Articles ---
 const routes = {
     '/': { screen: 'homeScreen', title: 'ImgCon - Free Online Image Converter, Compressor & Resizer', desc: 'ImgCon is a free online tool to convert, compress, resize, watermark, and clean EXIF metadata from images.' },
+    
     '/blog': { screen: 'blogScreen', title: 'ImgCon Blog - Image Optimization, Web Performance & Photography Guides', desc: 'Welcome to ImgCon Blog! Read tutorials, guides, and tips about image compression, WebP, AVIF, and web speed.' },
     '/image-converter': { screen: 'toolScreen', tool: 'converter', title: 'Image Converter - Convert JPG, PNG, WebP, AVIF, PDF Online | ImgCon', desc: 'Convert image formats instantly in your browser. Supports batch PNG, JPG, WebP, AVIF, PDF.' },
     '/image-compressor': { screen: 'toolScreen', tool: 'compressor', title: 'Image Compressor - Reduce Image File Size Online | ImgCon', desc: 'Compress JPG and WebP images without losing quality using target size settings.' },
@@ -52,6 +53,7 @@ const routes = {
     '/about-us': { screen: 'aboutScreen', title: 'About Us - ImgCon Team Story', desc: 'Learn about ImgCon and our mission to provide 100% private client-side image processing.' },
     '/privacy-policy': { screen: 'privacyScreen', title: 'Privacy Policy - ImgCon', desc: 'Our zero-upload privacy policy guarantees your files never leave your device.' },
     '/terms-conditions': { screen: 'termsScreen', title: 'Terms and Conditions - ImgCon', desc: 'Terms and conditions for using ImgCon online tools.' },
+    '/contact-us': { screen: 'contactScreen', title: 'Contact Us - ImgCon Support', desc: 'Get in touch with the ImgCon support team.' },
 
     // ALL 20 BLOG POSTS MAPPING
     '/blog/png-vs-jpg-difference': { screen: 'blogScreen', title: 'PNG vs JPG: What is the Difference and Which One to Use? | ImgCon Blog', isPost: true, desc: 'Learn differences between PNG and JPG image formats.' },
@@ -112,10 +114,10 @@ const router = async () => {
         metaDesc.setAttribute("content", route.desc);
     }
 
-    // Dynamically update Canonical Link
+    // Dynamically update Canonical Link for imgcon.online
     let canonicalTag = document.querySelector('link[rel="canonical"]');
     if (canonicalTag) {
-        canonicalTag.setAttribute("href", "https://imgcon.life" + path);
+        canonicalTag.setAttribute("href", "https://imgcon.online" + path);
     }
 
     if (route.screen === 'blogScreen') {
@@ -290,8 +292,12 @@ function setupToolUI(toolName) {
 
     // Attach Action Event Listeners to New Screen DOM
     attachToolEventListeners(toolScreen);
-}
 
+    // 🔥 AUTOMATIC SEO GUIDE & ACCORDION FAQS RENDERER
+    if (typeof renderToolSeoGuide === 'function') {
+        renderToolSeoGuide(toolName, toolScreen);
+    }
+}
 // ==========================================================================
 // RESET TOOL & MEMORY CLEANUP ENGINE (ZERO MEMORY LEAKS)
 // ==========================================================================
@@ -1610,3 +1616,170 @@ document.addEventListener('mousemove', (e) => {
         card.style.setProperty('--mouse-y', `${y}px`);
     });
 });
+// ==========================================================================
+// DYNAMIC TOOL SEO GUIDES & ACCORDION FAQS DATABASE (AdSense Compliant)
+// ==========================================================================
+const toolGuidesData = {
+    converter: {
+        title: "How to Convert Images Online (Step-by-Step Guide)",
+        steps: [
+            "<strong>Upload Source Files:</strong> Click the dropzone or drag and drop your photos (supports JPG, PNG, WEBP, AVIF, HEIC, and PDF).",
+            "<strong>Select Target Output Format:</strong> Choose from PNG, JPG, WEBP, AVIF, PDF, or ICO favicon format.",
+            "<strong>Adjust Compression Quality:</strong> Set the quality slider (80% - 85% recommended for optimal balance).",
+            "<strong>Process & Download:</strong> Click 'Start Processing' to generate converted images instantly in your browser memory."
+        ],
+        whyTitle: "Why Use ImgCon Client-Side Image Converter?",
+        features: [
+            { icon: "fa-shield-alt", title: "100% Private Processing", desc: "Your photos stay strictly inside your browser memory. Zero server uploads." },
+            { icon: "fa-bolt", title: "Web Worker Accelerated", desc: "Multi-threaded Web Worker architecture converts batch images at desktop speeds." },
+            { icon: "fa-layer-group", title: "Batch Processing Support", desc: "Convert dozens of files simultaneously and download them in a single compiled ZIP archive." },
+            { icon: "fa-file-pdf", title: "PDF Document Compiler", desc: "Combine multiple image uploads directly into a single multi-page printable PDF file." }
+        ],
+        faqs: [
+            { q: "Is ImgCon Image Converter completely free with no processing limits?", a: "Yes, ImgCon is 100% free with zero file upload limits or daily restrictions." },
+            { q: "Will converting PNG with transparency to WEBP preserve background transparency?", a: "Yes, WEBP retains 100% full alpha channel transparency while reducing file size by up to 30% compared to PNG." },
+            { q: "Can I convert iPhone HEIC photos to standard JPG format?", a: "Yes, upload your iPhone HEIC photos and ImgCon converts them to universally supported JPG or PNG format." },
+            { q: "Are my photos uploaded or stored on any external server?", a: "No. All conversion operations execute locally on your device via browser Web Worker JavaScript." }
+        ]
+    },
+    compressor: {
+        title: "How to Compress Photo File Sizes Without Losing Quality",
+        steps: [
+            "<strong>Select Your Photos:</strong> Drag and drop JPG, PNG, or WEBP images into the compressor dropzone.",
+            "<strong>Set Compression Settings:</strong> Keep quality slider at 80% or toggle Target File Size to specify an exact KB limit (e.g. 100 KB).",
+            "<strong>Enable EXIF Stripping:</strong> Check 'Strip EXIF Metadata' to remove hidden camera specs for extra space savings.",
+            "<strong>Preview & Save:</strong> Use the live split comparison slider to inspect visual quality before downloading."
+        ],
+        whyTitle: "Why Use ImgCon Smart Image Compressor?",
+        features: [
+            { icon: "fa-bullseye", title: "Target Size Calculation", desc: "Enter your required KB/MB limit (e.g. 100 KB) and ImgCon automatically calculates the exact quality algorithm." },
+            { icon: "fa-eye", title: "Live Comparison Slider", desc: "Compare original vs compressed results with zoom and pan side-by-side view." },
+            { icon: "fa-user-shield", title: "EXIF Location Protection", desc: "Automatically strips camera model, date, and GPS location coordinates." },
+            { icon: "fa-tachometer-alt", title: "Core Web Vitals Booster", desc: "Optimizes image payload to dramatically improve Google PageSpeed Insights and LCP scores." }
+        ],
+        faqs: [
+            { q: "How much file size reduction can I expect?", a: "Typical compression saves 60% to 80% file weight without noticeable visual quality loss." },
+            { q: "Does compressing images reduce pixel dimensions?", a: "No, compression alters data bitrate density while leaving pixel width and height unchanged." },
+            { q: "What is Target File Size compression?", a: "Enter your exact required limit (e.g. 100 KB for portal uploads), and ImgCon iteratively calculates the optimal settings." },
+            { q: "Why should I strip EXIF metadata?", a: "EXIF metadata contains camera hardware details and GPS coordinates. Stripping it saves 10-20 KB per photo and protects privacy." }
+        ]
+    },
+    resizer: {
+        title: "How to Resize Photo Dimensions by Pixels or Percentage",
+        steps: [
+            "<strong>Upload Photos:</strong> Drag and drop your images into the resizer staging area.",
+            "<strong>Choose Scaling Mode:</strong> Select Pixel Mode (Width x Height) or Percentage Mode (Scale Slider).",
+            "<strong>Lock Aspect Ratio:</strong> Keep 'Maintain Aspect Ratio' checked to prevent stretched or distorted photos.",
+            "<strong>Apply Social Presets or Process:</strong> Pick Instagram, Facebook, or Twitter presets, then click process."
+        ],
+        whyTitle: "Why Choose ImgCon Online Image Resizer?",
+        features: [
+            { icon: "fa-share-alt", title: "Social Media Presets", desc: "Built-in pixel presets for Instagram Posts (1080x1080), Stories (1080x1920), Facebook Covers, and Twitter Headers." },
+            { icon: "fa-lock", title: "Aspect Ratio Protection", desc: "Automatically adjusts height when width changes to ensure photos never look squished or stretched." },
+            { icon: "fa-sliders-h", title: "Percentage Scaling", desc: "Quickly scale photos down by 50%, 25%, or custom percentage ratios." },
+            { icon: "fa-microchip", title: "Local Browser Processing", desc: "Resizes dozens of large digital photography files in batch instantly without server lag." }
+        ],
+        faqs: [
+            { q: "What does 'Maintain Aspect Ratio' mean?", a: "When locked, changing image width automatically scales height proportionally to maintain natural photo proportions." },
+            { q: "What are the recommended dimensions for Instagram posts?", a: "Square Post: 1080x1080px | Portrait Post: 1080x1350px | Story/Reels: 1080x1920px." },
+            { q: "Can I batch resize multiple photos at once?", a: "Yes, upload all your files together; ImgCon scales all images simultaneously in browser memory." },
+            { q: "Will scaling an image up increase its visual sharpness?", a: "Upscaling increases pixel dimensions but cannot restore details that were not originally captured by the camera." }
+        ]
+    },
+    watermark: {
+        title: "How to Add Custom Text or Logo Watermarks to Photos",
+        steps: [
+            "<strong>Upload Base Photos:</strong> Drag and drop your photography or graphic files.",
+            "<strong>Choose Watermark Type:</strong> Select Text Watermark (e.g. © Your Brand) or Image Watermark (Upload PNG logo).",
+            "<strong>Adjust Opacity & Scale:</strong> Tune opacity (30%-70%) and scale sliders for subtle protection.",
+            "<strong>Set Positioning:</strong> Pick position (Center, Top-Right, Bottom-Left, etc.) and apply."
+        ],
+        whyTitle: "Why Use ImgCon Copyright Protection Tool?",
+        features: [
+            { icon: "fa-copyright", title: "Custom Text & Logo Overlay", desc: "Add transparent text notices or full-color company logos over your images." },
+            { icon: "fa-adjust", title: "Full Opacity Control", desc: "Blend watermarks smoothly over complex photo backgrounds without ruining image details." },
+            { icon: "fa-th", title: "9-Grid Position Matrix", desc: "Place watermarks accurately in corners, sides, or directly in the center." },
+            { icon: "fa-user-secret", title: "Zero Data Logging", desc: "Watermarked copies generate locally in memory; your unwatermarked originals remain untouched." }
+        ],
+        faqs: [
+            { q: "What is the recommended opacity for photo watermarks?", a: "We recommend 30% to 50% opacity so the copyright notice is clear without overwhelming the photo subject." },
+            { q: "Can I use a transparent PNG logo as a watermark?", a: "Yes, transparent PNG logos blend smoothly over photographs." },
+            { q: "Does ImgCon store uploaded watermarked photos?", a: "No, watermarks are applied using local HTML5 Canvas JavaScript. Your files stay on your device." }
+        ]
+    },
+    exif: {
+        title: "How to View and Clean EXIF GPS Metadata from JPEG Photos",
+        steps: [
+            "<strong>Upload Photo:</strong> Drop your JPEG photo into the EXIF Privacy Inspector.",
+            "<strong>Inspect Embedded Data:</strong> View camera specs, shutter speed, capture timestamp, and GPS map coordinates.",
+            "<strong>Click Clean Privacy Data:</strong> Generate a privacy-cleared photograph file.",
+            "<strong>Download Clean Photo:</strong> Save the photo free of location tracking headers."
+        ],
+        whyTitle: "Why Clean EXIF Metadata Before Sharing Online?",
+        features: [
+            { icon: "fa-map-marker-alt", title: "GPS Coordinates Stripping", desc: "Removes latitude and longitude tracking data embedded by smartphone cameras." },
+            { icon: "fa-camera", title: "Hardware Information Removal", desc: "Erases camera brand, serial numbers, and exposure settings." },
+            { icon: "fa-weight-hanging", title: "Extra File Size Savings", desc: "Stripping EXIF headers saves 10-20 KB per photo without affecting visual pixels." },
+            { icon: "fa-lock", title: "100% Client-Side Inspection", desc: "Inspects metadata locally without exposing personal location data to remote servers." }
+        ],
+        faqs: [
+            { q: "What is EXIF data in digital photos?", a: "EXIF (Exchangeable Image File Format) stores camera settings, hardware info, and GPS coordinates inside JPEG headers." },
+            { q: "Why should I strip EXIF data before uploading photos?", a: "Sharing photos with unstripped GPS data allows strangers to pinpoint your location on maps." },
+            { q: "Does stripping EXIF data lower photo quality?", a: "No, EXIF is text metadata; removing it leaves image pixels untouched while saving file weight." }
+        ]
+    }
+};
+
+// ==========================================================================
+// RENDER TOOL SEO GUIDE & ACCORDION FAQS FUNCTION
+// ==========================================================================
+function renderToolSeoGuide(toolName, container) {
+    if (!container) return;
+    
+    // Remove existing guide if present
+    const oldGuide = container.querySelector('.tool-seo-guide-container');
+    if (oldGuide) oldGuide.remove();
+
+    const guideData = toolGuidesData[toolName];
+    if (!guideData) return;
+
+    const guideSection = document.createElement('div');
+    guideSection.className = 'tool-seo-guide-container animate__animated animate__fadeIn';
+
+    guideSection.innerHTML = `
+        <!-- How-To Guide Section -->
+        <h2>${guideData.title}</h2>
+        <ol class="mb-6">
+            ${guideData.steps.map(step => `<li class="mb-2">${step}</li>`).join('')}
+        </ol>
+
+        <!-- Why Choose Feature Cards -->
+        <h2>${guideData.whyTitle}</h2>
+        <div class="tool-guide-badge-grid">
+            ${guideData.features.map(f => `
+                <div class="tool-guide-feature-card">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center font-bold">
+                            <i class="fas ${f.icon}"></i>
+                        </div>
+                        <h3 class="font-bold text-sm m-0" style="color: var(--text-dark);">${f.title}</h3>
+                    </div>
+                    <p class="text-xs m-0" style="color: var(--text-light);">${f.desc}</p>
+                </div>
+            `).join('')}
+        </div>
+
+        <!-- Accordion FAQs Section -->
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="space-y-3 mt-4">
+            ${guideData.faqs.map(faq => `
+                <details class="tool-faq-accordion">
+                    <summary>${faq.q}</summary>
+                    <div class="tool-faq-content">${faq.a}</div>
+                </details>
+            `).join('')}
+        </div>
+    `;
+
+    container.appendChild(guideSection);
+}
