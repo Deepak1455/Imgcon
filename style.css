@@ -896,3 +896,121 @@ body:not([data-theme="dark"]) .fa-moon { display: none; }
 .drop-zone-modern:hover .drop-icon-wrapper i {
     transform: scale(1.15) translateY(-3px);
 }
+
+/* TOOL SEO GUIDE & FAQ STYLES */
+.tool-seo-guide-container {
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    border-top: 2px dashed var(--card-border);
+    text-align: left;
+}
+
+.tool-seo-guide-container h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+.tool-seo-guide-container h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.tool-seo-guide-container p, 
+.tool-seo-guide-container li {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    line-height: 1.7;
+}
+
+.tool-seo-guide-container ol, 
+.tool-seo-guide-container ul {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.tool-seo-guide-container ol { list-style-type: decimal; }
+.tool-seo-guide-container ul { list-style-type: disc; }
+
+.tool-guide-badge-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+@media (min-width: 640px) {
+    .tool-guide-badge-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.tool-guide-feature-card {
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    transition: transform 0.25s ease;
+}
+
+.tool-guide-feature-card:hover {
+    transform: translateY(-2px);
+}
+
+.tool-faq-accordion {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    margin-bottom: 0.85rem;
+    overflow: hidden;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tool-faq-accordion summary {
+    padding: 1rem 1.25rem;
+    font-size: 0.98rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+}
+
+.tool-faq-accordion summary::-webkit-details-marker { display: none; }
+
+.tool-faq-accordion summary::after {
+    content: '+';
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    transition: transform 0.3s ease;
+}
+
+.tool-faq-accordion[open] summary::after {
+    content: '−';
+    transform: rotate(180deg);
+}
+
+.tool-faq-accordion[open] {
+    border-color: var(--primary-color);
+    box-shadow: 0 6px 16px -4px rgba(99, 102, 241, 0.15);
+}
+
+.tool-faq-content {
+    padding: 0 1.25rem 1.25rem 1.25rem;
+    color: var(--text-light);
+    font-size: 0.92rem;
+    line-height: 1.65;
+    border-top: 1px solid var(--bg-subtle);
+    margin-top: 0.25rem;
+    padding-top: 0.85rem;
+}
