@@ -1,4 +1,4 @@
-const CACHE_NAME = 'imgcon-cache-v4.0.9';
+const CACHE_NAME = 'imgcon-cache-v4.1.0';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
