@@ -1,6 +1,6 @@
 /**
  * ImgCon - EXIF Data Viewer & Stripper (100% Private Client-Side Engine)
- * Pure Binary ArrayBuffer Parser + Clean Canvas Stripper + SEO Content & FAQs
+ * Pure Binary ArrayBuffer Parser + Clean Canvas Stripper + Smart GPS Geocoder
  */
 
 (function () {
@@ -505,6 +505,14 @@
       const statusBox = document.getElementById("exifPrivacyStatus");
       const mapContainer = document.getElementById("mapLinkContainer");
 
+      const setNoGPS = () => {
+        document.getElementById("valLat").textContent = "Not Stamped / Location Off";
+        document.getElementById("valLng").textContent = "Not Stamped / Location Off";
+        if (mapContainer) mapContainer.classList.add("hidden");
+        const locationNameEl = document.getElementById("valLocationName");
+        if (locationNameEl) locationNameEl.remove();
+      };
+
       if (!tags || Object.keys(tags).length === 0) {
         statusBox.className = "p-3 rounded-xl mb-4 font-bold text-xs flex items-center justify-center gap-2 exif-badge-success";
         statusBox.innerHTML = `<i class="fas fa-check-circle text-base"></i> Photo is Clean! No EXIF Metadata Found.`;
@@ -517,45 +525,97 @@
         document.getElementById("valAperture").textContent = "N/A";
         document.getElementById("valShutter").textContent = "N/A";
         document.getElementById("valFocal").textContent = "N/A";
-        document.getElementById("valLat").textContent = "None";
-        document.getElementById("valLng").textContent = "None";
-        mapContainer.classList.add("hidden");
+        setNoGPS();
         return;
       }
 
-      const hasGPS = tags.GPSLatitude && tags.GPSLongitude;
+      // Check Real GPS Coordinates
+      let hasGPS = false;
+      let lat = 0, lng = 0;
+
+      if (tags.GPSLatitude && tags.GPSLongitude) {
+        lat = this.convertDMSToDD(tags.GPSLatitude, tags.GPSLatitudeRef);
+        lng = this.convertDMSToDD(tags.GPSLongitude, tags.GPSLongitudeRef);
+
+        // Filter out zero / invalid GPS (Android camera empty tags)
+        if (Math.abs(lat) > 0.0001 || Math.abs(lng) > 0.0001) {
+          hasGPS = true;
+        }
+      }
 
       if (hasGPS) {
         statusBox.className = "p-3 rounded-xl mb-4 font-bold text-xs flex items-center justify-center gap-2 exif-badge-danger animate__animated animate__pulse animate__infinite";
         statusBox.innerHTML = `<i class="fas fa-exclamation-triangle text-base"></i> Privacy Risk! GPS Location Data Detected!`;
+
+        const latRef = tags.GPSLatitudeRef || (lat >= 0 ? "N" : "S");
+        const lngRef = tags.GPSLongitudeRef || (lng >= 0 ? "E" : "W");
+
+        const latDMS = this.formatDMS(tags.GPSLatitude, latRef);
+        const lngDMS = this.formatDMS(tags.GPSLongitude, lngRef);
+
+        document.getElementById("valLat").textContent = `${Math.abs(lat).toFixed(6)}° ${latRef} (${latDMS})`;
+        document.getElementById("valLng").textContent = `${Math.abs(lng).toFixed(6)}° ${lngRef} (${lngDMS})`;
+
+        document.getElementById("googleMapsLink").href = `https://www.google.com/maps?q=${lat},${lng}`;
+        mapContainer.classList.remove("hidden");
+
+        // Fetch Real Address (City, State, Country)
+        this.fetchLocationAddress(lat, lng);
       } else {
-        statusBox.className = "p-3 rounded-xl mb-4 font-bold text-xs flex items-center justify-center gap-2 exif-badge-danger";
-        statusBox.innerHTML = `<i class="fas fa-info-circle text-base"></i> Hidden Camera & Device Information Found.`;
+        statusBox.className = "p-3 rounded-xl mb-4 font-bold text-xs flex items-center justify-center gap-2 exif-badge-success";
+        statusBox.innerHTML = `<i class="fas fa-check-circle text-base"></i> Safe! No GPS Coordinates in Photo.`;
+        setNoGPS();
       }
 
-      document.getElementById("valMake").textContent = tags.Make || "Unknown";
-      document.getElementById("valModel").textContent = tags.Model || "Unknown";
-      document.getElementById("valSoftware").textContent = tags.Software || "Standard System";
+      document.getElementById("valMake").textContent = tags.Make || "Unknown Device";
+      document.getElementById("valModel").textContent = tags.Model || "Standard Camera";
+      document.getElementById("valSoftware").textContent = tags.Software || "Default Firmware";
       document.getElementById("valDateTime").textContent = tags.DateTime || "Not Stamped";
 
       document.getElementById("valISO").textContent = tags.ISO || "Auto";
       document.getElementById("valAperture").textContent = tags.FNumber ? `f/${tags.FNumber}` : "N/A";
       document.getElementById("valShutter").textContent = tags.ExposureTime ? `${tags.ExposureTime}s` : "N/A";
       document.getElementById("valFocal").textContent = tags.FocalLength ? `${tags.FocalLength}mm` : "N/A";
+    },
 
-      if (hasGPS) {
-        const lat = this.convertDMSToDD(tags.GPSLatitude, tags.GPSLatitudeRef);
-        const lng = this.convertDMSToDD(tags.GPSLongitude, tags.GPSLongitudeRef);
+    formatDMS(dms, ref) {
+      if (Array.isArray(dms) && dms.length >= 3) {
+        return `${Math.floor(dms[0])}° ${Math.floor(dms[1])}' ${dms[2].toFixed(1)}" ${ref}`;
+      }
+      return `${ref}`;
+    },
 
-        document.getElementById("valLat").textContent = `${lat.toFixed(5)}° (${tags.GPSLatitudeRef || "N"})`;
-        document.getElementById("valLng").textContent = `${lng.toFixed(5)}° (${tags.GPSLongitudeRef || "E"})`;
+    async fetchLocationAddress(lat, lng) {
+      const mapContainer = document.getElementById("mapLinkContainer");
+      if (!mapContainer) return;
 
-        document.getElementById("googleMapsLink").href = `https://www.google.com/maps?q=${lat},${lng}`;
-        mapContainer.classList.remove("hidden");
-      } else {
-        document.getElementById("valLat").textContent = "Not Stamped";
-        document.getElementById("valLng").textContent = "Not Stamped";
-        mapContainer.classList.add("hidden");
+      let locationEl = document.getElementById("valLocationName");
+      if (!locationEl) {
+        locationEl = document.createElement("div");
+        locationEl.id = "valLocationName";
+        locationEl.className = "mt-2 p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-xs font-bold text-indigo-600 dark:text-indigo-400 text-center animate__animated animate__fadeIn";
+        mapContainer.parentNode.insertBefore(locationEl, mapContainer);
+      }
+      locationEl.innerHTML = `<i class="fas fa-spinner fa-spin mr-1"></i> Finding City & Country...`;
+
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.display_name) {
+            const address = data.address || {};
+            const city = address.city || address.town || address.village || address.county || "";
+            const state = address.state || "";
+            const country = address.country || "";
+            const placeStr = [city, state, country].filter(Boolean).join(", ");
+
+            locationEl.innerHTML = `<i class="fas fa-map-marked-alt text-red-500 mr-1.5"></i> Detected Location: <strong>${placeStr || data.display_name}</strong>`;
+            return;
+          }
+        }
+        locationEl.innerHTML = `<i class="fas fa-map-marker-alt text-indigo-500 mr-1.5"></i> GPS Coordinates Detected (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+      } catch (e) {
+        locationEl.innerHTML = `<i class="fas fa-map-marker-alt text-indigo-500 mr-1.5"></i> GPS Coordinates Detected (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
       }
     },
 
