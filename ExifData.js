@@ -320,9 +320,16 @@
                             <div class="p-4 rounded-2xl border text-center relative overflow-hidden" style="background-color: var(--card-bg); border-color: var(--card-border);">
                                 <img id="exifImagePreview" class="max-h-80 mx-auto object-contain rounded-xl shadow-md mb-4" src="" alt="Preview">
                                 <div id="exifPrivacyStatus" class="p-3 rounded-xl mb-4 font-bold text-xs flex items-center justify-center gap-2"></div>
-                                <button id="stripExifBtn" class="upload-button exif-strip-btn w-full justify-center py-3 text-sm font-bold">
-                                    <i class="fas fa-user-shield mr-2"></i> Clean & Strip EXIF Data
-                                </button>
+                                
+                                <div class="space-y-2">
+                                    <button id="stripExifBtn" class="upload-button exif-strip-btn w-full justify-center py-3 text-sm font-bold">
+                                        <i class="fas fa-user-shield mr-2"></i> Clean & Strip EXIF Data
+                                    </button>
+                                    <button id="exifResetBtn" class="secondary-btn w-full justify-center py-2.5 rounded-full text-xs font-bold transition-all hover:shadow-xs">
+                                        <i class="fas fa-redo mr-1.5 text-indigo-500"></i> Inspect Another Photo
+                                    </button>
+                                </div>
+
                                 <p class="text-xxs opacity-70 mt-2" style="color: var(--text-light);">Exports a sanitized copy with ZERO hidden device tracking data.</p>
                             </div>
                         </div>
@@ -465,6 +472,7 @@
       const dropZone = document.getElementById("exifDropZone");
       const fileInput = document.getElementById("exifFileInput");
       const stripBtn = document.getElementById("stripExifBtn");
+      const resetBtn = document.getElementById("exifResetBtn");
 
       if (dropZone) {
         dropZone.addEventListener("click", () => fileInput.click());
@@ -480,6 +488,39 @@
       });
 
       stripBtn?.addEventListener("click", () => this.stripAndDownload());
+      
+      // 🔥 EXIF RESET BUTTON EVENT
+      resetBtn?.addEventListener("click", () => this.reset());
+    },
+
+    // 🔥 SMART RESET METHOD (स्मूथली ड्रॉप-ज़ोन पर वापस आने का फ़ंक्शन)
+    reset() {
+      const previewImg = document.getElementById("exifImagePreview");
+      if (previewImg && previewImg.src && previewImg.src.startsWith("blob:")) {
+        try { URL.revokeObjectURL(previewImg.src); } catch (e) {}
+        previewImg.src = "";
+      }
+
+      this.currentFile = null;
+      this.exifData = null;
+
+      // Reset File Input Value
+      const fileInput = document.getElementById("exifFileInput");
+      if (fileInput) fileInput.value = "";
+
+      // Remove Location Text Name if generated
+      const locationNameEl = document.getElementById("valLocationName");
+      if (locationNameEl) locationNameEl.remove();
+
+      // Switch back to Drop Zone UI cleanly
+      const dropZone = document.getElementById("exifDropZone");
+      const resultArea = document.getElementById("exifResultArea");
+
+      if (resultArea) resultArea.classList.add("hidden");
+      if (dropZone) {
+        dropZone.classList.remove("hidden");
+        dropZone.classList.add("animate__animated", "animate__fadeIn");
+      }
     },
 
     async handleFileSelect(file) {
