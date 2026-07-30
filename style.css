@@ -770,27 +770,8 @@ body:not([data-theme="dark"]) .fa-moon { display: none; }
 }
 
 /* ==========================================================================
-   DEMO WIDGET & PWA INSTALL BANNER
+   PWA INSTALL BANNER
    ========================================================================== */
-
-.demo-format-btn {
-    color: var(--text-light);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-}
-
-.demo-format-btn.active {
-    color: #ffffff !important;
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-    box-shadow: 0 4px 12px var(--shadow-color);
-}
-
-.demo-comparison-container {
-    touch-action: none;
-    user-select: none;
-    cursor: ew-resize;
-}
 
 #pwaInstallBanner {
     backdrop-filter: blur(12px);
