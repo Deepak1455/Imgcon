@@ -299,9 +299,9 @@ function setupToolUI(toolName) {
     }
 }
 // ==========================================================================
-// RESET TOOL & MEMORY CLEANUP ENGINE (ZERO MEMORY LEAKS)
+// RESET TOOL & MEMORY CLEANUP ENGINE (ZERO MEMORY LEAKS & NO WHITE SCREEN)
 // ==========================================================================
-function resetTool() {
+function resetTool(softReset = false) {
     // 1. Revoke Blob Preview URLs
     if (Array.isArray(files)) {
         files.forEach(f => { 
@@ -328,6 +328,8 @@ function resetTool() {
         try { watermarkImage.close(); } catch (e) {}
     }
     
+    const currentTool = activeTool;
+
     // 4. Reset Global Application State
     files = []; 
     originalFileDetails = []; 
@@ -335,19 +337,32 @@ function resetTool() {
     selectedFormat = null; 
     currentImageIdx = 0; 
     watermarkImage = null;
-    activeTool = null;
     
-    // 5. Clear Tool Screen Container
     const toolScreen = document.getElementById('toolScreen');
-    if (toolScreen) {
-        toolScreen.innerHTML = ''; 
+    
+    // 5. Smart UI Recovery (Restores Initial Drop Zone smoothly)
+    if ((softReset || (toolScreen && !toolScreen.classList.contains('hidden'))) && currentTool) {
+        setupToolUI(currentTool);
+    } else {
+        activeTool = null;
+        if (toolScreen) toolScreen.innerHTML = ''; 
     }
 }
-// --- Core App Functionality ---
+
+// --- Core App Functionality (Memory Safe File Handler) ---
 function handleFiles(fileList, isAddingMore = false) {
     let newFiles = Array.from(fileList);
     if (newFiles.length === 0) return;
     
+    // Safety check: नई फ़ाइल्स अपलोड होने पर पुरानी फ़ाइल्स की RAM मेमोरी साफ़ करें
+    if (!isAddingMore && files.length > 0) {
+        files.forEach(f => {
+            if (f && f.previewUrl) {
+                try { URL.revokeObjectURL(f.previewUrl); } catch (e) {}
+            }
+        });
+    }
+
     newFiles.forEach(file => {
         file.previewUrl = URL.createObjectURL(file);
     });
@@ -366,7 +381,6 @@ function handleFiles(fileList, isAddingMore = false) {
         confirmSelection();
     }
 }
-
 async function populateFileDetails(fileList, startIndex = 0) {
     await Promise.all(fileList.map((file, i) => new Promise(resolve => {
         const index = startIndex + i;
@@ -497,46 +511,78 @@ function initDragAndDropReorder(listContainer) {
 
 function deleteFile(index) {
     if (files[index] && files[index].previewUrl) {
-        URL.revokeObjectURL(files[index].previewUrl);
+        try { URL.revokeObjectURL(files[index].previewUrl); } catch (e) {}
     }
     files.splice(index, 1);
     originalFileDetails.splice(index, 1);
-    if (files.length === 0) { resetTool(); return; }
-    if (currentImageIdx >= files.length) currentImageIdx = files.length - 1;
-    displayFiles(); renderFileManagementUI(); showFilePreview(currentImageIdx);
+    
+    // 🔥 FIX: सब फ़ाइल्स डिलीट होने पर सॉफ्ट रिसेट (Soft Reset) करें ताकि व्हाइट स्क्रीन न आये
+    if (files.length === 0) { 
+        resetTool(true); 
+        return; 
+    }
+    
+    if (currentImageIdx >= files.length) {
+        currentImageIdx = files.length - 1;
+    }
+    
+    displayFiles(); 
+    renderFileManagementUI(); 
+    showFilePreview(currentImageIdx);
+    
+    if (typeof triggerRealtimeSizeUpdate === 'function') {
+        triggerRealtimeSizeUpdate();
+    }
 }
 
 function attachFileManagementListeners() {
     const toolScreen = document.getElementById('toolScreen');
-    const listContainer = toolScreen.querySelector('.file-list-container');
+    const listContainer = toolScreen?.querySelector('.file-list-container');
     if (!listContainer) return;
-    listContainer.addEventListener('click', e => { 
+    
+    // सुरक्षित और क्लीन इवेंट डेलिगेशन
+    listContainer.onclick = e => { 
         const deleteBtn = e.target.closest('.delete-file-btn'); 
-        if (deleteBtn) deleteFile(parseInt(deleteBtn.dataset.index, 10)); 
-    });
+        if (deleteBtn) {
+            e.stopPropagation();
+            deleteFile(parseInt(deleteBtn.dataset.index, 10)); 
+        }
+    };
 }
 
 function runSingleCompressionPromise(workerItem, file, quality, targetWidth, targetHeight, format) {
     return new Promise(async (resolve) => {
-        workerItem.worker.onmessage = (e) => {
-            resolve(e.data);
-        };
-        const imageBitmap = await createImageBitmap(file);
-        workerItem.worker.postMessage({
-            imageBitmap,
-            fileName: file.name,
-            fileIndex: 0,
-            tool: 'compressor',
-            options: { quality, format, newWidth: targetWidth, newHeight: targetHeight }
-        }, [imageBitmap]);
+        try {
+            workerItem.worker.onmessage = (e) => {
+                resolve(e.data);
+            };
+            const imageBitmap = await createImageBitmap(file);
+            workerItem.worker.postMessage({
+                imageBitmap,
+                fileName: file.name,
+                fileIndex: 0,
+                tool: 'compressor',
+                options: { quality, format, newWidth: targetWidth, newHeight: targetHeight }
+            }, [imageBitmap]);
+        } catch (err) {
+            // एरर आने पर प्रॉमिस हैंग होने से बचाएं
+            resolve({ success: false, error: err.message });
+        }
     });
 }
 
-// --- Dynamic PDF Compilation Handler ---
+// --- Dynamic PDF Compilation Handler (Centered & Perfect Page Fit) ---
 async function compilePDF(results) {
     await loadExternalLibrary('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
     const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
+    
+    // Standard A4 PDF Document (210mm x 297mm)
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const margin = 10;
+    const maxW = pdfWidth - (margin * 2);
+    const maxH = pdfHeight - (margin * 2);
     
     for (let i = 0; i < results.length; i++) {
         const res = results[i];
@@ -548,13 +594,20 @@ async function compilePDF(results) {
             reader.readAsDataURL(res.blob);
         });
         
-        const width = res.newWidth || 800;
-        const height = res.newHeight || 600;
-        pdf.addImage(dataUrl, 'JPEG', 10, 10, 190, (190 * height) / width);
+        const imgW = res.newWidth || 800;
+        const imgH = res.newHeight || 600;
+        const ratio = Math.min(maxW / imgW, maxH / imgH);
+        
+        // इमेजेस को A4 पेज के सेंटर में परफेक्ट फ़िट करें
+        const finalW = imgW * ratio;
+        const finalH = imgH * ratio;
+        const posX = (pdfWidth - finalW) / 2;
+        const posY = (pdfHeight - finalH) / 2;
+        
+        pdf.addImage(dataUrl, 'JPEG', posX, posY, finalW, finalH);
     }
     return pdf.output('blob');
 }
-
 // --- Web Worker Process Flow ---
 async function processFiles() {
     const toolScreen = document.getElementById('toolScreen');
@@ -1028,18 +1081,28 @@ function attachToolEventListeners(container) {
         dropZone.addEventListener('drop', e => { 
             e.preventDefault(); 
             dropZone.classList.remove('drag-over');
-            handleFiles(e.dataTransfer.files); 
+            if (e.dataTransfer && e.dataTransfer.files.length > 0) {
+                handleFiles(e.dataTransfer.files); 
+            }
         });
-        dropZone.addEventListener('click', () => fileInput?.click());
+        dropZone.addEventListener('click', e => {
+            // अगर यूज़र कंफर्म बटन पर क्लिक न कर रहा हो तो फ़ाइल पिकर खोलें
+            if (!e.target.closest('.confirm-btn')) {
+                fileInput?.click();
+            }
+        });
         fileInput?.addEventListener('change', e => handleFiles(e.target.files));
     }
     
     // Core Buttons
+    container.querySelector('.confirm-btn')?.addEventListener('click', () => confirmSelection());
     container.querySelector('.add-more-files-input')?.addEventListener('change', e => handleFiles(e.target.files, true));
     container.querySelector('.prev-image-btn')?.addEventListener('click', () => { showFilePreview(currentImageIdx - 1); triggerRealtimeSizeUpdate(); });
     container.querySelector('.next-image-btn')?.addEventListener('click', () => { showFilePreview(currentImageIdx + 1); triggerRealtimeSizeUpdate(); });
     container.querySelector('.start-btn')?.addEventListener('click', processFiles);
-    container.querySelector('.clear-all-btn')?.addEventListener('click', resetTool);
+    
+    // 🔥 FIX: Clear All पर सॉफ्ट रिसेट (true) पास करें ताकि ड्रॉप-ज़ोन पर बिना व्हाइट स्क्रीन वापस जाएं
+    container.querySelector('.clear-all-btn')?.addEventListener('click', () => resetTool(true));
     
     // Quality Sliders Animation & Live Updates
     container.querySelectorAll('.quality-slider').forEach(slider => {
@@ -1463,88 +1526,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     router();
 });
-// --- Live Interactive Demo Comparison Widget Engine ---
-function initDemoComparisonWidget() {
-    const container = document.getElementById('demoComparisonWidget');
-    const clipper = document.getElementById('demoClipper');
-    const handle = document.getElementById('demoHandle');
-    if (!container || !clipper || !handle) return;
-
-    let isDragging = false;
-
-    // Update slider position based on mouse/touch X coordinates
-    const updatePosition = (clientX) => {
-        const rect = container.getBoundingClientRect();
-        let x = clientX - rect.left;
-        if (x < 0) x = 0;
-        if (x > rect.width) x = rect.width;
-        
-        const percentage = (x / rect.width) * 100;
-        clipper.style.clipPath = `inset(0 0 0 ${percentage}%)`;
-        handle.style.left = `${percentage}%`;
-    };
-
-    const onStart = (e) => {
-        isDragging = true;
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        updatePosition(clientX);
-    };
-
-    const onMove = (e) => {
-        if (!isDragging) return;
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        updatePosition(clientX);
-    };
-
-    const onEnd = () => {
-        isDragging = false;
-    };
-
-    // Touch & Mouse Event Listeners
-    container.addEventListener('mousedown', onStart);
-    container.addEventListener('touchstart', onStart, { passive: true });
-    
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onMove, { passive: true });
-    
-    window.addEventListener('mouseup', onEnd);
-    window.addEventListener('touchend', onEnd);
-
-    // Format Tab Switcher Logic
-    const formatBtns = document.querySelectorAll('.demo-format-btn');
-    const formatBadge = document.getElementById('demoFormatBadge');
-    const sizeBadge = document.getElementById('demoSizeBadge');
-
-    formatBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            formatBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            const fmt = btn.dataset.format;
-            const size = btn.dataset.size;
-            const savings = btn.dataset.savings;
-
-            if (formatBadge) formatBadge.textContent = `Compressed ${fmt}`;
-            if (sizeBadge) sizeBadge.textContent = `${size} • Saved ${savings}`;
-        });
-    });
-}
-
-// Ensure demo widget initializes on load & page change
-document.addEventListener('DOMContentLoaded', () => {
-    initDemoComparisonWidget();
-});
-
-// Re-initialize if navigating back to Home Screen
-const existingPageShowFunc = showPage;
-showPage = function(pageId) {
-    if (typeof existingPageShowFunc === 'function') existingPageShowFunc(pageId);
-    if (pageId === 'homeScreen') {
-        requestAnimationFrame(() => {
-            initDemoComparisonWidget();
-        });
-    }
-};
 // --- PWA Service Worker & Install Banner Manager (Bug Fixed Update) ---
 function initPWAInstallBanner() {
     const banner = document.getElementById('pwaInstallBanner');
@@ -1561,7 +1542,7 @@ function initPWAInstallBanner() {
     // Capture Native Browser PWA install prompt event using globally declared variable
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
-        deferredInstallPrompt = e; // Uses existing global variable (No duplicate 'let')
+        deferredInstallPrompt = e; // Uses existing global variable
 
         // Reveal Banner if not dismissed
         if (sessionStorage.getItem('pwa_banner_dismissed') !== 'true') {
@@ -1572,7 +1553,6 @@ function initPWAInstallBanner() {
     // Handle 'Install Now' Button Click
     installBtn.addEventListener('click', async () => {
         if (!deferredInstallPrompt) {
-            // Fallback instruction for iOS / Safari or non-automated prompts
             showToast('To install: tap Share/Menu in your browser and select "Add to Home Screen".');
             return;
         }
@@ -1606,6 +1586,7 @@ function initPWAInstallBanner() {
 document.addEventListener('DOMContentLoaded', () => {
     initPWAInstallBanner();
 });
+
 // Smart Mouse Spotlight Follower for Tool Cards
 document.addEventListener('mousemove', (e) => {
     document.querySelectorAll('.tool-choice-card').forEach(card => {
