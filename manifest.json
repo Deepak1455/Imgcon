@@ -1,0 +1,63 @@
+{
+  "id": "/",
+  "short_name": "ImgCon",
+  "name": "ImgCon - Free Online Image Converter, Compressor & Resizer",
+  "description": "Convert, compress, resize, watermark, and clean EXIF metadata from images directly in your browser. 100% private and works offline.",
+  "icons": [
+    {
+      "src": "logo.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "logo.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "logo.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "logo.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "background_color": "#6366f1",
+  "theme_color": "#6366f1",
+  "display": "standalone",
+  "orientation": "portrait",
+  "categories": [
+    "photo",
+    "utilities",
+    "productivity"
+  ],
+  "shortcuts": [
+    {
+      "name": "Image Converter",
+      "short_name": "Converter",
+      "description": "Convert PNG, JPG, WebP, AVIF & PDF",
+      "url": "/image-converter"
+    },
+    {
+      "name": "Image Compressor",
+      "short_name": "Compressor",
+      "description": "Shrink photo file sizes without quality loss",
+      "url": "/image-compressor"
+    },
+    {
+      "name": "EXIF Cleaner",
+      "short_name": "EXIF Cleaner",
+      "description": "Remove hidden GPS location tracking data",
+      "url": "/exif-cleaner"
+    }
+  ]
+}
