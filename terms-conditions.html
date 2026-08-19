@@ -1,71 +1,321 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) - Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-6SWYBN309Y"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
+
     gtag('config', 'G-6SWYBN309Y');
   </script>
+
+  <!-- GitHub Pages SPA Path Resolver -->
+  <script type="text/javascript">
+    (function(l) {
+      if (l.search[1] === '/' ) {
+        var decoded = l.search.slice(1).split('&').map(function(s) { 
+          return s.replace(/~and~/g, '&')
+        }).join('?');
+        window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+        );
+      }
+    }(window.location))
+  </script>
+
+  <!-- Google AdSense Auto Ads Code & Verification Meta Tag -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6616979929366975" crossorigin="anonymous"></script>
   <meta name="google-adsense-account" content="ca-pub-6616979929366975">
+
+  <!-- SEO & Google Verification -->
+  <meta name="google-site-verification" content="googlefd522ed6c4febf57" />
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Terms and Conditions - ImgCon Online Tools</title>
-  <meta name="description" content="Terms and Conditions for using ImgCon online image tools. Read our acceptable use policy and terms of service.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Terms and Conditions | ImgCon - Private Client-Side Image Tools</title>
+
+  <!-- Advanced Meta Tags -->
+  <meta name="description" content="Read the Terms and Conditions for using ImgCon. Learn about our 100% private client-side image processing, acceptable use policy, file ownership, and liability disclaimers.">
+  <meta name="keywords" content="terms and conditions, imgcon terms, legal agreement, private image converter, client side image processing, terms of service, user privacy terms, deepak sikarwar">
+  <meta name="author" content="Deepak Sikarwar">
+  <meta name="publisher" content="Deepak Sikarwar">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://imgcon.online/terms-conditions">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+
+  <!-- PWA Theme & Manifest -->
+  <meta name="theme-color" content="#6366f1">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+
+  <!-- Open Graph / Facebook SEO -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Terms and Conditions | ImgCon">
+  <meta property="og:description" content="Read the Terms and Conditions for using ImgCon client-side private image converter, compressor, resizer, and EXIF tools.">
+  <meta property="og:image" content="https://imgcon.online/og-image.png">
+  <meta property="og:url" content="https://imgcon.online/terms-conditions">
+
+  <!-- Twitter Card SEO -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Terms and Conditions | ImgCon">
+  <meta name="twitter:description" content="Read the Terms and Conditions for using ImgCon client-side private image processing suite.">
+  <meta name="twitter:image" content="https://imgcon.online/og-image.png">
+
+  <!-- Favicon Fix -->
+  <link rel="shortcut icon" href="logo.png" type="image/png">
+  <link rel="icon" href="logo.png" type="image/png" sizes="192x192">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Terms and Conditions",
+    "url": "https://imgcon.online/terms-conditions",
+    "description": "Legal terms and conditions for using ImgCon online image tools.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "ImgCon",
+      "url": "https://imgcon.online",
+      "logo": "https://imgcon.online/logo.png"
+    }
+  }
+  </script>
+
+  <!-- Critical Path CSS -->
+  <style>
+    :root {
+      --primary-color: #6366f1;
+      --primary-hover: #4f46e5;
+      --bg-main: #f8fafc;
+      --bg-subtle: #f1f5f9;
+      --card-bg: #ffffff;
+      --card-border: #e5e7eb;
+      --text-dark: #1e293b;
+      --text-light: #475569;
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+    [data-theme="dark"] {
+      --primary-color: #818cf8;
+      --primary-hover: #a78bfa;
+      --bg-main: #0f172a;
+      --bg-subtle: #1e293b;
+      --card-bg: #111827;
+      --card-border: #374151;
+      --text-dark: #f3f4f6;
+      --text-light: #cbd5e1;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      margin: 0;
+      padding: 12px;
+    }
+    .app-container {
+      background-color: var(--card-bg);
+      border-radius: 1.5rem;
+      border: 1px solid var(--card-border);
+      overflow: hidden;
+      max-width: 80rem;
+      margin: 0 auto;
+    }
+  </style>
+
+  <!-- Asynchronous CSS Loading -->
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"></noscript>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript>
+  
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="p-3 sm:p-6 pb-12 transition-colors duration-300">
 
-  <header class="sticky top-2 z-50 backdrop-filter backdrop-blur-lg flex justify-between items-center mb-6 py-3 px-4 max-w-7xl mx-auto rounded-2xl border shadow-sm" style="background-color: var(--card-bg); border-color: var(--card-border);">
-    <a href="/" class="flex items-center gap-3">
-      <img src="logo.png" alt="ImgCon Logo" width="40" height="40" class="w-10 h-10 object-contain">
-      <div>
-        <h1 class="text-xl font-extrabold" style="color: var(--text-dark);">ImgCon</h1>
-        <p class="text-xs font-semibold uppercase opacity-80" style="color: var(--primary-color);">Terms & Conditions</p>
-      </div>
-    </a>
-    <a href="/" class="secondary-btn px-4 py-2 rounded-full font-semibold text-xs"><i class="fas fa-home mr-2"></i>Home</a>
-  </header>
+    <!-- Sticky Floating Header -->
+    <header class="sticky top-2 z-50 backdrop-filter backdrop-blur-lg flex justify-between items-center mb-6 py-3 px-4 max-w-7xl mx-auto rounded-2xl border transition-all duration-300 shadow-sm" style="background-color: var(--card-bg); border-color: var(--card-border);">
+        <a href="/" class="flex items-center gap-3 group">
+            <img src="logo.png" alt="ImgCon Logo" width="40" height="40" class="w-10 h-10 object-contain logo-image" fetchpriority="high">
+            <div>
+                <h1 class="text-xl font-extrabold tracking-tight" style="color: var(--text-dark);">ImgCon</h1>
+                <p class="text-xs font-semibold tracking-wider uppercase opacity-80" style="color: var(--primary-color);">Terms of Service</p>
+            </div>
+        </a>
+        <div class="flex items-center gap-2">
+            <a href="/" id="homeBtn" class="secondary-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 hover:shadow-md"><i class="fas fa-home mr-2"></i>Home</a>
+            <button id="themeToggleBtn" class="p-2 rounded-full w-10 h-10 flex items-center justify-center border transition-all duration-300 hover:scale-105" style="background-color: var(--card-bg); border-color: var(--card-border);" aria-label="Toggle Theme">
+                <i class="fas fa-sun text-lg text-yellow-500 transition-transform duration-500"></i>
+                <i class="fas fa-moon text-lg text-indigo-400 transition-transform duration-500"></i>
+            </button>
+        </div>
+    </header>
 
-  <main class="app-container p-6 sm:p-10 max-w-4xl mx-auto">
-    <section class="content-page text-left space-y-6">
-      <div class="text-center mb-8 border-b pb-6" style="border-color: var(--card-border);">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold mb-3 border shadow-xs" style="background-color: var(--bg-subtle); border-color: var(--card-border); color: var(--primary-color);">
-              <i class="fas fa-file-contract"></i> Legal Agreement
-          </div>
-          <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-2" style="color: var(--text-dark);">Terms and Conditions</h1>
-          <p class="text-xs font-semibold opacity-75" style="color: var(--text-light);">
-              <i class="far fa-calendar-alt mr-1"></i> Last Updated: July 29, 2026
-          </p>
-      </div>
+    <main class="app-container p-5 sm:p-8 animate__animated animate__fadeInUp relative max-w-7xl mx-auto transition-all duration-500">
+        
+        <!-- Terms & Conditions Screen (Standalone & Clean Crawlable) -->
+        <section id="termsScreen" class="content-page text-left max-w-4xl mx-auto space-y-6">
+            
+            <!-- Page Header Banner -->
+            <div class="text-center mb-8 border-b pb-6" style="border-color: var(--card-border);">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold mb-3 border shadow-xs" style="background-color: var(--bg-subtle); border-color: var(--card-border); color: var(--primary-color);">
+                    <i class="fas fa-file-contract"></i> Legal Agreement
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-2" style="color: var(--text-dark);">Terms and Conditions</h2>
+                <p class="text-xs font-semibold opacity-75" style="color: var(--text-light);">
+                    <i class="far fa-calendar-alt mr-1"></i> Last Updated: July 29, 2026
+                </p>
+            </div>
 
-      <div class="space-y-6 text-sm leading-relaxed" style="color: var(--text-light);">
-          <div class="p-5 rounded-2xl border" style="background-color: var(--card-bg); border-color: var(--card-border);">
-              <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">1. Acceptance of Terms</h3>
-              <p>By using ImgCon, you confirm that you are at least 13 years of age and legally capable of entering into this agreement.</p>
-          </div>
-          <div class="p-5 rounded-2xl border" style="background-color: var(--card-bg); border-color: var(--card-border);">
-              <h3 class="text-lg font-bold mb-2" style="color: var(--text-dark);">2. Client-Side Processing & Ownership</h3>
-              <p>You retain complete ownership, copyright, and intellectual property rights over all images processed through ImgCon. Files are never uploaded to remote servers.</p>
-          </div>
-      </div>
-    </section>
-  </main>
+            <!-- Intro Overview Card -->
+            <div class="p-5 rounded-2xl border shadow-xs leading-relaxed animate__animated animate__fadeInUp" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
+                <p class="text-sm font-medium" style="color: var(--text-dark);">
+                    Welcome to <strong>ImgCon</strong> (<a href="https://imgcon.online" class="underline" style="color: var(--primary-color);">https://imgcon.online</a>). By accessing or using our online image converter, compressor, resizer, watermark, and EXIF cleaner tools, you agree to be bound by these Terms and Conditions. Please read them carefully before using our platform.
+                </p>
+            </div>
 
-  <footer class="text-center py-6 mt-10 text-xs opacity-75" style="color: var(--text-light);">&copy; 2026 ImgCon. All Rights Reserved.</footer>
+            <!-- Terms Sections Grid -->
+            <div class="space-y-6 text-sm leading-relaxed" style="color: var(--text-light);">
+                
+                <!-- Section 1 -->
+                <div class="p-5 rounded-2xl border animate__animated animate__fadeInUp" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                    <h3 class="text-lg font-bold mb-2 flex items-center gap-2" style="color: var(--text-dark);">
+                        <span class="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-xs font-extrabold">1</span>
+                        Acceptance of Terms
+                    </h3>
+                    <p>By using ImgCon, you confirm that you are at least 13 years of age and legally capable of entering into this agreement. If you do not agree with any part of these terms, you must discontinue using our services immediately.</p>
+                </div>
 
-  <!-- SCRIPT FILES -->
-  <script src="imageconverter.js" defer></script>
-  <script src="imagecompressor.js" defer></script>
-  <script src="imageresizer.js" defer></script>
-  <script src="imagewatermark.js" defer></script>
-  <script src="ExifData.js" defer></script>
-  <script src="script.js" defer></script>
-  <script src="imgconblog.js" defer></script>
+                <!-- Section 2 -->
+                <div class="p-5 rounded-2xl border animate__animated animate__fadeInUp" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                    <h3 class="text-lg font-bold mb-2 flex items-center gap-2" style="color: var(--text-dark);">
+                        <span class="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-xs font-extrabold">2</span>
+                        Client-Side Processing & File Privacy
+                    </h3>
+                    <p class="mb-3">ImgCon operates as a <strong>100% client-side web application</strong> using browser WebAssembly, Canvas API, and Web Worker technology.</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>No Server Uploads:</strong> Your images are processed locally within your device's browser memory. Files are never uploaded, stored, or transmitted to external servers.</li>
+                        <li><strong>Full Ownership:</strong> You retain complete ownership, copyright, and intellectual property rights over all images processed through ImgCon.</li>
+                    </ul>
+                </div>
+
+                <!-- Section 3 -->
+                <div class="p-5 rounded-2xl border animate__animated animate__fadeInUp" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                    <h3 class="text-lg font-bold mb-2 flex items-center gap-2" style="color: var(--text-dark);">
+                        <span class="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-xs font-extrabold">3</span>
+                        Acceptable Use Policy
+                    </h3>
+                    <p class="mb-2">You agree to use ImgCon solely for lawful personal or professional purposes. You agree not to:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Process content that violates third-party copyrights, trademarks, or privacy rights.</li>
+                        <li>Attempt to reverse-engineer, decompile, or tamper with the web application source code.</li>
+                        <li>Use automated scripts or bots in a manner that disrupts website availability.</li>
+                    </ul>
+                </div>
+
+                <!-- Section 4 -->
+                <div class="p-5 rounded-2xl border animate__animated animate__fadeInUp" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                    <h3 class="text-lg font-bold mb-2 flex items-center gap-2" style="color: var(--text-dark);">
+                        <span class="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-xs font-extrabold">4</span>
+                        Disclaimer of Warranties & Limitation of Liability
+                    </h3>
+                    <p>ImgCon is provided on an <strong>"AS IS" and "AS AVAILABLE"</strong> basis without warranties of any kind. While we strive for 100% processing accuracy and visual fidelity, ImgCon shall not be liable for any direct, indirect, incidental, or consequential damages resulting from file corruption, browser crashes, or data loss during local processing.</p>
+                </div>
+
+                <!-- Section 5 -->
+                <div class="p-5 rounded-2xl border animate__animated animate__fadeInUp" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                    <h3 class="text-lg font-bold mb-2 flex items-center gap-2" style="color: var(--text-dark);">
+                        <span class="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-xs font-extrabold">5</span>
+                        Third-Party Services & Advertisements
+                    </h3>
+                    <p>ImgCon uses Google AdSense and Google Analytics to serve non-intrusive advertisements and analyze anonymous web traffic. By using our website, you acknowledge and agree to our <a href="/privacy-policy" class="underline font-semibold" style="color: var(--primary-color);">Privacy Policy</a> regarding cookie usage.</p>
+                </div>
+
+            </div>
+
+            <!-- Official Contact Support Card -->
+            <div class="p-6 rounded-2xl border shadow-sm mt-8 text-center" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-xl mx-auto mb-3 shadow-inner">
+                    <i class="fas fa-envelope-open-text"></i>
+                </div>
+                <h3 class="text-lg font-bold mb-1" style="color: var(--text-dark);">Questions About Our Terms?</h3>
+                <p class="text-xs mb-4" style="color: var(--text-light);">If you have any legal questions, suggestions, or concerns regarding these Terms, please contact our support team:</p>
+                
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <a href="mailto:imgcon72@gmail.com" class="upload-button text-xs py-2.5 px-5 shadow-sm">
+                        <i class="fas fa-envelope mr-1.5"></i> imgcon72@gmail.com
+                    </a>
+                    <a href="mailto:contact@imgcon.online" class="secondary-btn px-5 py-2.5 rounded-full font-semibold text-xs transition-all hover:shadow-xs">
+                        <i class="fas fa-at mr-1.5 text-indigo-500"></i> contact@imgcon.online
+                    </a>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Global Footer -->
+    <footer id="main-footer" class="text-center py-10 mt-10 max-w-7xl mx-auto border-t" style="border-color: var(--card-border);">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-8 text-left mb-8 px-4">
+            <div class="col-span-2 md:col-span-1">
+                <p class="font-extrabold text-lg mb-3" style="color: var(--text-dark);">ImgCon</p>
+                <p class="text-xs leading-relaxed mb-3" style="color: var(--text-light);">The free, fast, and private way to handle all your image processing needs. Built with privacy at its core.</p>
+            </div>
+            <div>
+                 <p class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Tools</p>
+                 <ul class="space-y-2 text-xs" style="color: var(--text-light);">
+                     <li><a href="/image-converter" class="hover:underline transition-all">Image Converter</a></li>
+                     <li><a href="/image-compressor" class="hover:underline transition-all">Image Compressor</a></li>
+                     <li><a href="/image-resizer" class="hover:underline transition-all">Image Resizer</a></li>
+                     <li><a href="/image-watermark" class="hover:underline transition-all">Watermark Tool</a></li>
+                     <li><a href="/exif-cleaner" class="hover:underline transition-all font-semibold text-indigo-500">EXIF Data Cleaner</a></li>
+                 </ul>
+            </div>
+             <div>
+                 <p class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Company</p>
+                 <ul class="space-y-2 text-xs" style="color: var(--text-light);">
+                     <li><a href="/about-us" class="hover:underline transition-all">About Us</a></li>
+                     <li><a href="/blog" class="hover:underline transition-all">Blog</a></li>
+                     <li><a href="mailto:contact@imgcon.online" class="hover:underline transition-all">Contact Us</a></li>
+                 </ul>
+            </div>
+            <div>
+                 <p class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Legal</p>
+                 <ul class="space-y-2 text-xs" style="color: var(--text-light);">
+                      <li><a href="/privacy-policy" class="hover:underline transition-all">Privacy Policy</a></li>
+                      <li><a href="/terms-conditions" class="hover:underline transition-all">Terms & Conditions</a></li>
+                 </ul>
+            </div>
+            <div class="col-span-2 md:col-span-1">
+                <p class="font-bold text-sm uppercase tracking-wider mb-3" style="color: var(--text-dark);">Share ImgCon</p>
+                <div class="flex flex-wrap items-center gap-2">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://imgcon.online" target="_blank" rel="noopener noreferrer" class="social-share-btn w-9 h-9 flex items-center justify-center rounded-xl text-white transition-transform hover:-translate-y-1" style="background-color: #1877F2;" aria-label="Share on Facebook"><i class="fab fa-facebook-f text-sm"></i></a>
+                    <a href="https://twitter.com/intent/tweet?url=https://imgcon.online&text=Check%20out%20ImgCon!" target="_blank" rel="noopener noreferrer" class="social-share-btn w-9 h-9 flex items-center justify-center rounded-xl text-white transition-transform hover:-translate-y-1" style="background-color: #1DA1F2;" aria-label="Share on Twitter"><i class="fab fa-twitter text-sm"></i></a>
+                    <a href="https://api.whatsapp.com/send?text=Check%20out%20ImgCon!%20https://imgcon.online" target="_blank" rel="noopener noreferrer" class="social-share-btn w-9 h-9 flex items-center justify-center rounded-xl text-white transition-transform hover:-translate-y-1" style="background-color: #25D366;" aria-label="Share on WhatsApp"><i class="fab fa-whatsapp text-sm"></i></a>
+                    <a href="https://t.me/share/url?url=https://imgcon.online" target="_blank" rel="noopener noreferrer" class="social-share-btn w-9 h-9 flex items-center justify-center rounded-xl text-white transition-transform hover:-translate-y-1" style="background-color: #0088cc;" aria-label="Share on Telegram"><i class="fab fa-telegram text-sm"></i></a>
+                    <button id="copyLinkBtn" class="copy-link-btn w-9 h-9 flex items-center justify-center rounded-xl text-white transition-all hover:-translate-y-1 bg-gradient-to-br from-indigo-500 to-purple-600 shadow-sm" aria-label="Copy link to share">
+                        <i class="fas fa-copy text-sm"></i>
+                    </button>
+                </div>
+           </div>
+        </div>
+        <p class="text-xs opacity-75 mt-6" style="color: var(--text-light);">&copy; 2026 ImgCon. All Rights Reserved.</p>
+    </footer>
+
+    <div id="toast" class="toast"><i class="fas fa-check-circle mr-2 text-green-500"></i><span id="toastMessage"></span></div>
+
+    <!-- SCRIPT FILES INCLUDING ALL MODULAR ENGINES -->
+    <script src="imageconverter.js" defer></script>
+    <script src="imagecompressor.js" defer></script>
+    <script src="imageresizer.js" defer></script>
+    <script src="imagewatermark.js" defer></script>
+    <script src="ExifData.js" defer></script>
+    <script src="script.js" defer></script>
+    <script src="imgconblog.js" defer></script>
 </body>
 </html>
