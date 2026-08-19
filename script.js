@@ -1,7 +1,7 @@
 /**
  * ==========================================================================
- * SCRIPT.JS - ImgCon Central Orchestrator & Application Manager
- * (Handles State Management, SPA Routing, File Drag-Drop & Module Delegation)
+ * SCRIPT.JS - ImgCon Central Orchestrator & Application Manager (Optimized)
+ * (State Management, SPA Routing, Memory Management & Module Delegation)
  * ==========================================================================
  */
 
@@ -14,12 +14,14 @@ let selectedFormat = null;
 let activeTool = null;
 let deferredInstallPrompt = null;
 let watermarkImage = null;
+let currentModalBlobUrl = null;
 
 const SESSION_STORAGE_KEY = 'imgcon_session_v3';
 
 // --- Window Setter Helper for External Modules ---
 window.setSelectedFormat = function(fmt) {
     selectedFormat = fmt;
+    window.selectedFormat = fmt;
 };
 
 // --- DOM Elements ---
@@ -33,7 +35,7 @@ const mainContainer = document.querySelector('main.app-container');
 const mainFooter = document.getElementById('main-footer');
 const cardFooter = document.getElementById('card-footer');
 
-// --- Dynamic External Library Loader ---
+// --- Dynamic External Library Loader (Cached Promise Engine) ---
 const loadedLibraries = {};
 function loadExternalLibrary(src) {
     if (loadedLibraries[src]) return loadedLibraries[src];
@@ -56,8 +58,8 @@ window.loadExternalLibrary = loadExternalLibrary;
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('Service Worker registered successfully.', reg.scope))
-            .catch(err => console.error('Service Worker registration failed.', err));
+            .then(reg => console.log('Service Worker registered successfully. Scope:', reg.scope))
+            .catch(err => console.error('Service Worker registration failed:', err));
     });
 }
 
@@ -109,12 +111,12 @@ const router = async () => {
 
     document.title = route.title;
 
-    let metaDesc = document.querySelector('meta[name="description"]');
+    const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc && route.desc) {
         metaDesc.setAttribute("content", route.desc);
     }
 
-    let canonicalTag = document.querySelector('link[rel="canonical"]');
+    const canonicalTag = document.querySelector('link[rel="canonical"]');
     if (canonicalTag) {
         canonicalTag.setAttribute("href", "https://imgcon.online" + path);
     }
@@ -162,13 +164,13 @@ function showPage(pageId) {
     allScreens.forEach(s => s.classList.add('hidden'));
     const activeScreen = document.getElementById(pageId);
     if (activeScreen) {
-         activeScreen.classList.remove('hidden');
-         requestAnimationFrame(() => {
-             const h = activeScreen.clientHeight;
-             requestAnimationFrame(() => {
-                 if (mainContainer) mainContainer.style.minHeight = h + 'px';
-             });
-         });
+        activeScreen.classList.remove('hidden');
+        requestAnimationFrame(() => {
+            const h = activeScreen.clientHeight;
+            requestAnimationFrame(() => {
+                if (mainContainer && h > 0) mainContainer.style.minHeight = h + 'px';
+            });
+        });
     }
 
     const isHomePage = pageId === 'homeScreen';
@@ -225,6 +227,7 @@ const toolMetaDetails = {
 function setupToolUI(toolName) {
     activeTool = toolName;
     selectedFormat = null;
+    window.selectedFormat = null;
     
     const toolScreen = document.getElementById('toolScreen');
     if (!toolScreen) return;
@@ -257,7 +260,7 @@ function setupToolUI(toolName) {
     
     const fileInput = toolScreen.querySelector('.file-input');
     const addMoreInput = toolScreen.querySelector('.add-more-files-input');
-    const acceptType = (toolName === 'compressor') ? 'image/jpeg, image/webp' : 'image/*';
+    const acceptType = (toolName === 'compressor') ? 'image/jpeg, image/webp, image/png' : 'image/*';
 
     if (fileInput) fileInput.accept = acceptType;
     if (addMoreInput) addMoreInput.accept = acceptType;
@@ -269,8 +272,9 @@ function setupToolUI(toolName) {
     }
 }
 
-// --- Reset Tool Engine ---
+// --- Reset Tool Engine (Memory Cleaned) ---
 function resetTool(softReset = false) {
+    // 1. Revoke all object preview URLs
     if (Array.isArray(files)) {
         files.forEach(f => { 
             if (f && f.previewUrl) {
@@ -279,17 +283,13 @@ function resetTool(softReset = false) {
         });
     }
     
-    if (Array.isArray(processedResults) && processedResults.length > 0) {
-        processedResults.forEach(r => {
-            if (r && r.blob) {
-                try { 
-                    const blobUrl = URL.createObjectURL(r.blob);
-                    URL.revokeObjectURL(blobUrl); 
-                } catch (e) {}
-            }
-        });
+    // 2. Revoke modal preview blob
+    if (currentModalBlobUrl) {
+        try { URL.revokeObjectURL(currentModalBlobUrl); } catch (e) {}
+        currentModalBlobUrl = null;
     }
 
+    // 3. Close bitmaps
     if (watermarkImage && typeof watermarkImage.close === 'function') {
         try { watermarkImage.close(); } catch (e) {}
     }
@@ -304,6 +304,7 @@ function resetTool(softReset = false) {
     originalFileDetails = []; 
     processedResults = []; 
     selectedFormat = null; 
+    window.selectedFormat = null;
     currentImageIdx = 0; 
     watermarkImage = null;
     
@@ -317,7 +318,7 @@ function resetTool(softReset = false) {
     }
 }
 
-// --- Core App Functionality ---
+// --- Core File Handling ---
 function handleFiles(fileList, isAddingMore = false) {
     let newFiles = Array.from(fileList);
     if (newFiles.length === 0) return;
@@ -354,11 +355,18 @@ async function populateFileDetails(fileList, startIndex = 0) {
         const index = startIndex + i;
         const img = new Image();
         img.onload = () => { 
-            originalFileDetails[index] = { width: img.width, height: img.height, size: file.size, name: file.name, type: file.type, ratio: img.width / img.height }; 
+            originalFileDetails[index] = { 
+                width: img.naturalWidth || img.width, 
+                height: img.naturalHeight || img.height, 
+                size: file.size, 
+                name: file.name, 
+                type: file.type, 
+                ratio: (img.naturalWidth || img.width) / (img.naturalHeight || img.height) 
+            }; 
             resolve(); 
         };
         img.onerror = () => { 
-            originalFileDetails[index] = { width: 0, height: 0, size: file.size, name: file.name, type: file.type, ratio: 0 }; 
+            originalFileDetails[index] = { width: 0, height: 0, size: file.size, name: file.name, type: file.type, ratio: 1 }; 
             resolve(); 
         };
         img.src = file.previewUrl;
@@ -367,6 +375,8 @@ async function populateFileDetails(fileList, startIndex = 0) {
 
 async function confirmSelection() {
     const toolScreen = document.getElementById('toolScreen');
+    if (!toolScreen) return;
+
     const processUI = toolScreen.querySelector('.process-ui');
     const dropZoneContainer = toolScreen.querySelector('.drop-zone-container');
     
@@ -395,17 +405,24 @@ async function confirmSelection() {
 
 function displayFiles() {
     const toolScreen = document.getElementById('toolScreen');
-    const galleryContainer = toolScreen.querySelector('.gallery-container');
-    galleryContainer.innerHTML = files.map(file => `<div class="gallery-item w-full h-full flex-shrink-0 flex items-center justify-center p-2"><img src="${file.previewUrl}" class="max-w-full max-h-full object-contain" loading="lazy"></div>`).join('');
+    const galleryContainer = toolScreen?.querySelector('.gallery-container');
+    if (!galleryContainer) return;
+    galleryContainer.innerHTML = files.map(file => `<div class="gallery-item w-full h-full flex-shrink-0 flex items-center justify-center p-2"><img src="${file.previewUrl}" class="max-w-full max-h-full object-contain" loading="lazy" alt="Preview"></div>`).join('');
 }
 
 function showFilePreview(index) {
     if (index < 0 || index >= files.length) return;
     currentImageIdx = index;
     const toolScreen = document.getElementById('toolScreen');
-    toolScreen.querySelector('.gallery-container').style.transform = `translateX(-${index * 100}%)`;
-    toolScreen.querySelector('.current-image-index').textContent = index + 1;
-    toolScreen.querySelector('.total-images').textContent = files.length;
+    if (!toolScreen) return;
+
+    const gallery = toolScreen.querySelector('.gallery-container');
+    if (gallery) gallery.style.transform = `translateX(-${index * 100}%)`;
+    
+    const curSpan = toolScreen.querySelector('.current-image-index');
+    const totSpan = toolScreen.querySelector('.total-images');
+    if (curSpan) curSpan.textContent = index + 1;
+    if (totSpan) totSpan.textContent = files.length;
     
     if (activeTool === 'resizer' && originalFileDetails[index]) {
         const widthInput = toolScreen.querySelector('#resize-width');
@@ -419,11 +436,11 @@ function showFilePreview(index) {
 
 function renderFileManagementUI() {
     const toolScreen = document.getElementById('toolScreen');
-    const listContainer = toolScreen.querySelector('.file-list-container');
+    const listContainer = toolScreen?.querySelector('.file-list-container');
     if (!listContainer) return;
     listContainer.innerHTML = files.map((file, index) => {
         const details = originalFileDetails[index] || { size: file.size, width: '?', height: '?' };
-        return `<div class="file-item flex items-center gap-2 p-1.5 rounded-md hover:bg-card-bg cursor-grab transition-all border border-transparent hover:border-indigo-200" draggable="true" data-index="${index}"><img src="${file.previewUrl}" class="w-10 h-10 object-cover rounded shadow-sm" loading="lazy"><div class="flex-grow truncate text-xs"><p class="font-bold truncate" style="color: var(--text-dark);">${file.name}</p><p class="text-xxs text-light" style="color: var(--text-light);">${formatBytes(details.size)} &middot; ${details.width}x${details.height}</p></div><button class="delete-file-btn p-1 rounded-full text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" data-index="${index}"><i class="fas fa-times"></i></button></div>`;
+        return `<div class="file-item flex items-center gap-2 p-1.5 rounded-md hover:bg-card-bg cursor-grab transition-all border border-transparent hover:border-indigo-200" draggable="true" data-index="${index}"><img src="${file.previewUrl}" class="w-10 h-10 object-cover rounded shadow-sm" loading="lazy" alt="Item"><div class="flex-grow truncate text-xs"><p class="font-bold truncate" style="color: var(--text-dark);">${file.name}</p><p class="text-xxs text-light" style="color: var(--text-light);">${formatBytes(details.size)} &middot; ${details.width}x${details.height}</p></div><button class="delete-file-btn p-1 rounded-full text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" data-index="${index}" aria-label="Remove image"><i class="fas fa-times"></i></button></div>`;
     }).join('');
     
     attachFileManagementListeners();
@@ -516,13 +533,7 @@ function attachFileManagementListeners() {
     };
 }
 
-// ==========================================================================
-// CENTRAL TOOL DELEGATION ENGINE (DELEGATES PROCESSING TO ACTIVE MODULE)
-// ==========================================================================
-
-/**
- * Collects current tool settings from UI
- */
+// --- Collect Active Tool Settings ---
 function collectCurrentToolOptions(container) {
     const qualitySlider = container.querySelector('.quality-slider');
     const qualityVal = qualitySlider ? parseInt(qualitySlider.value, 10) / 100 : 0.85;
@@ -562,9 +573,7 @@ function collectCurrentToolOptions(container) {
     return opts;
 }
 
-/**
- * Central Execution Handler - Delegates to Tool Module
- */
+// --- Central Execution Handler (Delegates to Active Module) ---
 async function processFiles() {
     const toolScreen = document.getElementById('toolScreen');
     if (!toolScreen || files.length === 0) return;
@@ -587,17 +596,14 @@ async function processFiles() {
     const results = new Array(files.length);
     let filesProcessed = 0;
 
-    // Collect options from tool UI
     const options = collectCurrentToolOptions(toolScreen);
 
-    // Process files sequentially or in batch using active Module
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
         
         try {
             let result = null;
 
-            // DELEGATE TO SPECIFIC TOOL MODULE
             if (activeTool === 'converter' && window.ImageConverterModule?.processImage) {
                 result = await window.ImageConverterModule.processImage(file, options);
             } else if (activeTool === 'compressor' && window.ImageCompressorModule?.processImage) {
@@ -627,7 +633,7 @@ async function processFiles() {
     setTimeout(() => handleCompletion(results), 300);
 }
 
-// --- Handle Completion & Render Output Cards ---
+// --- Render Output Result Cards ---
 async function handleCompletion(results) {
     const toolScreen = document.getElementById('toolScreen');
     if (!toolScreen) return;
@@ -644,12 +650,17 @@ async function handleCompletion(results) {
         if (procText) procText.innerHTML = `<i class="fas fa-file-pdf text-red-500 mr-2"></i>Compiling PDF...`;
         
         if (window.ImageConverterModule?.compilePDF) {
-            const pdfBlob = await window.ImageConverterModule.compilePDF(results);
-            processedResults = [{ blob: pdfBlob, fileName: 'compiled_images.pdf', intendedFormat: 'pdf', fileIndex: 0 }];
+            try {
+                const pdfBlob = await window.ImageConverterModule.compilePDF(results);
+                processedResults = [{ blob: pdfBlob, fileName: 'compiled_images.pdf', intendedFormat: 'pdf', fileIndex: 0 }];
+            } catch (pdfErr) {
+                console.error("PDF Compilation error:", pdfErr);
+                showToast("Failed to compile PDF. Reverting to separate images.");
+            }
         }
     }
 
-    // Results Header Card
+    // Results Summary Banner
     resultsContainer.insertAdjacentHTML('beforeend', `
         <div class="results-summary text-center p-3.5 rounded-2xl mb-4 border animate__animated animate__fadeIn w-full overflow-hidden" style="background-color: var(--bg-subtle); border-color: var(--card-border);">
             <h3 class="text-xs sm:text-sm font-black uppercase tracking-wider text-indigo-500">Processing Complete!</h3>
@@ -659,6 +670,8 @@ async function handleCompletion(results) {
     
     // Render Individual Output Cards
     processedResults.forEach((res, i) => {
+        if (!res.blob) return;
+
         const originalFile = files[res.fileIndex] || { previewUrl: '', type: 'image/png' };
         const originalDetails = originalFileDetails[res.fileIndex] || { size: res.blob.size || 0, width: '?', height: '?' };
         const isPdf = res.intendedFormat === 'pdf';
@@ -745,7 +758,7 @@ async function handleCompletion(results) {
         }, 100);
     });
 
-    // Attach Action Listeners
+    // Attach Listeners
     resultsContainer.querySelectorAll('.preview-before-after-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const idx = parseInt(e.target.closest('.preview-before-after-btn').dataset.index, 10);
@@ -783,7 +796,7 @@ async function handleCompletion(results) {
                 const zipBlob = await zip.generateAsync({ type: "blob" });
                 saveAs(zipBlob, `optimized_images.zip`);
             } catch (err) {
-                if (typeof showToast === 'function') showToast("Failed to compile ZIP archive.");
+                showToast("Failed to compile ZIP archive.");
             } finally {
                 downloadBtn.innerHTML = `<i class="fas fa-file-archive mr-2"></i><span>Download All (ZIP)</span>`;
             }
@@ -791,12 +804,11 @@ async function handleCompletion(results) {
         resultsContainer.appendChild(downloadBtn);
     }
     
-    // UI Cleanup
     toolScreen.querySelector('.conversion-process')?.classList.add('hidden');
     resultsContainer.classList.remove('hidden');
 }
 
-// --- Before-After Comparison Modal System ---
+// --- Before-After Comparison Modal (Safe Memory Management) ---
 function openComparisonModal(index) {
     if (!processedResults || !processedResults[index]) return;
     
@@ -807,13 +819,21 @@ function openComparisonModal(index) {
     const container = document.getElementById('modalPreviewContainer');
     if (!container) return;
 
+    // Release old modal Blob URL from browser RAM
+    if (currentModalBlobUrl) {
+        try { URL.revokeObjectURL(currentModalBlobUrl); } catch (e) {}
+        currentModalBlobUrl = null;
+    }
+
     container.className = `before-after-container h-full w-full ${splitDirection}`;
     
     const beforeImg = container.querySelector('.before-image');
     const afterImg = container.querySelector('.after-image');
     
+    currentModalBlobUrl = URL.createObjectURL(result.blob);
+
     if (beforeImg) beforeImg.src = originalFile.previewUrl;
-    if (afterImg) afterImg.src = URL.createObjectURL(result.blob);
+    if (afterImg) afterImg.src = currentModalBlobUrl;
     
     const fileNameEl = document.getElementById('modalFileName');
     if (fileNameEl) fileNameEl.textContent = `Quality Comparison: ${result.fileName}`;
@@ -955,14 +975,14 @@ const triggerRealtimeSizeUpdate = debounce(async () => {
         const originalSizeSpan = previewInfo.querySelector('.original-size');
         const newSizeSpan = previewInfo.querySelector('.new-size');
         if (originalSizeSpan && newSizeSpan) {
-            originalSizeSpan.textContent = formatBytes(originalFileDetails[currentImageIdx].size);
+            originalSizeSpan.textContent = formatBytes(originalFileDetails[currentImageIdx]?.size || currentFile.size);
             newSizeSpan.textContent = formatBytes(result.blob.size);
         }
     }
 }, 250);
 window.triggerRealtimeSizeUpdate = triggerRealtimeSizeUpdate;
 
-// --- Attach Action Event Listeners ---
+// --- Attach Event Listeners ---
 function attachToolEventListeners(container) {
     const dropZone = container.querySelector('#dropZone');
     const fileInput = container.querySelector('.file-input');
@@ -1117,8 +1137,13 @@ document.getElementById('copyLinkBtn')?.addEventListener('click', () => {
     showToast('Link copied to clipboard!');
 });
 
+// Close Preview Modal & Free Memory
 document.getElementById('modalCloseBtn')?.addEventListener('click', () => {
-    previewModal?.classList.remove('show');
+    if (previewModal) previewModal.classList.remove('show');
+    if (currentModalBlobUrl) {
+        try { URL.revokeObjectURL(currentModalBlobUrl); } catch (e) {}
+        currentModalBlobUrl = null;
+    }
 });
 
 // --- Scroll Reveal Observer System ---
@@ -1360,27 +1385,6 @@ const toolGuidesData = {
             { q: "What is the recommended opacity for photo watermarks?", a: "We recommend 30% to 50% opacity so the copyright notice is clear without overwhelming the photo subject." },
             { q: "Can I use a transparent PNG logo as a watermark?", a: "Yes, transparent PNG logos blend smoothly over photographs." },
             { q: "Does ImgCon store uploaded watermarked photos?", a: "No, watermarks are applied using local HTML5 Canvas JavaScript. Your files stay on your device." }
-        ]
-    },
-    exif: {
-        title: "How to View and Clean EXIF GPS Metadata from JPEG Photos",
-        steps: [
-            "<strong>Upload Photo:</strong> Drop your JPEG photo into the EXIF Privacy Inspector.",
-            "<strong>Inspect Embedded Data:</strong> View camera specs, shutter speed, capture timestamp, and GPS map coordinates.",
-            "<strong>Click Clean Privacy Data:</strong> Generate a privacy-cleared photograph file.",
-            "<strong>Download Clean Photo:</strong> Save the photo free of location tracking headers."
-        ],
-        whyTitle: "Why Clean EXIF Metadata Before Sharing Online?",
-        features: [
-            { icon: "fa-map-marker-alt", title: "GPS Coordinates Stripping", desc: "Removes latitude and longitude tracking data embedded by smartphone cameras." },
-            { icon: "fa-camera", title: "Hardware Information Removal", desc: "Erases camera brand, serial numbers, and exposure settings." },
-            { icon: "fa-weight-hanging", title: "Extra File Size Savings", desc: "Stripping EXIF headers saves 10-20 KB per photo without affecting visual pixels." },
-            { icon: "fa-lock", title: "100% Client-Side Inspection", desc: "Inspects metadata locally without exposing personal location data to remote servers." }
-        ],
-        faqs: [
-            { q: "What is EXIF data in digital photos?", a: "EXIF (Exchangeable Image File Format) stores camera settings, hardware info, and GPS coordinates inside JPEG headers." },
-            { q: "Why should I strip EXIF data before uploading photos?", a: "Sharing photos with unstripped GPS data allows strangers to pinpoint your location on maps." },
-            { q: "Does stripping EXIF data lower photo quality?", a: "No, EXIF is text metadata; removing it leaves image pixels untouched while saving file weight." }
         ]
     }
 };
