@@ -1,7 +1,7 @@
 /**
  * ==========================================================================
  * SCRIPT.JS - ImgCon Central Orchestrator & Application Manager (Ultra-Fast)
- * Features: Self-Healing DOM, Clean SPA Routing, Memory Management & GPU UI
+ * Features: Instant Home Navigation, Self-Healing DOM, SPA Routing & GPU UI
  * ==========================================================================
  */
 
@@ -21,13 +21,6 @@ window.setSelectedFormat = function(fmt) {
     selectedFormat = fmt;
     window.selectedFormat = fmt;
 };
-
-// --- DOM Elements Cache ---
-const homeBtn = document.getElementById('homeBtn');
-const themeToggleBtn = document.getElementById('themeToggleBtn');
-const mainContainer = document.querySelector('main.app-container');
-const mainFooter = document.getElementById('main-footer');
-const cardFooter = document.getElementById('card-footer');
 
 // --- Dynamic External Library Loader (Cached Promise Engine) ---
 const loadedLibraries = {};
@@ -58,7 +51,6 @@ if ('serviceWorker' in navigator) {
 
 // --- SELF-HEALING: Inject Required Global Templates & Modals If Missing ---
 function ensureGlobalTemplates() {
-    // 1. Tool Layout Template
     if (!document.getElementById('toolLayoutTemplate')) {
         const tpl = document.createElement('template');
         tpl.id = 'toolLayoutTemplate';
@@ -169,7 +161,6 @@ function ensureGlobalTemplates() {
         document.body.appendChild(tpl);
     }
 
-    // 2. Toast Notification
     if (!document.getElementById('toast')) {
         const toastDiv = document.createElement('div');
         toastDiv.id = 'toast';
@@ -178,7 +169,6 @@ function ensureGlobalTemplates() {
         document.body.appendChild(toastDiv);
     }
 
-    // 3. Preview Modal
     if (!document.getElementById('previewModal')) {
         const modalDiv = document.createElement('div');
         modalDiv.id = 'previewModal';
@@ -213,7 +203,7 @@ function ensureGlobalTemplates() {
     }
 }
 
-// --- Router Maps with Meta Descriptions & Titles ---
+// --- Router Maps ---
 const routes = {
     '/': { screen: 'homeScreen', title: 'ImgCon - Free Online Image Converter, Compressor & Resizer', desc: 'ImgCon is a free online tool to convert, compress, resize, watermark, and clean EXIF metadata from images.' },
     '/blog': { screen: 'blogScreen', title: 'ImgCon Blog - Image Optimization, Web Performance & Photography Guides', desc: 'Welcome to ImgCon Blog! Read tutorials, guides, and tips about image compression, WebP, AVIF, and web speed.' },
@@ -255,6 +245,12 @@ const router = async () => {
         path = '/';
     }
 
+    // 🚀 CRITICAL FIX: If navigating to Home Screen, but Home DOM doesn't exist on this standalone file
+    if (route.screen === 'homeScreen' && !document.getElementById('homeScreen')) {
+        window.location.href = '/';
+        return;
+    }
+
     document.title = route.title;
 
     const metaDesc = document.querySelector('meta[name="description"]');
@@ -264,7 +260,7 @@ const router = async () => {
 
     const canonicalTag = document.querySelector('link[rel="canonical"]');
     if (canonicalTag) {
-        canonicalTag.setAttribute("href", "https://imgcon.online" + path);
+        canonicalTag.setAttribute("href", "https://imgcon.online" + (path === '/' ? '' : path));
     }
 
     if (route.screen === 'blogScreen') {
@@ -295,11 +291,18 @@ const navigateTo = (e) => {
         if (link.hasAttribute('download') || link.href.startsWith('blob:') || link.hostname !== window.location.hostname || link.href.includes('mailto:') || link.target) {
             return; 
         }
-        e.preventDefault();
         
         let targetPath = link.pathname;
         if (targetPath.endsWith('.html')) targetPath = targetPath.replace('.html', '');
-        
+        if (!targetPath) targetPath = '/';
+
+        // 🚀 CRITICAL FIX: If clicking Home button or Logo from a standalone file, load Home directly
+        if (targetPath === '/' && !document.getElementById('homeScreen')) {
+            window.location.href = '/';
+            return;
+        }
+
+        e.preventDefault();
         if (window.location.pathname !== targetPath) {
             history.pushState(null, '', targetPath);
             router();
@@ -313,6 +316,11 @@ function showPage(pageId) {
     allScreens.forEach(s => s.classList.add('hidden'));
     
     const activeScreen = document.getElementById(pageId);
+    const mainContainer = document.querySelector('main.app-container');
+    const homeBtn = document.getElementById('homeBtn');
+    const mainFooter = document.getElementById('main-footer');
+    const cardFooter = document.getElementById('card-footer');
+
     if (activeScreen) {
         activeScreen.classList.remove('hidden');
         requestAnimationFrame(() => {
@@ -322,7 +330,9 @@ function showPage(pageId) {
     }
 
     const isHomePage = pageId === 'homeScreen';
-    if (homeBtn) homeBtn.classList.toggle('hidden', isHomePage);
+    if (homeBtn) {
+        homeBtn.classList.toggle('hidden', isHomePage);
+    }
     
     if (isHomePage) {
         if (mainFooter) mainFooter.style.display = 'block';
@@ -379,8 +389,9 @@ function setupToolUI(toolName) {
     selectedFormat = null;
     window.selectedFormat = null;
     
+    const mainContainer = document.querySelector('main.app-container');
     let toolScreen = document.getElementById('toolScreen');
-    if (!toolScreen) {
+    if (!toolScreen && mainContainer) {
         toolScreen = document.createElement('section');
         toolScreen.id = 'toolScreen';
         toolScreen.className = 'screen';
@@ -388,7 +399,7 @@ function setupToolUI(toolName) {
     }
 
     const toolTemplate = document.getElementById('toolLayoutTemplate');
-    if (!toolTemplate) return;
+    if (!toolTemplate || !toolScreen) return;
 
     const toolLayout = toolTemplate.content.cloneNode(true);
     toolScreen.innerHTML = '';
@@ -991,7 +1002,7 @@ function toggleThemeWithRipple() {
     localStorage.setItem('theme', newTheme);
 }
 
-themeToggleBtn?.addEventListener('click', toggleThemeWithRipple);
+document.getElementById('themeToggleBtn')?.addEventListener('click', toggleThemeWithRipple);
 
 // --- Global Utilities ---
 function showToast(message) { 
