@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-6SWYBN309Y"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -8,43 +9,77 @@
     gtag('js', new Date());
     gtag('config', 'G-6SWYBN309Y');
   </script>
+
+  <!-- GitHub Pages SPA Path Resolver -->
+  <script type="text/javascript">
+    (function(l) {
+      if (l.search[1] === '/' ) {
+        var decoded = l.search.slice(1).split('&').map(function(s) { 
+          return s.replace(/~and~/g, '&')
+        }).join('?');
+        window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+        );
+      }
+    }(window.location))
+  </script>
+
+  <!-- Google AdSense Auto Ads -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6616979929366975" crossorigin="anonymous"></script>
   <meta name="google-adsense-account" content="ca-pub-6616979929366975">
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Free Online Image Converter - Convert PNG, JPG, WebP, AVIF, PDF | ImgCon</title>
   <meta name="description" content="Convert images between PNG, JPG, WebP, AVIF, PDF, and ICO formats online for free. 100% private client-side browser processing with zero server uploads.">
   <link rel="canonical" href="https://imgcon.online/image-converter">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+
+  <!-- PWA Theme & Favicon -->
+  <meta name="theme-color" content="#6366f1">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="shortcut icon" href="/logo.png" type="image/png">
+  <link rel="icon" href="/logo.png" type="image/png" sizes="192x192">
+
+  <!-- CSS Dependencies -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body class="p-3 sm:p-6 pb-12 transition-colors duration-300">
 
+  <!-- Sticky Floating Header -->
   <header class="sticky top-2 z-50 backdrop-filter backdrop-blur-lg flex justify-between items-center mb-6 py-3 px-4 max-w-7xl mx-auto rounded-2xl border shadow-sm" style="background-color: var(--card-bg); border-color: var(--card-border);">
-    <a href="/" class="flex items-center gap-3">
-      <img src="logo.png" alt="ImgCon Logo" width="40" height="40" class="w-10 h-10 object-contain">
+    <a href="/" class="flex items-center gap-3 group">
+      <img src="/logo.png" alt="ImgCon Logo" width="40" height="40" class="w-10 h-10 object-contain logo-image">
       <div>
-        <h1 class="text-xl font-extrabold" style="color: var(--text-dark);">ImgCon</h1>
+        <h1 class="text-xl font-extrabold tracking-tight" style="color: var(--text-dark);">ImgCon</h1>
         <p class="text-xs font-semibold uppercase opacity-80" style="color: var(--primary-color);">Image Converter</p>
       </div>
     </a>
-    <a href="/" class="secondary-btn px-4 py-2 rounded-full font-semibold text-xs"><i class="fas fa-home mr-2"></i>Home</a>
+    <div class="flex items-center gap-2">
+      <a href="/" id="homeBtn" class="secondary-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 hover:shadow-md"><i class="fas fa-home mr-2"></i>Home</a>
+      <button id="themeToggleBtn" class="p-2 rounded-full w-10 h-10 flex items-center justify-center border transition-all duration-300 hover:scale-105" style="background-color: var(--card-bg); border-color: var(--card-border);" aria-label="Toggle Theme">
+        <i class="fas fa-sun text-lg text-yellow-500 transition-transform duration-500"></i>
+        <i class="fas fa-moon text-lg text-indigo-400 transition-transform duration-500"></i>
+      </button>
+    </div>
   </header>
 
-  <main class="app-container p-5 sm:p-8 max-w-7xl mx-auto">
+  <main class="app-container p-5 sm:p-8 animate__animated animate__fadeInUp relative max-w-7xl mx-auto transition-all duration-500">
     <section id="toolScreen" class="screen"></section>
   </main>
 
   <footer class="text-center py-6 mt-10 text-xs opacity-75" style="color: var(--text-light);">&copy; 2026 ImgCon. All Rights Reserved.</footer>
 
-  <!-- SCRIPT FILES -->
-  <script src="imageconverter.js" defer></script>
-  <script src="imagecompressor.js" defer></script>
-  <script src="imageresizer.js" defer></script>
-  <script src="imagewatermark.js" defer></script>
-  <script src="ExifData.js" defer></script>
-  <script src="script.js" defer></script>
-  <script src="imgconblog.js" defer></script>
+  <!-- MODULAR SCRIPTS -->
+  <script src="/imageconverter.js" defer></script>
+  <script src="/imagecompressor.js" defer></script>
+  <script src="/imageresizer.js" defer></script>
+  <script src="/imagewatermark.js" defer></script>
+  <script src="/ExifData.js" defer></script>
+  <script src="/script.js" defer></script>
+  <script src="/imgconblog.js" defer></script>
 </body>
 </html>
